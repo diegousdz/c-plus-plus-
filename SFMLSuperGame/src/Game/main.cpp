@@ -20,29 +20,19 @@ const string windowTitle = "Stone & Frost";
 
 bool isUsingGamepad = false;
 
-int currentOptionSelected = 0;
+
 bool SetValueOnce = false;
 bool isGameInitialized = false;
 sf::Sprite mySprite;
 
 Orc orcWarriorsPoolShapes[5];
 ResourceManager resourceManagerInstance;
-/*
-struct Score
-{
-    string name;
-    int score;
-    Score(std::string playerName = "", int playerScore = 0)
-       : name(playerName), score(playerScore) {}
-}; */
-
-
 
 void  startGameLevelOne(sf::RenderWindow &window)
 {
     if(!isGameInitialized) {}
 }
-
+/*
 void drawMainMenu(sf::RenderWindow &window)
 {
     window.clear(sf::Color(20, 12, 28));
@@ -88,7 +78,7 @@ void drawMainMenu(sf::RenderWindow &window)
         window.draw(menu[i]);
     }
     
-}
+}*/
 
 
 
@@ -259,24 +249,20 @@ void Update(Player& player, float deltaTime) {
 
 }
 
-
-/*
-std::string scoreToString(const Score& score) {
-    return "Name: " + score.name + "\nScore: " + std::to_string(score.score) + "\n";
-} */
-
 int main()
 {
+    // create an instance of the engine
     NexusEngine& engine = NexusEngine::getInstance();
+    // call the function init on NexusEngine
+
+    engine.initializeWindow(engine.getResourceManager().gameWindow, 600, 600, "Stone & Frost");
     engine.init();
-    
-    sf::Clock clock;
     while (engine.getResourceManager().gameWindow.isOpen())
     {
         engine.getResourceManager().setDeltaTime();
         engine.handleInput();
         engine.update(engine.getResourceManager().getDeltaTime());
-     //   engine.draw(engine.getResourceManager().gameWindow);
+        engine.draw(engine.getResourceManager().gameWindow);
     }
 
     return 0;

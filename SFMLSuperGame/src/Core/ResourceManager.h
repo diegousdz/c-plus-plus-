@@ -19,10 +19,12 @@ public:
     bool isMainMenuActive = true;
     bool isGameInitialized = false;
     int currentOptionSelected = 0;
+    
 
     sf::RenderWindow gameWindow;
     sf::Clock clock;
 
+    sf::Texture playerTexture;
     Player newGamePlayer;
     Orc orcWarriorsPoolShapes[5];
     void createEnemiesLevelOne();

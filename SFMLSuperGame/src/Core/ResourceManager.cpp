@@ -1,7 +1,21 @@
 ﻿#include "ResourceManager.h"
 
 void ResourceManager::loadResources()
-{ 
+{
+    // Load the player's texture
+    // Load the player's texture for placeholder (if needed)
+    if (!playerTexture.loadFromFile("res/textures/Player/Tilemap/Idle/spritesheetIdle.png"))
+    {
+        std::cout << "Failed to load player texture!" << std::endl;
+    }
+
+    // Initialize the player with the loaded texture
+    newGamePlayer.setTexture(&playerTexture);
+
+    // Load animations
+    newGamePlayer.loadAnimations();
+
+    // You can also load other textures here (like for Orc, enemies, etc.)
 }
 
 void ResourceManager::setDeltaTime()

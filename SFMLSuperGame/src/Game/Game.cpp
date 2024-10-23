@@ -1,4 +1,16 @@
 ﻿#include "Game.h"
+#include "./../Core/ResourceManager.h"
+#include "../GameEntities/Orc.h"
+
+Game::Game(Player user, int nOfEnemies)
+{
+    ResourceManager resourceManager;
+    resourceManager.loadResources();  // Load resources (including player textures)
+    
+    // Now use the preloaded player from ResourceManager
+    user = resourceManager.newGamePlayer; 
+    
+}
 
 void Game::createEnemiesLevelOne()
 {
