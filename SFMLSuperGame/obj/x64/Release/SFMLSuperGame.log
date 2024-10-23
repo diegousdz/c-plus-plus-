@@ -1,0 +1,11 @@
+﻿  main.cpp
+  Player.cpp
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  All 87 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  SFMLSuperGame.vcxproj -> C:\Users\diego\source\repos\EntregablesImage\SFMLSuperGame\SFMLSuperGame\bin\x64\Release\SFMLSuperGame.exe
+   "C:\Users\diego\source\repos\EntregablesImage\SFMLSuperGame\SFMLSuperGame\res\" "C:\Users\diego\source\repos\EntregablesImage\SFMLSuperGame\SFMLSuperGame\bin\x64\Release\res\" /e /h /y /s
+  A subdirectory or file C:\Users\diego\source\repos\EntregablesImage\SFMLSuperGame\SFMLSuperGame\bin\x64\Release\res\ already exists.
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: The command "MKDIR "C:\Users\diego\source\repos\EntregablesImage\SFMLSuperGame\SFMLSuperGame\bin\x64\Release\res\"
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(166,5): error MSB3073: :VCEnd" exited with code 1.
