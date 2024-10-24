@@ -117,12 +117,15 @@ void Player::createPlayer(std::string incomingString, sf::Vector2f scaleVector)
 // Handle player movement and update action (run, jump, idle, etc.)
 void Player::handleMovement(float deltaTime)
 {
+    isMoving = false;
+    
     if (movingLeft)
     {
         velocity.x = -speed;
         onInverseDirection = true;
         currentAction = Run;
         isMoving = true;
+        std::cout << "Player is moving left. currentAction: " << currentAction << std::endl;
     }
     else if (movingRight)
     {
@@ -130,12 +133,17 @@ void Player::handleMovement(float deltaTime)
         onInverseDirection = false;
         currentAction = Run;
         isMoving = true;
+        std::cout << "Player is moving right. currentAction: " << currentAction << std::endl;
     }
     else
     {
         velocity.x = 0;
         if (isOnGround)
+        {
             currentAction = Idle;
+            std::cout << "Player is idle. currentAction: " << currentAction << std::endl;
+        }
+          
     }
 
     if (isJumping && isOnGround)
@@ -143,7 +151,8 @@ void Player::handleMovement(float deltaTime)
         velocity.y = -400.0f;
         isOnGround = false;
         currentAction = Jump;
-        isJumping = false; // Reset jumping flag
+        std::cout << "Player is jumping. currentAction: " << currentAction << std::endl;
+        isJumping = false;
     }
 
     // Apply gravity
@@ -163,6 +172,7 @@ void Player::handleMovement(float deltaTime)
         shape.setPosition(shape.getPosition().x, 500);
         if (!isMoving)
             currentAction = Idle;
+            std::cout << "Player landed and is idle. currentAction: " << currentAction << std::endl;
     }
 }
 

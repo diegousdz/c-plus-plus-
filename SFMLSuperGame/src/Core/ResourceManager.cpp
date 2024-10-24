@@ -9,8 +9,26 @@ void ResourceManager::loadResources()
         std::cout << "Failed to load player texture!" << std::endl;
     }
 
+    // Load the player's idle texture
+    if (!playerIdleTexture.loadFromFile("res/textures/Player/Tilemap/Idle/spritesheetIdle.png"))
+    {
+        std::cout << "Failed to load player idle texture!" << std::endl;
+    }
+
+    // Load the player's run texture
+    if (!playerRunTexture.loadFromFile("res/textures/Player/Tilemap/Run/spritesheetRun.png"))
+    {
+        std::cout << "Failed to load player run texture!" << std::endl;
+    }
+
+    // Load the player's jump texture
+    if (!playerJumpTexture.loadFromFile("res/textures/Player/Tilemap/Jump/spritesheetJump.png"))
+    {
+        std::cout << "Failed to load player jump texture!" << std::endl;
+    }
+
     // Initialize the player with the loaded texture
-    newGamePlayer.setTexture(&playerTexture);
+    newGamePlayer.setTexture(&playerIdleTexture);
 
     // Load animations
     newGamePlayer.loadAnimations();
@@ -54,4 +72,12 @@ void ResourceManager::createEnemiesLevelOne()
             // TODD:  gameWindow.draw(orcWarriorsPoolShapes[i].shape);
         }
     
+}
+
+int ResourceManager::getPlayerTypeOfAnimationLastSet() const {
+    return playerTypeOfAnimationLastSet;
+}
+
+void ResourceManager::setPlayerTypeOfAnimationLastSet(int type) {
+    playerTypeOfAnimationLastSet = type;
 }

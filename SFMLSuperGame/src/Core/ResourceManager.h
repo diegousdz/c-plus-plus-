@@ -28,7 +28,16 @@ public:
     Player newGamePlayer;
     Orc orcWarriorsPoolShapes[5];
     void createEnemiesLevelOne();
-    
+
+    int getPlayerTypeOfAnimationLastSet() const;
+    void setPlayerTypeOfAnimationLastSet(int type);
+
+    sf::Texture playerIdleTexture;    
+    sf::Texture playerRunTexture;     
+    sf::Texture playerJumpTexture; 
+
 private:
+    int playerTypeOfAnimationLastSet; 
+    
     float deltaTime = 0.0f;
 };

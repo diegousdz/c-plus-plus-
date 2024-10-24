@@ -7,9 +7,34 @@ void NexusEngine::init()
 }
 void NexusEngine::update(float deltaTime)
 {
+
+    // Switch the texture based on the current animation state
+    int currentAnimationState = resourceManager.getPlayerTypeOfAnimationLastSet();
+    
+    switch (currentAnimationState) {
+    case 0:
+        resourceManager.newGamePlayer.currentSprite.setTexture(resourceManager.playerIdleTexture);
+        resourceManager.newGamePlayer.loadAnimations();
+        std::cout << "Switched to Idle Texture" << std::endl;
+        break;
+    case 1:
+        resourceManager.newGamePlayer.currentSprite.setTexture(resourceManager.playerRunTexture);
+        resourceManager.newGamePlayer.loadAnimations();
+        std::cout << "Switched to Run Texture" << std::endl;
+        break;
+    case 2:
+
+        resourceManager.newGamePlayer.currentSprite.setTexture(resourceManager.playerJumpTexture);
+        resourceManager.newGamePlayer.loadAnimations();
+        std::cout << "Switched to Jump Texture" << std::endl;
+        break;
+    default:  resourceManager.newGamePlayer.currentSprite.setTexture(resourceManager.playerIdleTexture);;
+             resourceManager.newGamePlayer.loadAnimations();
+    }
+    
     if (!resourceManager.isMainMenuActive)  // Only update when the game is active
     {
-        
+
         // Apply gravity to the player when not on the ground
         resourceManager.newGamePlayer.velocity.y += resourceManager.newGamePlayer.gravity * deltaTime;
 
@@ -18,6 +43,22 @@ void NexusEngine::update(float deltaTime)
             resourceManager.newGamePlayer.velocity.x * deltaTime, 
             resourceManager.newGamePlayer.velocity.y * deltaTime
         );
+
+        switch (resourceManager.getPlayerTypeOfAnimationLastSet()) {
+        case 0:
+            // Idle animation
+                resourceManager.newGamePlayer.setTexture(&resourceManager.playerIdleTexture);
+            break;
+        case 1:
+            // Run animation
+                resourceManager.newGamePlayer.setTexture(&resourceManager.playerRunTexture);
+            break;
+        case 2:
+            // Jump animation
+                resourceManager.newGamePlayer.setTexture(&resourceManager.playerJumpTexture);
+            break;
+        default: 0;
+        }
 
         // Check if the player is on the ground
         if (resourceManager.newGamePlayer.shape.getPosition().y + resourceManager.newGamePlayer.shape.getSize().y > resourceManager.windowHeight)
@@ -117,6 +158,21 @@ void NexusEngine::draw(sf::RenderWindow &gameWindow)
 
 void NexusEngine::handleInput()
 {
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+        resourceManager.setPlayerTypeOfAnimationLastSet(1); // Running left
+        std::cout << "Running (left)" << std::endl;
+    } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+        resourceManager.setPlayerTypeOfAnimationLastSet(1); // Running right
+        std::cout << "Running (right)" << std::endl;
+    } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+        resourceManager.setPlayerTypeOfAnimationLastSet(2); // Jumping
+        std::cout << "Jumping" << std::endl;
+    } else {
+        resourceManager.setPlayerTypeOfAnimationLastSet(0); // Idle (no key pressed)
+        std::cout << "Idle" << std::endl;
+    }
+    
     sf::Event event;
     while (resourceManager.gameWindow.pollEvent(event))
     {
@@ -136,7 +192,8 @@ void NexusEngine::handleInput()
                     resourceManager.currentOptionSelected--;
                     if (resourceManager.currentOptionSelected < 0)
                     {
-                        resourceManager.currentOptionSelected = 2;  // Wrap to last item
+                        resourceManager.currentOptionSelected = 2;
+                    // Wrap to last item
                     }
                 }
 
@@ -173,12 +230,14 @@ void NexusEngine::handleInput()
                     resourceManager.newGamePlayer.velocity.x = -resourceManager.newGamePlayer.speed;
                     resourceManager.newGamePlayer.onInverseDirection = true;  // Set facing direction
                     resourceManager.newGamePlayer.isMoving = true;
+                    resourceManager.setPlayerTypeOfAnimationLastSet(1);
                 }
                 else if (event.key.code == sf::Keyboard::D)  // Move right
                 {
                     resourceManager.newGamePlayer.velocity.x = resourceManager.newGamePlayer.speed;
                     resourceManager.newGamePlayer.onInverseDirection = false;  // Set facing direction
                     resourceManager.newGamePlayer.isMoving = true;
+                    resourceManager.setPlayerTypeOfAnimationLastSet(1);
                 }
             }
 
@@ -188,12 +247,14 @@ void NexusEngine::handleInput()
                 {
                     resourceManager.newGamePlayer.velocity.x = 0;
                     resourceManager.newGamePlayer.isMoving = false;
+                    resourceManager.setPlayerTypeOfAnimationLastSet(0);
                 }
 
                 if (event.key.code == sf::Keyboard::Space && resourceManager.newGamePlayer.isOnGround)
                 {
                     resourceManager.newGamePlayer.velocity.y = -400.0f;  // Jump
                     resourceManager.newGamePlayer.isOnGround = false;  // Player is in the air
+                    resourceManager.setPlayerTypeOfAnimationLastSet(2);
                 }
 
                 // Toggle main menu with 'P'
