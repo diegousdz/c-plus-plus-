@@ -181,7 +181,9 @@
   <ItemGroup>
     <ClInclude Include="src\Core\AnimationSequencer.h" />
     <ClInclude Include="src\Core\FileManager.h" />
+    <ClInclude Include="src\Core\GUIHandler.h" />
     <ClInclude Include="src\Core\HelperFunctions.h" />
+    <ClInclude Include="src\Core\InputManager.h" />
     <ClInclude Include="src\Core\NexusEngine.h" />
     <ClInclude Include="src\Core\RenderAndFXManager.h" />
     <ClInclude Include="src\Core\ResourceManager.h" />
@@ -191,6 +193,7 @@
     <ClInclude Include="src\GameEntities\Warrior.h" />
     <ClInclude Include="src\Game\Game.h" />
     <ClInclude Include="src\Game\StoneAndFrostWorld.h" />
+    <ClInclude Include="src\Tools\Tilemap.h" />
     <ClInclude Include="src\Tools\WorldEditor.h" />
   </ItemGroup>
   <ItemGroup>
@@ -270,7 +273,9 @@
       <AdditionalIncludeDirectories>C:\Users\diego\source\repos\EntregablesImage\SFMLSuperGame\SFMLSuperGame\\libs\SFML\include;</AdditionalIncludeDirectories>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
+    <ClCompile Include="src\Core\GUIHandler.cpp" />
     <ClCompile Include="src\Core\HelperFunctions.cpp" />
+    <ClCompile Include="src\Core\InputManager.cpp" />
     <ClCompile Include="src\Core\NexusEngine.cpp" />
     <ClCompile Include="src\Core\RenderAndFXManager.cpp" />
     <ClCompile Include="src\Core\ResourceManager.cpp" />
@@ -651,6 +656,7 @@
       <AdditionalIncludeDirectories>C:\Users\diego\source\repos\EntregablesImage\SFMLSuperGame\SFMLSuperGame\\libs\SFML\include;</AdditionalIncludeDirectories>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
+    <ClCompile Include="src\Tools\Tilemap.cpp" />
     <ClCompile Include="src\Tools\WorldEditor.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>

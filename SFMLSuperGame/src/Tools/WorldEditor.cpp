@@ -1,18 +1,28 @@
 ﻿#include "WorldEditor.h"
 
-GameEditor::GameEditor(int screenHeight)
+#include <iostream>
+#include <SFML/Graphics/Font.hpp>
+#include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/Text.hpp>
+#include <SFML/Window/Event.hpp>
+#include <SFML/Window/Mouse.hpp>
+
+#include "Tilemap.h"
+
+WorldEditor::WorldEditor(int screenHeight): tileMapWidth(0), tileSize(0), gameOverLine(0)
 {
     tileMapHeight = screenHeight;
 }
 
 
 
-void GameEditor::InitializeGameEditor()
+
+void WorldEditor::InitializeGameEditor()
 {
     
 }
 
-void GameEditor::ExitGameEditor()
+void WorldEditor::ExitGameEditor()
 {
     // Deallocating memory to prevent memory leak
     delete[] moduleWidth;
@@ -23,3 +33,226 @@ void GameEditor::ExitGameEditor()
     moduleHeight = nullptr;
 }
 
+void WorldEditor::init()
+{
+    std::cerr << "Init!" << std::endl;
+    if (!fontEditor.loadFromFile("res/fonts/PressStart2P-Regular.ttf"))
+    {
+        std::cout << "Failed to load font!" << std::endl;
+    }
+    int buttonWidth = 64;
+    int buttonOnePosX = 16;
+    int padding = 16;
+    int buttonVerticalPositions = 32;
+    // --------------------------------------- Tittle
+    
+    titleEditor.setFont(fontEditor);
+    titleEditor.setString("TILE SIZE");
+    titleEditor.setCharacterSize(8);
+    titleEditor.setPosition(16, 16);
+    titleEditor.setFillColor(sf::Color::White);
+    
+
+    // --------------------------------------- Button 1 
+    
+    ButtonOne.setSize(sf::Vector2f(buttonWidth, 24));  // Button dimensions
+    ButtonOne.setPosition(buttonOnePosX, buttonVerticalPositions);  // Button position
+    ButtonOne.setFillColor(sf::Color(56, 56, 56));  // Button color (cyan)
+
+    ButtonTextOne.setFont(fontEditor);
+    ButtonTextOne.setString("Size 1");
+    ButtonTextOne.setCharacterSize(8);
+    ButtonTextOne.setPosition(padding + 8  , buttonVerticalPositions + padding /2);
+    ButtonTextOne.setFillColor(sf::Color::White);
+    
+
+    // --------------------------------------- Button 2
+
+    ButtonTwo.setSize(sf::Vector2f(buttonWidth, 24));  // Button dimensions
+    ButtonTwo.setPosition(buttonOnePosX + buttonWidth + padding , buttonVerticalPositions);  // Button position
+    ButtonTwo.setFillColor(sf::Color(56, 56, 56));  // Button color (cyan)
+
+    ButtonTextTwo.setFont(fontEditor);
+    ButtonTextTwo.setString("Size 2");
+    ButtonTextTwo.setCharacterSize(8);
+    ButtonTextTwo.setPosition(buttonOnePosX + buttonWidth + padding + padding * 0.5, buttonVerticalPositions + padding /2);
+    
+    // --------------------------------------- Button 3
+
+    ButtonThree.setSize(sf::Vector2f(buttonWidth, 24));  // Button dimensions
+    ButtonThree.setPosition((buttonWidth * 2) + (padding * 3), buttonVerticalPositions);  // Button position
+    ButtonThree.setFillColor(sf::Color(56, 56, 56));  // Button color (cyan)
+
+    ButtonTextThree.setFont(fontEditor);
+    ButtonTextThree.setString("Size 2");
+    ButtonTextThree.setCharacterSize(8);
+    ButtonTextThree.setPosition(buttonWidth * 2 + buttonOnePosX + padding * 2 + padding * 0.5, buttonVerticalPositions + padding /2);
+
+    
+
+   // Tilemap tilemap;
+    // Initialize tilemap
+    //tilemap.InstantiateATilemapByType(1);
+/*
+    // Example: Initialize a single tile shape for rendering (32x32 grid tiles)
+    gridTile.setSize(sf::Vector2f(32, 32));
+    gridTile.setFillColor(sf::Color::Transparent);  // Make it transparent
+    gridTile.setOutlineColor(sf::Color::White);  // Add a grid outline
+    gridTile.setOutlineThickness(1);
+*/
+    // Load a font for text display (use your own font path)
+}
+
+void WorldEditor::draw(sf::RenderWindow &window)
+{
+    window.clear(sf::Color(32, 32, 32));
+    
+    window.draw(titleEditor);
+    
+    window.draw(ButtonOne);
+    window.draw(ButtonTextOne);
+    
+    window.draw(ButtonTwo);
+    window.draw(ButtonTextTwo);
+    
+    window.draw(ButtonThree);
+    window.draw(ButtonTextThree);
+
+}
+
+
+// Function to create a new window and tilemap based on the size
+void WorldEditor::createTilemap(int tileSizeType)
+{
+    // Define the size of the tilemap based on the tileSizeType
+    
+    Tilemap tilemap;
+    
+     switch (tileSizeType)
+    {
+        case 1:
+            tilemap.InstantiateATilemapByType(1);  // Short tilemap (1800 wide)
+            break;
+        case 2:
+            tilemap.InstantiateATilemapByType(2);  // Medium tilemap (2400 wide)
+            break;
+        case 3:
+            tilemap.InstantiateATilemapByType(3);  // Long tilemap (3600 wide)
+            break;
+        default:
+            std::cout << "Invalid tile size!" << std::endl;
+            return;
+    } 
+
+    // Create a new window with hardcoded size for now (you can adjust this)
+    tileViewPort.create(sf::VideoMode(600, 600), "Tilemap Viewport");
+}
+
+void WorldEditor::Update(sf::RenderWindow &window, sf::Event event)
+{
+
+
+    sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+   
+   
+    // Check if mouse is hovering over ButtonOne
+    if (ButtonOne.getGlobalBounds().contains(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y)))
+    {
+
+        // If the mouse is over the button, now check if the button is pressed
+        if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
+        {
+            std::cout << "Button One Clicked!" << std::endl;
+            // Handle your button click action here
+            tileSizeType = 1;
+            
+            if(!hasCreatedTilemap)
+            {
+                createTilemap(tileSizeType);
+                hasCreatedTilemap = true;
+            }
+              
+        }
+        if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
+        {
+            std::cout << "Button One Released!" << std::endl;
+            // Handle your button click action here
+        }
+    } 
+
+    // Check ButtonTwo
+    if (ButtonTwo.getGlobalBounds().contains(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y)))
+    {
+
+        // Check if ButtonTwo is clicked
+        if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
+        {
+            std::cout << "Button Two Clicked!" << std::endl;
+            tileSizeType = 2;
+            if(!hasCreatedTilemap)
+            {
+                createTilemap(tileSizeType);
+                hasCreatedTilemap = true;
+            }
+        }
+
+        // Check if ButtonTwo is released
+        if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
+        {
+            std::cout << "Button Two Released!" << std::endl;
+
+        }
+    } 
+
+    // Check ButtonThree
+    if (ButtonThree.getGlobalBounds().contains(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y)))
+    {
+
+        // Check if ButtonThree is clicked
+        if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
+        {
+            std::cout << "Button Three Clicked!" << std::endl;
+            tileSizeType = 3;
+            if(!hasCreatedTilemap)
+            {
+                createTilemap(tileSizeType);
+                hasCreatedTilemap = true;
+            }
+        }
+
+        // Check if ButtonThree is released
+        if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
+        {
+            std::cout << "Button Three Released!" << std::endl;
+         
+        }
+    } 
+
+    switch (tileSizeType)
+    {
+    case 1:
+        ButtonOne.setFillColor(sf::Color(128 , 128, 128));
+        ButtonTwo.setFillColor(sf::Color(56, 56, 56));
+        ButtonThree.setFillColor(sf::Color(56, 56, 56));
+        break;
+    case 2:
+        ButtonOne.setFillColor(sf::Color(56, 56, 56));
+        ButtonTwo.setFillColor(sf::Color(128 , 128, 128));
+        ButtonThree.setFillColor(sf::Color(56, 56, 56));
+        break;
+    case 3:
+        ButtonOne.setFillColor(sf::Color(56, 56, 56));      // Button One inactive
+        ButtonTwo.setFillColor(sf::Color(56, 56, 56));      // Button Two inactive
+        ButtonThree.setFillColor(sf::Color(128 , 128, 128));
+        break;
+    default:
+        ButtonOne.setFillColor(sf::Color(56, 56, 56));
+        ButtonTwo.setFillColor(sf::Color(56, 56, 56));
+        ButtonThree.setFillColor(sf::Color(56, 56, 56));
+
+        std::cout << "Invalid tile size type!" << std::endl;
+        break;
+    }
+
+    
+}

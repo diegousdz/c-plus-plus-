@@ -14,18 +14,18 @@ void NexusEngine::update(float deltaTime)
     switch (currentAnimationState) {
     case 0:
         resourceManager.newGamePlayer.currentSprite.setTexture(resourceManager.playerIdleTexture);
-        resourceManager.newGamePlayer.loadAnimations();
+   //     resourceManager.newGamePlayer.loadAnimations();
         std::cout << "Switched to Idle Texture" << std::endl;
         break;
     case 1:
         resourceManager.newGamePlayer.currentSprite.setTexture(resourceManager.playerRunTexture);
-        resourceManager.newGamePlayer.loadAnimations();
+    //    resourceManager.newGamePlayer.loadAnimations();
         std::cout << "Switched to Run Texture" << std::endl;
         break;
     case 2:
 
         resourceManager.newGamePlayer.currentSprite.setTexture(resourceManager.playerJumpTexture);
-        resourceManager.newGamePlayer.loadAnimations();
+    //    resourceManager.newGamePlayer.loadAnimations();
         std::cout << "Switched to Jump Texture" << std::endl;
         break;
     default:  resourceManager.newGamePlayer.currentSprite.setTexture(resourceManager.playerIdleTexture);;
@@ -76,7 +76,6 @@ void NexusEngine::update(float deltaTime)
     }
 }
 
-
 void NexusEngine::drawMainMenu(sf::RenderWindow &window)
 {
     window.clear(sf::Color(20, 12, 28));
@@ -125,7 +124,6 @@ void NexusEngine::drawMainMenu(sf::RenderWindow &window)
 //    window.display();
 }
 
-
 void NexusEngine::draw(sf::RenderWindow &gameWindow)
 {
     gameWindow.clear();
@@ -153,8 +151,6 @@ void NexusEngine::draw(sf::RenderWindow &gameWindow)
 
     gameWindow.display();
 }
-
-
 
 void NexusEngine::handleInput()
 {
