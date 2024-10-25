@@ -14,36 +14,13 @@ WorldEditor::WorldEditor(int screenHeight): tileMapWidth(0), tileSize(0), gameOv
     tileMapHeight = screenHeight;
 }
 
-
-
-
-void WorldEditor::InitializeGameEditor()
+void WorldEditor::initTileSizeGroup()
 {
-    
-}
-
-void WorldEditor::ExitGameEditor()
-{
-    // Deallocating memory to prevent memory leak
-    delete[] moduleWidth;
-    delete[] moduleHeight;
-
-    // Setting to nullptr to ensure correct clean of space memory otherwise we might get garbage
-    moduleWidth = nullptr;
-    moduleHeight = nullptr;
-}
-
-void WorldEditor::init()
-{
-    std::cerr << "Init!" << std::endl;
-    if (!fontEditor.loadFromFile("res/fonts/PressStart2P-Regular.ttf"))
-    {
-        std::cout << "Failed to load font!" << std::endl;
-    }
     int buttonWidth = 64;
     int buttonOnePosX = 16;
     int padding = 16;
     int buttonVerticalPositions = 32;
+    
     // --------------------------------------- Tittle
     
     titleEditor.setFont(fontEditor);
@@ -51,7 +28,6 @@ void WorldEditor::init()
     titleEditor.setCharacterSize(8);
     titleEditor.setPosition(16, 16);
     titleEditor.setFillColor(sf::Color::White);
-    
 
     // --------------------------------------- Button 1 
     
@@ -64,7 +40,6 @@ void WorldEditor::init()
     ButtonTextOne.setCharacterSize(8);
     ButtonTextOne.setPosition(padding + 8  , buttonVerticalPositions + padding /2);
     ButtonTextOne.setFillColor(sf::Color::White);
-    
 
     // --------------------------------------- Button 2
 
@@ -88,8 +63,57 @@ void WorldEditor::init()
     ButtonTextThree.setCharacterSize(8);
     ButtonTextThree.setPosition(buttonWidth * 2 + buttonOnePosX + padding * 2 + padding * 0.5, buttonVerticalPositions + padding /2);
 
-    
+}
 
+void WorldEditor::initTileMiniViewport()
+{
+    int baseTileWidth = 256;
+    int baseTilePositionY = 64;
+    int topHeaderHeight = baseTileWidth / 4;
+
+    // --------------------------------------- Base Tile
+
+    miniViewportBaseTile.setSize(sf::Vector2f(baseTileWidth, baseTileWidth));  // Button dimensions
+    miniViewportBaseTile.setPosition(0, baseTilePositionY);  // Button position
+    miniViewportBaseTile.setFillColor(sf::Color(56, 56, 56));
+
+    gamePreview.setSize(sf::Vector2f(baseTileWidth, baseTileWidth ));  // Button dimensions
+    gamePreview.setPosition(0, baseTilePositionY);  // Button position
+    gamePreview.setFillColor(sf::Color(48, 48, 48));
+
+    topHeader.setSize(sf::Vector2f(baseTileWidth, topHeaderHeight ));
+    topHeader.setPosition(0, baseTilePositionY);
+    topHeader.setFillColor(sf::Color(56, 56, 56));
+
+    magicBelt.setSize(sf::Vector2f(baseTileWidth, topHeaderHeight ));
+    magicBelt.setPosition(0, baseTileWidth );
+    magicBelt.setFillColor(sf::Color(56, 56, 56));
+}
+
+void WorldEditor::InitializeGameEditor()
+{
+}
+
+void WorldEditor::ExitGameEditor()
+{
+    // Deallocating memory to prevent memory leak
+    delete[] moduleWidth;
+    delete[] moduleHeight;
+    
+    // Setting to nullptr to ensure correct clean of space memory otherwise we might get garbage
+    moduleWidth = nullptr;
+    moduleHeight = nullptr;
+}
+
+void WorldEditor::init()
+{
+    std::cerr << "Init!" << std::endl;
+    if (!fontEditor.loadFromFile("res/fonts/PressStart2P-Regular.ttf"))
+    {
+        std::cout << "Failed to load font!" << std::endl;
+    }
+    initTileSizeGroup();
+    initTileMiniViewport();
    // Tilemap tilemap;
     // Initialize tilemap
     //tilemap.InstantiateATilemapByType(1);
@@ -103,10 +127,9 @@ void WorldEditor::init()
     // Load a font for text display (use your own font path)
 }
 
-void WorldEditor::draw(sf::RenderWindow &window)
+
+void  WorldEditor::drawTileSizeGroup(sf::RenderWindow& window)
 {
-    window.clear(sf::Color(32, 32, 32));
-    
     window.draw(titleEditor);
     
     window.draw(ButtonOne);
@@ -117,9 +140,23 @@ void WorldEditor::draw(sf::RenderWindow &window)
     
     window.draw(ButtonThree);
     window.draw(ButtonTextThree);
-
 }
 
+void  WorldEditor::drawTileMiniViewport(sf::RenderWindow& window)
+{
+    window.draw(miniViewportBaseTile);
+    window.draw(gamePreview);
+    window.draw(topHeader);
+    window.draw(magicBelt);
+    
+}
+
+void WorldEditor::draw(sf::RenderWindow &window)
+{
+    window.clear(sf::Color(32, 32, 32));
+    drawTileSizeGroup(window);
+    drawTileMiniViewport(window);
+}
 
 // Function to create a new window and tilemap based on the size
 void WorldEditor::createTilemap(int tileSizeType)
@@ -150,15 +187,12 @@ void WorldEditor::createTilemap(int tileSizeType)
 
 void WorldEditor::Update(sf::RenderWindow &window, sf::Event event)
 {
-
-
+    // save mouse position
     sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-   
-   
+    
     // Check if mouse is hovering over ButtonOne
     if (ButtonOne.getGlobalBounds().contains(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y)))
     {
-
         // If the mouse is over the button, now check if the button is pressed
         if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
         {

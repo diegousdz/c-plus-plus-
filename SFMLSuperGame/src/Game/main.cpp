@@ -8,7 +8,6 @@ bool inEditorMode = true;
 
 int main()
 {
- 
     if(inEditorMode)
     {
         sf::RenderWindow editorWindow(sf::VideoMode(256, 512), "Tilemap Editor");

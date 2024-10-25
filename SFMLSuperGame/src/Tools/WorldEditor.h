@@ -21,9 +21,12 @@ public:
     }
     
     WorldEditor(int screenHeight);
-
-
+    
+    void initTileSizeGroup();
+    void initTileMiniViewport();
     void init();
+    void drawTileSizeGroup(sf::RenderWindow &window);
+    void drawTileMiniViewport(sf::RenderWindow& window);
     void draw(sf::RenderWindow &window);  // Render editor content
     void Update(sf::RenderWindow &window, sf::Event event);
     void createTilemap(int tileSizeType);
@@ -71,12 +74,14 @@ private:
     sf::RenderWindow editorWindow;  // Editor window for rendering
   
     sf::Font font;  // Font to display text
+
+    // ------------------------------------------------- Tile Size 
     sf::Text title;  // Text to show the title
 
     sf::RectangleShape gridTile;  // Example visual representation of a tile
-    int selectedTileType;
+
     sf::Font fontEditor;
-    
+
     sf::Text titleEditor;
     
     sf::RectangleShape ButtonOne;
@@ -89,4 +94,24 @@ private:
     sf::Text ButtonTextThree;
     
     int tileSizeType = 1;
+    
+    // ------------------------------------------------- Tile Mini-Viewport
+
+    sf::RectangleShape miniViewportBaseTile;
+    sf::RectangleShape gamePreview;
+    sf::RectangleShape topHeader;
+    sf::RectangleShape magicBelt;
+
+    // ------------------------------------------------- Load Tilemap
+
+    sf::RectangleShape baseLoadTilemap;
+    sf::Text instructionLoadTilemap;
+    sf::RectangleShape buttonLoadTilemap;
+    sf::Text buttonTextLoadTile;
+
+    // ------------------------------------------------- Debug Console
+
+    sf::RectangleShape baseLoadTilemap;
+    
+ 
 };
