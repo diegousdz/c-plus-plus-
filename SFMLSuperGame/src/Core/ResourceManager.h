@@ -3,6 +3,7 @@
 #include <SFML/Window/Window.hpp>
 #include "./../GameEntities/Player.h"
 #include "./../GameEntities/Orc.h"
+#include "../Game/Game.h"
 
 class ResourceManager
 {
@@ -36,6 +37,8 @@ public:
     sf::Texture playerRunTexture;     
     sf::Texture playerJumpTexture; 
 
+    Game game;
+    bool isFirstFall = true;
 private:
     int playerTypeOfAnimationLastSet; 
     

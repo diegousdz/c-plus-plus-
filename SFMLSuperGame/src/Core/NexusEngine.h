@@ -22,7 +22,6 @@ public:
 
     void init();
     void update(float deltaTime);
-   // void drawMainMenu(sf::RenderWindow& window);
     void draw(RenderWindow& gameWindow);
     void handleInput();
     void initializeWindow(RenderWindow& gameWindow, int width, int height, std::string windowName);

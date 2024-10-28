@@ -2,7 +2,7 @@
 
 void Tilemap::clearTilemap()
 {
-    for (int row = 0; row < 600; row++)
+    for (int row = 0; row < 512; row++)
     {
         if (genericHorizontalArray[row] != nullptr)
         {
@@ -14,13 +14,13 @@ void Tilemap::clearTilemap()
 
 void Tilemap::createTilemapShort()
 {
-    for (int row = 0; row < 600; row++)
+    for (int row = 0; row < 512; row++)
     {
         // Create a separate array for each row
         genericHorizontalArray[row] = new int[1800];  // Dynamically allocated
 
         // Initialize the array with 0
-        for (int i = 0; i < 1800; i++)
+        for (int i = 0; i < 1024; i++)
         {
             genericHorizontalArray[row][i] = 0;
         }
@@ -29,11 +29,11 @@ void Tilemap::createTilemapShort()
 
 void Tilemap::createTilemapMedium()
 {
-    for (int row = 0; row < 600; row++)
+    for (int row = 0; row < 512; row++)
     {
         genericHorizontalArray[row] = new int[2400];  // Dynamically allocated
 
-        for (int i = 0; i < 2400; i++)
+        for (int i = 0; i < 2048; i++)
         {
             genericHorizontalArray[row][i] = 0;
         }
@@ -42,11 +42,11 @@ void Tilemap::createTilemapMedium()
 
 void Tilemap::createTilemapLong()
 {
-    for (int row = 0; row < 600; row++)
+    for (int row = 0; row < 512; row++)
     {
         genericHorizontalArray[row] = new int[3600];  // Dynamically allocated
 
-        for (int i = 0; i < 3600; i++)
+        for (int i = 0; i < 3072; i++)
         {
             genericHorizontalArray[row][i] = 0;
         }

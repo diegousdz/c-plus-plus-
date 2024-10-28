@@ -4,7 +4,7 @@
 #include "../Tools/WorldEditor.h"
 #include "./../Core/NexusEngine.h"
 
-bool inEditorMode = true;
+bool inEditorMode = false;
 
 int main()
 {
@@ -38,7 +38,7 @@ int main()
                     editor.tileViewPort.close();  // Close the existing tilemap window
                 }
 
-                editor.tileViewPort.create(sf::VideoMode(600, 600), "Tilemap Viewport");
+                editor.tileViewPort.create(sf::VideoMode(512, 512), "Tilemap Viewport");
                 
                 if (editor.tileViewPort.isOpen())
                 {
@@ -61,7 +61,7 @@ int main()
     {
         // create an instance of the engine
         NexusEngine& engine = NexusEngine::getInstance();
-        engine.initializeWindow(engine.getResourceManager().gameWindow, 600, 600, "Stone & Frost");
+        engine.initializeWindow(engine.getResourceManager().gameWindow, 512, 512, "Stone & Frost");
         engine.init();
     
         while (engine.getResourceManager().gameWindow.isOpen())

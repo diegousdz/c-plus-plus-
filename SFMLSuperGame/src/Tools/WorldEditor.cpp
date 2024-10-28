@@ -14,6 +14,21 @@ WorldEditor::WorldEditor(int screenHeight): tileMapWidth(0), tileSize(0), gameOv
     tileMapHeight = screenHeight;
 }
 
+void WorldEditor::InitializeGameEditor()
+{
+}
+
+void WorldEditor::ExitGameEditor()
+{
+    // Deallocating memory to prevent memory leak
+    delete[] moduleWidth;
+    delete[] moduleHeight;
+    
+    // Setting to nullptr to ensure correct clean of space memory otherwise we might get garbage
+    moduleWidth = nullptr;
+    moduleHeight = nullptr;
+}
+
 void WorldEditor::initTileSizeGroup()
 {
     int buttonWidth = 64;
@@ -90,19 +105,49 @@ void WorldEditor::initTileMiniViewport()
     magicBelt.setFillColor(sf::Color(56, 56, 56));
 }
 
-void WorldEditor::InitializeGameEditor()
+void WorldEditor::initDebugConsole()
 {
+    int baseTileWidth = 256;
+    int baseTilePositionY = baseTileWidth + 86;
+    int paddingLoadTile = 8;
+    baseDebugConsole.setSize(sf::Vector2f(256, 64));  // Button dimensions
+    baseDebugConsole.setPosition(0, baseTilePositionY );  // Button position
+    baseDebugConsole.setFillColor(sf::Color(8, 8, 8));  // Button color (cyan)
+
+    texDebugConsole.setFont(fontEditor);
+    texDebugConsole.setString("Logs: ");
+    texDebugConsole.setCharacterSize(8);
+    texDebugConsole.setPosition(16, baseTilePositionY + paddingLoadTile);
+    texDebugConsole.setFillColor(sf::Color::Green);
 }
 
-void WorldEditor::ExitGameEditor()
+void WorldEditor::initLoadTilemap()
 {
-    // Deallocating memory to prevent memory leak
-    delete[] moduleWidth;
-    delete[] moduleHeight;
+    int baseTileWidth = 256;
+    int baseTilePositionY = baseTileWidth + 64;
+    int paddingLoadTile = 8;
+
+    baseLoadTilemap.setSize(sf::Vector2f(256, 24));  // Button dimensions
+    baseLoadTilemap.setPosition(0, baseTilePositionY );  // Button position
+    baseLoadTilemap.setFillColor(sf::Color(32, 32, 32));  // Button color (cyan)
+
+    instructionLoadTilemap.setFont(fontEditor);
+    instructionLoadTilemap.setString("Load tilemap");
+    instructionLoadTilemap.setCharacterSize(8);
+    instructionLoadTilemap.setPosition(16, baseTilePositionY + paddingLoadTile);
+    instructionLoadTilemap.setFillColor(sf::Color::White);
+
+    float textWidth = instructionLoadTilemap.getGlobalBounds().width;
     
-    // Setting to nullptr to ensure correct clean of space memory otherwise we might get garbage
-    moduleWidth = nullptr;
-    moduleHeight = nullptr;
+    buttonLoadTilemap.setSize(sf::Vector2f(64, 16));  // Button dimensions
+    buttonLoadTilemap.setPosition(textWidth + 32, baseTilePositionY + paddingLoadTile * 0.5);  // Button position
+    buttonLoadTilemap.setFillColor(sf::Color(86, 86, 86));
+    
+    buttonTextLoadTile.setFont(fontEditor);
+    buttonTextLoadTile.setString("Search");
+    buttonTextLoadTile.setCharacterSize(8);
+    buttonTextLoadTile.setPosition(textWidth + 32 + paddingLoadTile, baseTilePositionY + paddingLoadTile);
+    buttonTextLoadTile.setFillColor(sf::Color::White);
 }
 
 void WorldEditor::init()
@@ -114,6 +159,8 @@ void WorldEditor::init()
     }
     initTileSizeGroup();
     initTileMiniViewport();
+    initLoadTilemap();
+    initDebugConsole();
    // Tilemap tilemap;
     // Initialize tilemap
     //tilemap.InstantiateATilemapByType(1);
@@ -128,7 +175,7 @@ void WorldEditor::init()
 }
 
 
-void  WorldEditor::drawTileSizeGroup(sf::RenderWindow& window)
+void  WorldEditor::drawTileSizeGroup(sf::RenderWindow& window) const
 {
     window.draw(titleEditor);
     
@@ -142,13 +189,26 @@ void  WorldEditor::drawTileSizeGroup(sf::RenderWindow& window)
     window.draw(ButtonTextThree);
 }
 
-void  WorldEditor::drawTileMiniViewport(sf::RenderWindow& window)
+void  WorldEditor::drawTileMiniViewport(sf::RenderWindow& window) const
 {
     window.draw(miniViewportBaseTile);
     window.draw(gamePreview);
     window.draw(topHeader);
     window.draw(magicBelt);
-    
+}
+
+void WorldEditor::drawTileLoadTilemap(sf::RenderWindow& window) const
+{
+    window.draw(baseLoadTilemap);
+    window.draw(instructionLoadTilemap);
+    window.draw(buttonLoadTilemap);
+    window.draw(buttonTextLoadTile);
+}
+
+void WorldEditor::drawDebugConsole(sf::RenderWindow& window) const
+{
+    window.draw(baseDebugConsole);
+    window.draw(texDebugConsole);
 }
 
 void WorldEditor::draw(sf::RenderWindow &window)
@@ -156,6 +216,8 @@ void WorldEditor::draw(sf::RenderWindow &window)
     window.clear(sf::Color(32, 32, 32));
     drawTileSizeGroup(window);
     drawTileMiniViewport(window);
+    drawTileLoadTilemap(window);
+    drawDebugConsole(window);
 }
 
 // Function to create a new window and tilemap based on the size
@@ -182,7 +244,7 @@ void WorldEditor::createTilemap(int tileSizeType)
     } 
 
     // Create a new window with hardcoded size for now (you can adjust this)
-    tileViewPort.create(sf::VideoMode(600, 600), "Tilemap Viewport");
+    tileViewPort.create(sf::VideoMode(512, 512), "Tilemap Viewport");
 }
 
 void WorldEditor::Update(sf::RenderWindow &window, sf::Event event)

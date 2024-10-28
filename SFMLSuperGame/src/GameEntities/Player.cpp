@@ -121,42 +121,38 @@ void Player::handleMovement(float deltaTime)
     
     if (movingLeft)
     {
-        velocity.x = -speed;
         onInverseDirection = true;
+        velocity.x = -speed;
         currentAction = Run;
         isMoving = true;
         std::cout << "Player is moving left. currentAction: " << currentAction << std::endl;
     }
     else if (movingRight)
     {
-        velocity.x = speed;
         onInverseDirection = false;
+        velocity.x = speed;
         currentAction = Run;
+        
         isMoving = true;
         std::cout << "Player is moving right. currentAction: " << currentAction << std::endl;
+    } else if (isOnGround) {  // Only set Idle if on the ground and not moving
+        currentAction = Idle;
     }
-    else
-    {
-        velocity.x = 0;
-        if (isOnGround)
-        {
-            currentAction = Idle;
-            std::cout << "Player is idle. currentAction: " << currentAction << std::endl;
-        }
-          
-    }
-
+        
     if (isJumping && isOnGround)
     {
-        velocity.y = -400.0f;
+        velocity.y = -200.0f;  // Reduced jump height (adjust value as needed)
         isOnGround = false;
         currentAction = Jump;
-        std::cout << "Player is jumping. currentAction: " << currentAction << std::endl;
         isJumping = false;
     }
 
+    // Apply gravity to control fall speed
+    float gravityStrength = 800.0f;  // Adjust as needed to balance the fall rate
+    velocity.y += gravityStrength * deltaTime;
+
     // Apply gravity
-    velocity.y += gravity * deltaTime;
+  //  velocity.y += gravity * deltaTime;
 
     // Update position
     shape.move(velocity * deltaTime);
@@ -167,6 +163,7 @@ void Player::handleMovement(float deltaTime)
     // Check for landing
     if (shape.getPosition().y >= 500)
     {
+        
         isOnGround = true;
         velocity.y = 0;
         shape.setPosition(shape.getPosition().x, 500);
@@ -199,10 +196,14 @@ void Player::updateAnimation(float deltaTime)
         // Handle flipping based on movement direction
         if (onInverseDirection)
         {
+        //    shape.setPosition(shape.getPosition().x -4.0f, shape.getPosition().y);
             currentSprite.setScale(-1.f, 1.f); // Flip sprite for left movement
+            currentSprite.setPosition(currentSprite.getPosition().x + 50.0f, currentSprite.getPosition().y);
         }
         else
         {
+
+            shape.setScale(1.f, 1.f);
             currentSprite.setScale(1.f, 1.f); // Default scale for right movement
         }
     }

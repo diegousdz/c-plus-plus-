@@ -24,9 +24,13 @@ public:
     
     void initTileSizeGroup();
     void initTileMiniViewport();
+    void initDebugConsole();
+    void initLoadTilemap();
     void init();
-    void drawTileSizeGroup(sf::RenderWindow &window);
-    void drawTileMiniViewport(sf::RenderWindow& window);
+    void drawTileSizeGroup(sf::RenderWindow &window) const;
+    void drawTileMiniViewport(sf::RenderWindow& window) const;
+    void drawTileLoadTilemap(sf::RenderWindow& window) const;
+    void drawDebugConsole(sf::RenderWindow& window) const;
     void draw(sf::RenderWindow &window);  // Render editor content
     void Update(sf::RenderWindow &window, sf::Event event);
     void createTilemap(int tileSizeType);
@@ -111,7 +115,6 @@ private:
 
     // ------------------------------------------------- Debug Console
 
-    sf::RectangleShape baseLoadTilemap;
-    
- 
+    sf::RectangleShape baseDebugConsole;
+    sf::Text texDebugConsole;
 };

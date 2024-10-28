@@ -1,17 +1,23 @@
-﻿#pragma once
-#include "../GameEntities/Player.h"
+﻿    #pragma once
+    #include "../GameEntities/Player.h"
 
-class Game
-{
-public:
-    
-    Game(Player user, int nOfEnemies);  // Constructor with parameters
- //   Game();
+    class Game
+    {
+    public:
+        
+        Game();  // Constructor with parameters
 
-    void NewGame();
-    void LoadGame();
+        void init(sf::RenderWindow& window, Player user);
+        void updateBackgroundPosition();
+        void update(float deltaTime, Player player);
+        void draw(sf::RenderWindow& window, Player user);
+        
+        void NewGame();
+        void LoadGame();
+        void createEnemiesLevelOne();
 
-    void simulate();
-    void createEnemiesLevelOne();
-}
-;
+    private:
+        sf::View camera;
+        sf::Sprite background;
+        sf::Vector2f worldOffset;
+    };
