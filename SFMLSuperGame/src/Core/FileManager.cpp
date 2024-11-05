@@ -82,3 +82,4 @@ bool FileManager::savePlayerProgress(const std::string& basePath, const std::str
         return false;
     }
 }
+

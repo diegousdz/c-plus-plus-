@@ -30,6 +30,8 @@ public:
     void initSectionMap();
     void initBrushes();
     void initRotationControls();
+    void onSaveButtonClick();
+    void initVariablesToSave();
     void initLoadTilemap();
     void init();
     
@@ -42,7 +44,8 @@ public:
     void drawBrushesTexture(sf::RenderWindow& window);
     void drawRotationControls(sf::RenderWindow& window) const;
     void draw(sf::RenderWindow &window);
-    
+    void checkMousePositionAndClicksLoadSave(const sf::Vector2i& mousePosition, sf::Event event);
+
     void createTilemap(int tileSizeType);
     void checkMousePositionAndClicksTileSize(const sf::Vector2i& mousePosition, sf::Event event);
     void checkMousePositionAndClicksGridSize(const sf::Vector2i& mousePosition, sf::Event event);
@@ -55,6 +58,8 @@ public:
     WorldEditor(): tileMapWidth(0), tileMapHeight(0), tileSize(0), gameOverLine(0)
     {
     }
+    bool loadButtonClicked = false; // Flag to control Load button clicks
+    bool saveButtonClicked = false;
     
     int tileMapWidth;
     int tileMapHeight;
@@ -91,6 +96,9 @@ public:
     void checkMousePositionAndClicksWithShift(const sf::Vector2i &mousePosition,  sf::Event event);
     void allocateArrayCharEncoder(int rows, int cols);
     void deallocateArrayCharEncoder(int rows);
+
+
+    
     int previousCellSize = 8;
 
 private:
@@ -103,6 +111,10 @@ private:
     
     int rowsOfSprites;
     int numberOfCellsPerRow;
+
+    bool canEditCellSize = false;
+
+    GameMap* newGameMap = nullptr;
     
     sf::Vector2i mousePosition;
     sf::RenderWindow editorWindow;  // Editor window for rendering
@@ -136,11 +148,11 @@ private:
     sf::RectangleShape magicBelt;
     // ------------------------------------------------- Load Tilemap
     sf::RectangleShape baseLoadTilemap;
-    sf::Text instructionLoadTilemap;
-    sf::RectangleShape buttonLoadTilemap;
-    sf::Text buttonTextLoadTile;
-    sf::RectangleShape buttonSaveTilemap;
-    sf::Text buttonTextSaveTilemap;
+    sf::Text textTilemap;
+    sf::RectangleShape buttonLoad;
+    sf::Text buttonTextLoad;
+    sf::RectangleShape buttonSave;
+    sf::Text buttonTextSave;
     // ------------------------------------------------- Debug Console
     sf::RectangleShape baseDebugConsole;
     sf::Text texDebugConsole;
@@ -196,5 +208,6 @@ private:
     sf::RectangleShape ButtonRotateThree;
     sf::Text titleRotationBottom;
     sf::RectangleShape ButtonRotateFour;
+
 
 };

@@ -106,3 +106,22 @@ void Tilemap::applyTextureToTile(int x, int y, const sf::Texture &texture) const
         tilemapSprite[y][x].setTexture(texture);
     }
 }
+
+void Tilemap::deallocateGameMap() {
+    if (gameMap) {
+        delete gameMap;
+        gameMap = nullptr;
+        std::cout << "GameMap deallocated." << std::endl;
+    }
+}
+
+void Tilemap::allocateGameMap(int cellSize, int screenWidth, int screenHeight, int mapSize)
+{
+    if(gameMap)
+        deallocateGameMap();
+
+    gameMap = new GameMap(cellSize, screenWidth, screenHeight, mapSize);
+    std::cout << "GameMap allocated with cell size: " << cellSize 
+              << ", screen dimensions: " << screenWidth << "x" << screenHeight 
+              << ", map size: " << mapSize << std::endl;
+}

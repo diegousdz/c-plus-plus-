@@ -26,33 +26,33 @@ void WorldEditor::initLoadTilemap()
     baseLoadTilemap.setPosition(0, static_cast<float>(baseTilePositionY));
     baseLoadTilemap.setFillColor(sf::Color(32, 32, 32));
 
-    instructionLoadTilemap.setFont(fontEditor);
-    instructionLoadTilemap.setString("TILEMAP");
-    instructionLoadTilemap.setCharacterSize(8);
-    instructionLoadTilemap.setPosition(16, static_cast<float>(baseTilePositionY) + paddingLoadTile);
-    instructionLoadTilemap.setFillColor(sf::Color::White);
+    textTilemap.setFont(fontEditor);
+    textTilemap.setString("TILEMAP");
+    textTilemap.setCharacterSize(8);
+    textTilemap.setPosition(16, static_cast<float>(baseTilePositionY) + paddingLoadTile);
+    textTilemap.setFillColor(sf::Color::White);
 
-    float textWidth = instructionLoadTilemap.getGlobalBounds().width;
+    float textWidth = textTilemap.getGlobalBounds().width;
 
-    buttonLoadTilemap.setSize(sf::Vector2f(64, 16));
-    buttonLoadTilemap.setPosition(textWidth + 32, baseTilePositionY + paddingLoadTile * 0.5);
-    buttonLoadTilemap.setFillColor(sf::Color(86, 86, 86));
+    buttonLoad.setSize(sf::Vector2f(64, 16));
+    buttonLoad.setPosition(textWidth + 32, baseTilePositionY + paddingLoadTile * 0.5);
+    buttonLoad.setFillColor(sf::Color(86, 86, 86));
 
-    buttonTextLoadTile.setFont(fontEditor);
-    buttonTextLoadTile.setString("Load");
-    buttonTextLoadTile.setCharacterSize(8);
-    buttonTextLoadTile.setPosition(textWidth + 32 + (paddingLoadTile * 2), static_cast<float>(baseTilePositionY) + paddingLoadTile);
-    buttonTextLoadTile.setFillColor(sf::Color::White);
+    buttonTextLoad.setFont(fontEditor);
+    buttonTextLoad.setString("Load");
+    buttonTextLoad.setCharacterSize(8);
+    buttonTextLoad.setPosition(textWidth + 32 + (paddingLoadTile * 2), static_cast<float>(baseTilePositionY) + paddingLoadTile);
+    buttonTextLoad.setFillColor(sf::Color::White);
 
-    buttonSaveTilemap.setSize(sf::Vector2f(64, 16));
-    buttonSaveTilemap.setPosition(buttonTextLoadTile.getPosition().x + 64 + static_cast<float>(paddingLoadTile), baseTilePositionY + paddingLoadTile * 0.5);
-    buttonSaveTilemap.setFillColor(sf::Color(86, 86, 86));
+    buttonSave.setSize(sf::Vector2f(64, 16));
+    buttonSave.setPosition(buttonTextLoad.getPosition().x + 64 + static_cast<float>(paddingLoadTile), baseTilePositionY + paddingLoadTile * 0.5);
+    buttonSave.setFillColor(sf::Color(86, 86, 86));
 
-    buttonTextSaveTilemap.setFont(fontEditor);
-    buttonTextSaveTilemap.setString("Save");
-    buttonTextSaveTilemap.setCharacterSize(8);
-    buttonTextSaveTilemap.setPosition(buttonSaveTilemap.getPosition().x + 8, baseTilePositionY + paddingLoadTile);
-    buttonTextSaveTilemap.setFillColor(sf::Color::White);
+    buttonTextSave.setFont(fontEditor);
+    buttonTextSave.setString("Save");
+    buttonTextSave.setCharacterSize(8);
+    buttonTextSave.setPosition(buttonSave.getPosition().x + 8, baseTilePositionY + paddingLoadTile);
+    buttonTextSave.setFillColor(sf::Color::White);
 
     sectionLoadTilemapHeight = baseLoadTilemap.getSize().y + paddingLoadTile * 2;
 }
@@ -323,7 +323,8 @@ void WorldEditor::initBrushes()
     ButtonTextureEighteen.setSize(sf::Vector2f(buttonWidth, buttonHeight));
     ButtonTextureEighteen.setPosition(baseX + (buttonWidth + paddingBetweenButtons) * 5, thirdRowY);
     ButtonTextureEighteen.setFillColor(sf::Color(28, 28, 28));
-}void WorldEditor::initRotationControls()
+}
+void WorldEditor::initRotationControls()
 {
     int buttonWidth = 48;
     int buttonHeight = 24;
@@ -399,8 +400,20 @@ void WorldEditor::initBrushes()
     );
 }
 
+void WorldEditor::onSaveButtonClick() {
+    if (newGameMap) { // Check if gameMap exists
+        newGameMap->saveToFile("res/data", "gameMap");
+    } else {
+        std::cout << "No GameMap to save." << std::endl;
+    }
+}
 
 
+void WorldEditor::initVariablesToSave()
+{
+    tilemap.allocateGameMap(8, 512, 512, 1);
+    newGameMap = tilemap.getGameMap();
+}
 // ------------------------------------------------------------------------------- Init function 
 void WorldEditor::init()
 {
@@ -412,26 +425,14 @@ void WorldEditor::init()
     {
         std::cout << "Font loaded  successfully " << std::endl;
     }
+    initVariablesToSave();
     initLoadTilemap();
     initTileSizeGroup();
     initGridSizeGroup();
     initSectionMap();
     initBrushes();
     initRotationControls();
-   // initTileMiniViewport();
     initDebugConsole();
-   // Tilemap tilemap;
-    // Initialize tilemap
-    /*
-    tilemap.InstantiateATilemapByType(1);
-
-    // Example: Initialize a single tile shape for rendering (32x32 grid tiles)
-    gridTile.setSize(sf::Vector2f(32, 32));
-    gridTile.setFillColor(sf::Color::Transparent);  // Make it transparent
-    gridTile.setOutlineColor(sf::Color::White);  // Add a grid outline
-    gridTile.setOutlineThickness(1);
-
-    // Load a font for text display (use your own font path)*/
 }
 // ------------------------------------------------------------------------------- Draw functions
 void WorldEditor::drawTileSizeGroup(sf::RenderWindow& window) const
@@ -473,11 +474,11 @@ void WorldEditor::drawTileMiniViewport(sf::RenderWindow& window) const
 void WorldEditor::drawTileLoadTilemap(sf::RenderWindow& window) const
 {
     window.draw(baseLoadTilemap);
-    window.draw(instructionLoadTilemap);
-    window.draw(buttonLoadTilemap);
-    window.draw(buttonTextLoadTile);
-    window.draw(buttonSaveTilemap);
-    window.draw(buttonTextSaveTilemap);
+    window.draw(textTilemap);
+    window.draw(buttonLoad);
+    window.draw(buttonTextLoad);
+    window.draw(buttonSave);
+    window.draw(buttonTextSave);
 
 }
 void WorldEditor::drawDebugConsole(sf::RenderWindow& window) const
@@ -580,6 +581,34 @@ void WorldEditor::draw(sf::RenderWindow &window)
     drawDebugConsole(window);
 }
 // ------------------------------------------------------------------------------- Update functions
+
+void WorldEditor::checkMousePositionAndClicksLoadSave(const sf::Vector2i &mousePosition, sf::Event event) {
+    // Check if mouse is hovering over the Load button
+    if (buttonLoad.getGlobalBounds().contains(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y))) {
+        if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+            if (!loadButtonClicked) {
+                std::cout << "Load Button Clicked!" << std::endl;
+                loadButtonClicked = true; // Set the flag so it doesn't log multiple times
+            }
+        } else if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left) {
+            loadButtonClicked = false; // Reset the flag when button is released
+        }
+    }
+
+    // Check if mouse is hovering over the Save button
+    if (buttonSave.getGlobalBounds().contains(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y))) {
+        if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+            if (!saveButtonClicked) {
+                std::cout << "Save Button Clicked!" << std::endl;
+                onSaveButtonClick();
+                saveButtonClicked = true; // Set the flag so it doesn't log multiple times
+            }
+        } else if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left) {
+            saveButtonClicked = false; // Reset the flag when button is released
+        }
+    }
+}
+
 // Function to create a new window and tilemap based on the size type
 void WorldEditor::createTilemap(int tileSizeType)
 {
@@ -606,6 +635,9 @@ void WorldEditor::checkMousePositionAndClicksTileSize(const sf::Vector2i &mouseP
             if(!hasCreatedTilemap)
             {
                 createTilemap(tileSizeType);
+                
+                newGameMap->setMapSize(tileSizeType);
+                newGameMap->setMapSections(2);
                 hasCreatedTilemap = true;
             }
               
@@ -629,6 +661,8 @@ void WorldEditor::checkMousePositionAndClicksTileSize(const sf::Vector2i &mouseP
             if(!hasCreatedTilemap)
             {
                 createTilemap(tileSizeType);
+                newGameMap->setMapSize(tileSizeType);
+                newGameMap->setMapSections(4);
                 hasCreatedTilemap = true;
             }
         }
@@ -653,6 +687,8 @@ void WorldEditor::checkMousePositionAndClicksTileSize(const sf::Vector2i &mouseP
             if(!hasCreatedTilemap)
             {
                 createTilemap(tileSizeType);
+                newGameMap->setMapSize(tileSizeType);
+                newGameMap->setMapSections(6);
                 hasCreatedTilemap = true;
             }
         }
@@ -700,17 +736,26 @@ void WorldEditor::checkMousePositionAndClicksGridSize(const sf::Vector2i &mouseP
     // Check if mouse is hovering over ButtonOne
     if (ButtonOneGrid.getGlobalBounds().contains(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y)))
     {
+        if( !canEditCellSize)
+        {
+            canEditCellSize = true;
+            cout << "value of canEditCellSize 1: " << canEditCellSize << endl;
+        }
         // If the mouse is over the button, now check if the button is pressed
         if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
         {
-            std::cout << "Button One Clicked!" << std::endl;
-            
+       //     std::cout << "Button One Clicked!" << std::endl;
+    
             gridSizeType = 1;
-              
+            if(canEditCellSize) {
+                newGameMap->setCellSize(8);
+                canEditCellSize = false;
+                cout << "value of canEditCellSize: " << canEditCellSize << endl;
+            }
         }
         if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
         {
-            std::cout << "Button One Released!" << std::endl;
+        //    std::cout << "Button One Released!" << std::endl;
             // Handle your button click action here
         }
     } 
@@ -718,19 +763,28 @@ void WorldEditor::checkMousePositionAndClicksGridSize(const sf::Vector2i &mouseP
     // Check ButtonTwo
     if (ButtonTwoGrid.getGlobalBounds().contains(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y)))
     {
+        if(!canEditCellSize)
+        {
+            canEditCellSize = true;
+            cout << "value of canEditCellSize 2: " << canEditCellSize << endl;
+        }
 
         // Check if ButtonTwo is clicked
         if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
         {
-            std::cout << "Button Two Clicked!" << std::endl;
+        //    std::cout << "Button Two Clicked!" << std::endl;
             gridSizeType = 2;
-
+            if(canEditCellSize) {
+                newGameMap->setCellSize(16);
+                canEditCellSize = false;
+                cout << "value of canEditCellSize: " << canEditCellSize << endl;
+            }
         }
 
         // Check if ButtonTwo is released
         if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
         {
-            std::cout << "Button Two Released!" << std::endl;
+         //   std::cout << "Button Two Released!" << std::endl;
 
         }
     } 
@@ -738,18 +792,29 @@ void WorldEditor::checkMousePositionAndClicksGridSize(const sf::Vector2i &mouseP
     // Check ButtonThree
     if (ButtonThreeGrid.getGlobalBounds().contains(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y)))
     {
-
+       
+        if(!canEditCellSize)
+        {
+            canEditCellSize = true;
+            cout << "value of canEditCellSize 3: " << canEditCellSize << endl;
+        }
+          
         // Check if ButtonThree is clicked
         if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
         {
-            std::cout << "Button Three Clicked!" << std::endl;
+          //  std::cout << "Button Three Clicked!" << std::endl;
             gridSizeType = 3;
+            if(canEditCellSize) {
+                newGameMap->setCellSize(32);
+                canEditCellSize = false;
+                cout << "value of canEditCellSize: " << canEditCellSize << endl;
+            }
         }
 
         // Check if ButtonThree is released
         if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
         {
-            std::cout << "Button Three Released!" << std::endl;
+           // std::cout << "Button Three Released!" << std::endl;
          
         }
     } 
@@ -1064,6 +1129,7 @@ void WorldEditor::Update(sf::RenderWindow &window, const sf::Event& event)
 {
     mousePosition = sf::Mouse::getPosition(window);
     
+    checkMousePositionAndClicksLoadSave(mousePosition, event);
     // Tile Size
     checkMousePositionAndClicksTileSize(mousePosition, event);
     changeColorButtonsTileSize();
