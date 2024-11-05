@@ -1,69 +1,60 @@
-#include <iostream>
-#include <iso646.h>
-
 #include "../Tools/WorldEditor.h"
 #include "./../Core/NexusEngine.h"
 
-bool inEditorMode = false;
+bool inEditorMode = true;
 
 int main()
 {
-    if(inEditorMode)
+    if (inEditorMode)
     {
         sf::RenderWindow editorWindow(sf::VideoMode(256, 512), "Tilemap Editor");
         WorldEditor& editor = WorldEditor::getInstance();
-   
-         editor.init();
+
+        editor.init();
         while (editorWindow.isOpen() || editor.tileViewPort.isOpen())
         {
-            // Handle main window events
+            // Handle events for the editorWindow
             sf::Event event;
             while (editorWindow.pollEvent(event))
             {
                 if (event.type == sf::Event::Closed)
                     editorWindow.close();
             }
-                // Draw something in the editor window (like the tilemap for example)
-                editorWindow.clear();
-               
-                editor.draw(editorWindow);
-                editor.Update(editorWindow,  event);
-            
-                editorWindow.display();
+            // Update and draw for editorWindow
+            editorWindow.clear();
+            editor.draw(editorWindow);
+            editor.Update(editorWindow, event);
+            editorWindow.display();
 
-            if(editor.hasCreatedTilemap)
+            // Handle events for tileViewPort
+            if (editor.tileViewPort.isOpen())
             {
-                if (editor.tileViewPort.isOpen())
+                sf::Event tileEvent;
+                while (editor.tileViewPort.pollEvent(tileEvent))
                 {
-                    editor.tileViewPort.close();  // Close the existing tilemap window
+                    if (tileEvent.type == sf::Event::Closed)
+                        editor.tileViewPort.close();
                 }
-
+                editor.tileViewPort.clear(sf::Color(50, 50, 50));
+                editor.tilemapDraw(editor.tileViewPort);
+                editor.tilemapUpdate(editor.tileViewPort, tileEvent);
+                editor.tileViewPort.display();
+            }
+            else if (editor.hasCreatedTilemap)
+            {
+                // Create the tileViewPort window
                 editor.tileViewPort.create(sf::VideoMode(512, 512), "Tilemap Viewport");
-                
-                if (editor.tileViewPort.isOpen())
-                {
-                    while (editor.tileViewPort.pollEvent(event))
-                    {
-                        if (event.type == sf::Event::Closed)
-                            editor.tileViewPort.close();
-                        // Handle tilemap-specific events here
-                    }
-                    editor.tileViewPort.clear(sf::Color(50, 50, 50));
-                
-                    editor.tileViewPort.display();
-                }
                 editor.hasCreatedTilemap = false;
             }
-           
         }
-    
-    } else
+    }
+    else
     {
         // create an instance of the engine
         NexusEngine& engine = NexusEngine::getInstance();
         engine.initializeWindow(engine.getResourceManager().gameWindow, 512, 512, "Stone & Frost");
         engine.init();
-    
+
         while (engine.getResourceManager().gameWindow.isOpen())
         {
             engine.getResourceManager().setDeltaTime();
@@ -74,3 +65,6 @@ int main()
     }
     return 0;
 }
+
+// collisionees
+// 

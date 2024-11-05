@@ -6,6 +6,7 @@
 class AnimationSequencer
 {
 public:
+    
     std::map<int, std::vector<sf::Sprite>> animationFrames;  // Map of animation type to frames
 
     // Generic function to load a spritesheet and extract frames for any animation

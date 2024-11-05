@@ -4,6 +4,8 @@
 #include "./../GameEntities/Player.h"
 #include "./../GameEntities/Orc.h"
 #include "../Game/Game.h"
+#include "GUIHandler.h"
+
 
 class ResourceManager
 {
@@ -35,10 +37,27 @@ public:
 
     sf::Texture playerIdleTexture;    
     sf::Texture playerRunTexture;     
-    sf::Texture playerJumpTexture; 
-
+    sf::Texture playerJumpTexture;
+    
     Game game;
     bool isFirstFall = true;
+    GUIHandler guiHandler;
+
+    // ----------------------------------- GUI
+
+    sf::Font font;
+    sf::Text title;
+    static constexpr int maxItemsMenu = 3;
+    sf::Text menu[maxItemsMenu];
+
+    // ----------------------------- top part
+    sf::RectangleShape header;
+
+    sf::Vector2<float> windowBounds = sf::Vector2<float>(0, 0);
+    bool variablesDrawInitializedMainMenu = false;
+    bool variablesDrawInitializedGame = false;
+    bool isInGame;
+
 private:
     int playerTypeOfAnimationLastSet; 
     

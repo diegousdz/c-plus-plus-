@@ -7,24 +7,33 @@ void NexusEngine::init()
     resourceManager.isGameInitialized = true;
     resourceManager.game = Game();
     resourceManager.game.init(resourceManager.gameWindow, resourceManager.newGamePlayer);
+
+    
 }
 void NexusEngine::update(float deltaTime)
 {
-    std::cout << "Shape Position: " << resourceManager.newGamePlayer.shape.getPosition().x << ", " << resourceManager.newGamePlayer.shape.getPosition().y << std::endl;
-    std::cout << "Sprite Position: " << resourceManager.newGamePlayer.currentSprite.getPosition().x << ", " << resourceManager.newGamePlayer.currentSprite.getPosition().y << std::endl;
+//    std::cout << "Shape Position: " << resourceManager.newGamePlayer.shape.getPosition().x << ", " << resourceManager.newGamePlayer.shape.getPosition().y << std::endl;
+//    std::cout << "Sprite Position: " << resourceManager.newGamePlayer.currentSprite.getPosition().x << ", " << resourceManager.newGamePlayer.currentSprite.getPosition().y << std::endl;
     
     // --------------------------------------------------- check Main menu is not activated
-    if (!resourceManager.isMainMenuActive)  // Only update when the game is active
+    if (!resourceManager.isMainMenuActive)  
     {
+        
         resourceManager.game.update(deltaTime, resourceManager.newGamePlayer);
+        
+        
         // Apply gravity to the player when not on the ground
-        resourceManager.newGamePlayer.velocity.y += resourceManager.newGamePlayer.gravity * deltaTime;
-
+        if (!resourceManager.newGamePlayer.isOnGround)
+        {
+            resourceManager.newGamePlayer.velocity.y += resourceManager.newGamePlayer.gravity * deltaTime;
+        }
         // Update player position based on velocity (horizontal and vertical)
         resourceManager.newGamePlayer.shape.move(
             resourceManager.newGamePlayer.velocity.x * deltaTime, 
             resourceManager.newGamePlayer.velocity.y * deltaTime
-        );  
+        );
+
+
         
         // ----------------------------------------------------------- Animation Switch
         switch (resourceManager.getPlayerTypeOfAnimationLastSet()) {
@@ -47,87 +56,52 @@ void NexusEngine::update(float deltaTime)
         default:  resourceManager.newGamePlayer.currentSprite.setTexture(resourceManager.playerIdleTexture);;
             resourceManager.newGamePlayer.loadAnimations();
         }
-
-
-
+  
         // Check if the player is on the ground
-        if (resourceManager.newGamePlayer.shape.getPosition().y + resourceManager.newGamePlayer.shape.getSize().y > static_cast<float>(resourceManager.windowHeight))
+        float playerBottom = resourceManager.newGamePlayer.shape.getPosition().y + resourceManager.newGamePlayer.shape.getSize().y;
+        if (playerBottom >= resourceManager.windowHeight)
         {
             // Player hits the ground
             resourceManager.newGamePlayer.shape.setPosition(
                 resourceManager.newGamePlayer.shape.getPosition().x, 
-                static_cast<float>(resourceManager.windowHeight) - resourceManager.newGamePlayer.shape.getSize().y
-            );
+                static_cast<float>(resourceManager.windowHeight) - resourceManager.newGamePlayer.shape.getSize().y); // Remove extra semicolon
             resourceManager.newGamePlayer.velocity.y = 0;  // Stop vertical movement
-            resourceManager.newGamePlayer.isOnGround = true;  // Player is now on the ground
+            resourceManager.newGamePlayer.isOnGround = true;
+            // Player is now on the ground
             if(resourceManager.isFirstFall)
                 resourceManager.isFirstFall = false;
+            
+            resourceManager.newGamePlayer.currentSprite.setPosition(
+                resourceManager.newGamePlayer.shape.getPosition()
+            ); 
+        } else
+        {
+            resourceManager.newGamePlayer.isOnGround = false;  // Player is airborne
         }
 
+    
         resourceManager.newGamePlayer.updateAnimation(deltaTime);
     }
 }
-
-void NexusEngine::drawMainMenu(sf::RenderWindow &window)
-{
-    window.clear(sf::Color(20, 12, 28));
-    sf::Font font;
-    if (!font.loadFromFile("res/fonts/PressStart2P-Regular.ttf"))
-    {
-        std::cout << "Error loading font" << std::endl;
-    }
-
-    sf::Text title;
-    title.setFont(font);
-    title.setString("Stone & Frost");
-    title.setCharacterSize(32);
-    title.setFillColor(sf::Color::White);
-    title.setPosition(50, 50);
-
-    const int max_items = 3;
-    sf::Text menu[max_items];
-
-    // Set up the menu items
-    menu[0].setFont(font);
-    menu[0].setCharacterSize(16);
-    menu[0].setString("Start Game");
-    menu[0].setPosition(sf::Vector2f(50, 180));
-
-    menu[1].setFont(font);
-    menu[1].setCharacterSize(16);
-    menu[1].setString("Options");
-    menu[1].setPosition(sf::Vector2f(50, 280));
-
-    menu[2].setFont(font);
-    menu[2].setCharacterSize(16);
-    menu[2].setString("Exit");
-    menu[2].setPosition(sf::Vector2f(50, 380));
-
-    window.draw(title);
-    for (int i = 0; i < max_items; i++) {
-        if (i == resourceManager.currentOptionSelected) {
-            menu[i].setFillColor(sf::Color::Yellow);
-        } else {
-            menu[i].setFillColor(sf::Color::White);
-        }
-        window.draw(menu[i]);
-    }
-
-//    window.display();
-}
-
 void NexusEngine::draw(sf::RenderWindow &gameWindow)
 {
+    
     gameWindow.clear();
 
     if (resourceManager.isMainMenuActive)
     {
-        drawMainMenu(gameWindow);
+        
+        resourceManager.guiHandler.setIsInGame(resourceManager, false);
+        resourceManager.guiHandler.draw(gameWindow, resourceManager);
     }
     else
     {
+        resourceManager.guiHandler.setIsInGame(resourceManager, true);
+        resourceManager.guiHandler.draw(gameWindow, resourceManager);
+
         if (resourceManager.isGameInitialized)
         {
+            
             if(resourceManager.isFirstFall)
             {
                 sf::RectangleShape debugShape(sf::Vector2f(50.0f, 37.0f));
@@ -136,26 +110,27 @@ void NexusEngine::draw(sf::RenderWindow &gameWindow)
                 gameWindow.draw(debugShape);
 
                 gameWindow.draw(resourceManager.newGamePlayer.currentSprite);
+                for (int i = 0; i < 5; i++)
+                {
+                    gameWindow.draw(resourceManager.orcWarriorsPoolShapes[i].shape);
+                } 
             } else
             {
                 resourceManager.game.draw(gameWindow, resourceManager.newGamePlayer);
-            }
-           
+            } 
+            /*
             // Visualize the player's shape as a green box
-          //  sf::RectangleShape debugShape(sf::Vector2f(50.0f, 37.0f));
-          //  debugShape.setFillColor(sf::Color(0, 255, 0, 128)); // Semi-transparent green
-          //  debugShape.setPosition(resourceManager.newGamePlayer.shape.getPosition());
-            //gameWindow.draw(debugShape);
+            sf::RectangleShape debugShape(sf::Vector2f(50.0f, 37.0f));
+            debugShape.setFillColor(sf::Color(0, 255, 0, 128)); // Semi-transparent green
+            debugShape.setPosition(resourceManager.newGamePlayer.shape.getPosition());
+            gameWindow.draw(debugShape);
             
             // Draw the player sprite
-         //   gameWindow.draw(resourceManager.newGamePlayer.currentSprite);
+            gameWindow.draw(resourceManager.newGamePlayer.currentSprite);
             
 
             // Draw other game elements (enemies, etc.)
-           /* for (int i = 0; i < 5; i++)
-            {
-                gameWindow.draw(resourceManager.orcWarriorsPoolShapes[i].shape);
-            } */
+           */
         }
     }
 
@@ -167,16 +142,16 @@ void NexusEngine::handleInput()
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
         resourceManager.setPlayerTypeOfAnimationLastSet(1); // Running left
-        std::cout << "Running (left)" << std::endl;
+    //    std::cout << "Running (left)" << std::endl;
     } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
         resourceManager.setPlayerTypeOfAnimationLastSet(1); // Running right
-        std::cout << "Running (right)" << std::endl;
+     //   std::cout << "Running (right)" << std::endl;
     } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
         resourceManager.setPlayerTypeOfAnimationLastSet(2); // Jumping
-        std::cout << "Jumping" << std::endl;
+     //   std::cout << "Jumping" << std::endl;
     } else {
         resourceManager.setPlayerTypeOfAnimationLastSet(0); // Idle (no key pressed)
-        std::cout << "Idle" << std::endl;
+       // std::cout << "Idle" << std::endl;
     }
     
     sf::Event event;
@@ -258,7 +233,7 @@ void NexusEngine::handleInput()
 
                 if (event.key.code == sf::Keyboard::Space && resourceManager.newGamePlayer.isOnGround)
                 {
-                    //resourceManager.newGamePlayer.velocity.y = -400.0f;  // Jump
+                    resourceManager.newGamePlayer.velocity.y = -400.0f;  // Jump
                     resourceManager.newGamePlayer.isOnGround = false;  // Player is in the air
                     resourceManager.setPlayerTypeOfAnimationLastSet(2);
                 }

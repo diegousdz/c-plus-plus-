@@ -11,6 +11,7 @@ void Game::init(sf::RenderWindow& window, Player user)
 {
     camera.setSize(static_cast<float>(window.getSize().x), static_cast<float>(window.getSize().y));
     camera.setCenter(user.shape.getPosition());
+   //  game.setMapWidth(resourceManager.gameWindow.);
 }
 
 void Game::updateBackgroundPosition()
@@ -30,19 +31,22 @@ void Game::update(float deltaTime, Player player)
     // Interpolate between the camera center and player position
     cameraCenter.x += (playerPosition.x - cameraCenter.x) * cameraSmoothing;
     cameraCenter.y += (playerPosition.y - cameraCenter.y) * cameraSmoothing;
+    
 
-    camera.setCenter(cameraCenter);
-  //  camera.setCenter(player.shape.getPosition());
-   // updateBackgroundPosition();
+   // camera.setCenter(cameraCenter);
+    camera.setCenter(player.shape.getPosition());
+    updateBackgroundPosition();
 }
 
 void Game::draw(sf::RenderWindow& window, Player user)
 {
-    sf::RectangleShape debugShape(sf::Vector2f(50.0f, 37.0f));
+    window.setView(camera);
+    
+    sf::RectangleShape debugShape(user.shape.getSize());
     debugShape.setFillColor(sf::Color(0, 255, 0, 128)); // Semi-transparent green
     debugShape.setPosition(user.shape.getPosition());
+    
     window.draw(debugShape);
-    window.setView(camera);
     window.draw(user.currentSprite);
 }
 
@@ -59,4 +63,9 @@ void Game::createEnemiesLevelOne()
         
         // TODD:  gameWindow.draw(orcWarriorsPoolShapes[i].shape);
     } */
+}
+
+void Game::setMapWidth(int totalMapSectionWidth)
+{
+    mapWidth = totalMapSectionWidth;
 }

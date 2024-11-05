@@ -1,70 +1,11 @@
-﻿#include "Tilemap.h"
+﻿// Tilemap.cpp
+#include "Tilemap.h"
+#include <iostream>
 
-void Tilemap::clearTilemap()
+Tilemap::Tilemap(int type, int cellSize)
 {
-    for (int row = 0; row < 512; row++)
-    {
-        if (genericHorizontalArray[row] != nullptr)
-        {
-            delete[] genericHorizontalArray[row];  // Free memory for each row
-            genericHorizontalArray[row] = nullptr;  // Set pointer to nullptr after deletion
-        }
-    }
-}
-
-void Tilemap::createTilemapShort()
-{
-    for (int row = 0; row < 512; row++)
-    {
-        // Create a separate array for each row
-        genericHorizontalArray[row] = new int[1800];  // Dynamically allocated
-
-        // Initialize the array with 0
-        for (int i = 0; i < 1024; i++)
-        {
-            genericHorizontalArray[row][i] = 0;
-        }
-    }
-}
-
-void Tilemap::createTilemapMedium()
-{
-    for (int row = 0; row < 512; row++)
-    {
-        genericHorizontalArray[row] = new int[2400];  // Dynamically allocated
-
-        for (int i = 0; i < 2048; i++)
-        {
-            genericHorizontalArray[row][i] = 0;
-        }
-    }
-}
-
-void Tilemap::createTilemapLong()
-{
-    for (int row = 0; row < 512; row++)
-    {
-        genericHorizontalArray[row] = new int[3600];  // Dynamically allocated
-
-        for (int i = 0; i < 3072; i++)
-        {
-            genericHorizontalArray[row][i] = 0;
-        }
-    }
-}
-
-void Tilemap::InstantiateATilemapByType(int type)
-{
-    if (type == 1)
-    {
-        createTilemapShort();
-    } else if ( type == 2)
-    {
-        createTilemapMedium();
-    } else
-    {
-        createTilemapLong();
-    }
+    tilemapWasCreated = false;
+    createTilemapBySize(type, cellSize);
 }
 
 Tilemap::~Tilemap()
@@ -72,5 +13,96 @@ Tilemap::~Tilemap()
     clearTilemap();
 }
 
+void Tilemap::clearTilemap()
+{
+    if (tilemapSprite != nullptr)
+    {
+        for (int row = 0; row < rows; row++)
+        {
+            delete[] tilemapSprite[row];
+        }
+        delete[] tilemapSprite;
+        tilemapSprite = nullptr;
+    }
+}
 
+sf::Sprite** Tilemap::createTilemapShort(int cellSize)
+{
+    rows = screenWidth / cellSize;
+    cols = sizeShortMap / cellSize;
 
+    tilemapSprite = new sf::Sprite*[rows];
+    for (int row = 0; row < rows; row++)
+    {
+        tilemapSprite[row] = new sf::Sprite[cols];
+        for (int col = 0; col < cols; col++)
+        {
+            tilemapSprite[row][col] = sf::Sprite(); // Initialize each sprite
+        }
+    }
+    
+    tilemapWasCreated = true;
+    return tilemapSprite;
+}
+
+sf::Sprite** Tilemap::createTilemapMedium(int cellSize)
+{
+    rows = screenWidth / cellSize;
+    cols = sizeMediumMap / cellSize;
+
+    tilemapSprite = new sf::Sprite*[rows];
+    for (int row = 0; row < rows; row++)
+    {
+        tilemapSprite[row] = new sf::Sprite[cols];
+        for (int col = 0; col < cols; col++)
+        {
+            tilemapSprite[row][col] = sf::Sprite();
+        }
+    }
+    
+    tilemapWasCreated = true;
+    return tilemapSprite;
+}
+
+sf::Sprite** Tilemap::createTilemapLong(int cellSize)
+{
+    rows = screenWidth / cellSize;
+    cols = sizeLongMap / cellSize;
+
+    tilemapSprite = new sf::Sprite*[rows];
+    for (int row = 0; row < rows; row++)
+    {
+        tilemapSprite[row] = new sf::Sprite[cols];
+        for (int col = 0; col < cols; col++)
+        {
+            tilemapSprite[row][col] = sf::Sprite();
+        }
+    }
+    
+    tilemapWasCreated = true;
+    return tilemapSprite;
+}
+
+sf::Sprite** Tilemap::createTilemapBySize(int type, int cellSize)
+{
+    switch (type)
+    {
+        case 1: return createTilemapShort(cellSize);
+        case 2: return createTilemapMedium(cellSize);
+        case 3: return createTilemapLong(cellSize);
+        default: return createTilemapShort(cellSize);
+    }
+}
+
+sf::Sprite** Tilemap::getTilemap() const
+{
+    return tilemapSprite;
+}
+
+void Tilemap::applyTextureToTile(int x, int y, const sf::Texture &texture) const
+{
+    if (tilemapSprite != nullptr && y < rows && x < cols)
+    {
+        tilemapSprite[y][x].setTexture(texture);
+    }
+}
