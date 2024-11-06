@@ -7,6 +7,8 @@
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/Mouse.hpp>
 
+#include <windows.h>
+
 #include "Tilemap.h"
 
 // ------------------------------------------------------------------------------- Class constructor
@@ -169,11 +171,11 @@ void WorldEditor::initTileMiniViewport()
     magicBelt.setFillColor(sf::Color(56, 56, 56));
 }
 
-void WorldEditor::initDebugConsole()
-{
+void WorldEditor::initDebugConsole() {
     int baseTileWidth = 256;
     int baseTilePositionY = sectionLoadTilemapHeight + sectionTileSizeHeight + 256 + 96;
     int paddingLoadTile = 8;
+
     baseDebugConsole.setSize(sf::Vector2f(baseTileWidth, 64));
     baseDebugConsole.setPosition(0, baseTilePositionY);
     baseDebugConsole.setFillColor(sf::Color(8, 8, 8));
@@ -183,6 +185,9 @@ void WorldEditor::initDebugConsole()
     texDebugConsole.setCharacterSize(8);
     texDebugConsole.setPosition(16, baseTilePositionY + paddingLoadTile);
     texDebugConsole.setFillColor(sf::Color::Green);
+
+    consoleInput = ""; // Initialize with an empty string
+    isConsoleActive = true; // Set console to be active for input initially
 }
 
 void WorldEditor::initSectionMap()
@@ -229,6 +234,7 @@ void WorldEditor::initSectionMap()
     ButtonSectionSix.setFillColor(sf::Color(28, 28, 28));
 
 }
+
 void WorldEditor::initBrushes()
 {
     int buttonWidth = 30;
@@ -324,6 +330,7 @@ void WorldEditor::initBrushes()
     ButtonTextureEighteen.setPosition(baseX + (buttonWidth + paddingBetweenButtons) * 5, thirdRowY);
     ButtonTextureEighteen.setFillColor(sf::Color(28, 28, 28));
 }
+
 void WorldEditor::initRotationControls()
 {
     int buttonWidth = 48;
@@ -401,19 +408,62 @@ void WorldEditor::initRotationControls()
 }
 
 void WorldEditor::onSaveButtonClick() {
-    if (newGameMap) { // Check if gameMap exists
-        newGameMap->saveToFile("res/data", "gameMap");
-    } else {
-        std::cout << "No GameMap to save." << std::endl;
+    if (!newGameMap) {
+        std::cerr << "Error: No GameMap to save." << std::endl;
+        return;
+    }
+
+    if (!newGameMap->sections) {
+        std::cerr << "Error: No sections array exists." << std::endl;
+        return;
+    }
+
+    newGameMap->saveToFile("res/data", "gameMap");
+
+    std::cout << "Saving " << newGameMap->mapSections << " sections..." << std::endl;
+
+    for (int i = 0; i < newGameMap->mapSections; i++) {
+        if (!newGameMap->sections[i]) {
+            std::cerr << "Section " << i << " is nullptr, skipping save." << std::endl;
+            continue;
+        }
+
+        std::string sectionFileName = "mapSection_" + std::to_string(i);
+        try {
+            if (newGameMap->sections[i]->saveToFile("res/data", sectionFileName)) {
+                std::cout << "Section " << i << " saved successfully" << std::endl;
+            } else {
+                std::cerr << "Failed to save section " << i << std::endl;
+            }
+        } catch (const std::exception& e) {
+            std::cerr << "Error saving section " << i << ": " << e.what() << std::endl;
+        }
     }
 }
 
-
 void WorldEditor::initVariablesToSave()
 {
+    // Initialize GameMap with default values
     tilemap.allocateGameMap(8, 512, 512, 1);
     newGameMap = tilemap.getGameMap();
+
+    if (newGameMap) {
+        newMapSection = newGameMap->sections;
+
+        // Debug information to verify allocation
+        std::cout << "GameMap allocated with cell size: " << newGameMap->cellSize
+                  << ", screen dimensions: " << newGameMap->screenWidth << "x" << newGameMap->screenHeight
+                  << ", map size: " << newGameMap->mapSize << std::endl;
+
+        if (newMapSection) {
+            std::cout << "MapSection array allocated with " << newMapSection << " sections." << std::endl;
+            
+        } else {
+            std::cerr << "Error: MapSection array not allocated." << std::endl;
+        }
+    }
 }
+
 // ------------------------------------------------------------------------------- Init function 
 void WorldEditor::init()
 {
@@ -425,6 +475,7 @@ void WorldEditor::init()
     {
         std::cout << "Font loaded  successfully " << std::endl;
     }
+    loadTileTextures();
     initVariablesToSave();
     initLoadTilemap();
     initTileSizeGroup();
@@ -612,95 +663,112 @@ void WorldEditor::checkMousePositionAndClicksLoadSave(const sf::Vector2i &mouseP
 // Function to create a new window and tilemap based on the size type
 void WorldEditor::createTilemap(int tileSizeType)
 {
-    // Define the size of the tilemap based on the tileSizeType
+    cout << "Tile Size: " << getCellSize() << endl;
     
-    Tilemap(tileSizeType, 16);
-    // Create a new window with hardcoded size for now (you can adjust this)
-    tileViewPort.create(sf::VideoMode(512, 512), "Tilemap Viewport");
+    // Define the size of the tilemap based on the tileSizeType
+    tilemap = Tilemap(tileSizeType, 16);
+    
+    // Properly allocate GameMap with correct number of sections
+    int numSections;
+    switch(tileSizeType) {
+    case 1: numSections = 2; break;
+    case 2: numSections = 4; break;
+    case 3: numSections = 6; break;
+    default: numSections = 2; break;
+    }
+    
+    tilemap.allocateGameMap(8, 512, 512, tileSizeType);
+    newGameMap = tilemap.getGameMap();
+    if(newGameMap) {
+        newGameMap->createSections(numSections);
+        newMapSection = newGameMap->sections;
+        
+        // Initialize each section's grid
+        for(int i = 0; i < numSections; i++) {
+            if(newGameMap->sections[i]) {
+                int gridSize = 512 / tileSize;
+                allocateTileCellArray(newGameMap->sections[i], gridSize);
+            }
+        }
+    }
+    
+   // tileViewPort.create(sf::VideoMode(512, 512), "Tilemap Viewport");
+    previousCellSize = getCellSize();
+    cout << "Tile Size 2: " << previousCellSize << endl;
 }
 // ------------------------------------------------- Tile Size 
-void WorldEditor::checkMousePositionAndClicksTileSize(const sf::Vector2i &mousePosition,  sf::Event event)
+void WorldEditor::checkMousePositionAndClicksTileSize(const sf::Vector2i &mousePosition, sf::Event event)
 {
-    
     // Check if mouse is hovering over ButtonOne
     if (buttonOneFileSize.getGlobalBounds().contains(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y)))
     {
-        // If the mouse is over the button, now check if the button is pressed
         if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
         {
             std::cout << "Button One Clicked!" << std::endl;
-            // Handle your button click action here
             tileSizeType = 1;
             
-            if(!hasCreatedTilemap)
-            {
-                createTilemap(tileSizeType);
-                
+            if(newGameMap) {
+                newGameMap->clearSections(); // Clear existing sections
                 newGameMap->setMapSize(tileSizeType);
-                newGameMap->setMapSections(2);
+                newGameMap->createSections(2); // Create 2 sections for size 1
+                std::cout << "Recreated tilemap with 2 sections" << std::endl;
+            } else if(!hasCreatedTilemap) {
+                createTilemap(tileSizeType);
                 hasCreatedTilemap = true;
             }
-              
-        }
-        if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
-        {
-            std::cout << "Button One Released!" << std::endl;
-            // Handle your button click action here
+            
+            // Always create/recreate the viewport window
+            tileViewPort.create(sf::VideoMode(512, 512), "Tilemap Viewport");
         }
     } 
 
     // Check ButtonTwo
     if (buttonTwoFileSize.getGlobalBounds().contains(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y)))
     {
-
-        // Check if ButtonTwo is clicked
         if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
         {
             std::cout << "Button Two Clicked!" << std::endl;
             tileSizeType = 2;
-            if(!hasCreatedTilemap)
-            {
-                createTilemap(tileSizeType);
+            
+            if(newGameMap) {
+                newGameMap->clearSections();
                 newGameMap->setMapSize(tileSizeType);
-                newGameMap->setMapSections(4);
+                newGameMap->createSections(4); // Create 4 sections for size 2
+                std::cout << "Recreated tilemap with 4 sections" << std::endl;
+            } else if(!hasCreatedTilemap) {
+                createTilemap(tileSizeType);
                 hasCreatedTilemap = true;
             }
-        }
-
-        // Check if ButtonTwo is released
-        if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
-        {
-            std::cout << "Button Two Released!" << std::endl;
-
+            
+            // Always create/recreate the viewport window
+            tileViewPort.create(sf::VideoMode(512, 512), "Tilemap Viewport");
         }
     } 
 
     // Check ButtonThree
     if (buttonThreeFileSize.getGlobalBounds().contains(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y)))
     {
-
-        // Check if ButtonThree is clicked
         if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
         {
             std::cout << "Button Three Clicked!" << std::endl;
             tileSizeType = 3;
-            if(!hasCreatedTilemap)
-            {
-                createTilemap(tileSizeType);
+            
+            if(newGameMap) {
+                newGameMap->clearSections();
                 newGameMap->setMapSize(tileSizeType);
-                newGameMap->setMapSections(6);
+                newGameMap->createSections(6); // Create 6 sections for size 3
+                std::cout << "Recreated tilemap with 6 sections" << std::endl;
+            } else if(!hasCreatedTilemap) {
+                createTilemap(tileSizeType);
                 hasCreatedTilemap = true;
             }
-        }
-
-        // Check if ButtonThree is released
-        if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
-        {
-            std::cout << "Button Three Released!" << std::endl;
-         
+            
+            // Always create/recreate the viewport window
+            tileViewPort.create(sf::VideoMode(512, 512), "Tilemap Viewport");
         }
     } 
 }
+
 void WorldEditor::changeColorButtonsTileSize()
 {
     switch (tileSizeType)
@@ -747,6 +815,7 @@ void WorldEditor::checkMousePositionAndClicksGridSize(const sf::Vector2i &mouseP
        //     std::cout << "Button One Clicked!" << std::endl;
     
             gridSizeType = 1;
+            newGameMap->mapSize = 1;
             if(canEditCellSize) {
                 newGameMap->setCellSize(8);
                 canEditCellSize = false;
@@ -774,6 +843,7 @@ void WorldEditor::checkMousePositionAndClicksGridSize(const sf::Vector2i &mouseP
         {
         //    std::cout << "Button Two Clicked!" << std::endl;
             gridSizeType = 2;
+            newGameMap->mapSize = 2;
             if(canEditCellSize) {
                 newGameMap->setCellSize(16);
                 canEditCellSize = false;
@@ -804,6 +874,7 @@ void WorldEditor::checkMousePositionAndClicksGridSize(const sf::Vector2i &mouseP
         {
           //  std::cout << "Button Three Clicked!" << std::endl;
             gridSizeType = 3;
+            newGameMap->mapSize = 3;
             if(canEditCellSize) {
                 newGameMap->setCellSize(32);
                 canEditCellSize = false;
@@ -914,6 +985,66 @@ void WorldEditor::changeColorButtonsSection()
     }
 }
 
+
+
+void WorldEditor::checkMousePositionAndClickOnTileTextures(const sf::Vector2i &mousePosition, sf::Event event) {
+    // Array of all buttons for easy iteration
+  //  CurrentlySelectedIndex = 0;
+    for (int i = 0; i < 18; ++i) {
+        if (buttons[i]->getGlobalBounds().contains(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y))) {
+            if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+
+                // save the current index 
+                CurrentlySelectedIndex = i + 1;
+
+                std::cout << "CurrentlySelectedIndex: " << CurrentlySelectedIndex << std::endl;
+            }
+        }
+    }
+}
+
+void WorldEditor::changeColorButtonsTextures()
+{
+    // Ensure CurrentlySelectedIndex is within bounds (1 to 18)
+    
+    if (CurrentlySelectedIndex < 1 || CurrentlySelectedIndex > 18) {
+        cout << "Invalid CurrentlySelectedIndex: " << CurrentlySelectedIndex << std::endl;
+        return;
+    }
+    int calc = CurrentlySelectedIndex - 1;
+    // Loop through the buttons array
+    for (int i = 0; i < 18; ++i) {
+        if (i == calc) {
+            // Set selected button color
+            buttons[i]->setFillColor(sf::Color(128, 128, 128));
+        } else {
+            // Set default color for non-selected buttons
+            buttons[i]->setFillColor(sf::Color(56, 56, 56));
+        }
+    }
+}
+
+
+
+void WorldEditor::saveCurrentSectionState()
+{
+    if (!newGameMap || !newGameMap->sections || sectionSelected <= 0) return;
+
+    MapSection* currentSection = newGameMap->sections[sectionSelected - 1];
+    if (!currentSection) return;
+
+    std::string sectionFileName = "section_" + std::to_string(sectionSelected) + "_data";
+    try {
+        if (currentSection->saveToFile("res/data", sectionFileName)) {
+            std::cout << "Section " << sectionSelected << " saved successfully." << std::endl;
+        } else {
+            std::cerr << "Failed to save section " << sectionSelected << std::endl;
+        }
+    } catch (const std::exception& e) {
+        std::cerr << "Error saving section " << sectionSelected << ": " << e.what() << std::endl;
+    }
+}
+
 void WorldEditor::checkMousePositionAndClickOnSection(const sf::Vector2i &mousePosition, sf::Event event)
 {
     if(tileSizeType == 1)
@@ -925,6 +1056,7 @@ void WorldEditor::checkMousePositionAndClickOnSection(const sf::Vector2i &mouseP
             if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
             {
                 std::cout << "Button Section One Clicked!" << std::endl;
+                saveCurrentSectionState();
                 sectionSelected = 1;
                 changeColorButtonsSection(); // Update colors based on selection
             }
@@ -942,6 +1074,7 @@ void WorldEditor::checkMousePositionAndClickOnSection(const sf::Vector2i &mouseP
             if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
             {
                 std::cout << "Button Section Two Clicked!" << std::endl;
+                saveCurrentSectionState();
                 sectionSelected = 2;
                 changeColorButtonsSection(); // Update colors based on selection
             }
@@ -962,6 +1095,7 @@ void WorldEditor::checkMousePositionAndClickOnSection(const sf::Vector2i &mouseP
             if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
             {
                 std::cout << "Button Section One Clicked!" << std::endl;
+                saveCurrentSectionState();
                 sectionSelected = 1;
                 changeColorButtonsSection(); // Update colors based on selection
             }
@@ -979,6 +1113,7 @@ void WorldEditor::checkMousePositionAndClickOnSection(const sf::Vector2i &mouseP
             if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
             {
                 std::cout << "Button Section Two Clicked!" << std::endl;
+                saveCurrentSectionState();
                 sectionSelected = 2;
                 changeColorButtonsSection(); // Update colors based on selection
             }
@@ -996,6 +1131,7 @@ void WorldEditor::checkMousePositionAndClickOnSection(const sf::Vector2i &mouseP
             if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
             {
                 std::cout << "Button Section Three Clicked!" << std::endl;
+                saveCurrentSectionState();
                 sectionSelected = 3;
                 changeColorButtonsSection(); // Update colors based on selection
             }
@@ -1012,6 +1148,7 @@ void WorldEditor::checkMousePositionAndClickOnSection(const sf::Vector2i &mouseP
             if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
             {
                 std::cout << "Button Section Four Clicked!" << std::endl;
+                saveCurrentSectionState();
                 sectionSelected = 4;
                 changeColorButtonsSection();
             }
@@ -1032,6 +1169,7 @@ void WorldEditor::checkMousePositionAndClickOnSection(const sf::Vector2i &mouseP
             if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
             {
                 std::cout << "Button Section One Clicked!" << std::endl;
+                saveCurrentSectionState();
                 sectionSelected = 1;
                 changeColorButtonsSection(); // Update colors based on selection
             }
@@ -1049,6 +1187,7 @@ void WorldEditor::checkMousePositionAndClickOnSection(const sf::Vector2i &mouseP
             if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
             {
                 std::cout << "Button Section Two Clicked!" << std::endl;
+                saveCurrentSectionState();
                 sectionSelected = 2;
                 changeColorButtonsSection(); // Update colors based on selection
             }
@@ -1066,6 +1205,7 @@ void WorldEditor::checkMousePositionAndClickOnSection(const sf::Vector2i &mouseP
             if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
             {
                 std::cout << "Button Section Three Clicked!" << std::endl;
+                saveCurrentSectionState();
                 sectionSelected = 3;
                 changeColorButtonsSection(); // Update colors based on selection
             }
@@ -1082,6 +1222,7 @@ void WorldEditor::checkMousePositionAndClickOnSection(const sf::Vector2i &mouseP
             if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
             {
                 std::cout << "Button Section Four Clicked!" << std::endl;
+                saveCurrentSectionState();
                 sectionSelected = 4;
                 changeColorButtonsSection();
             }
@@ -1096,6 +1237,7 @@ void WorldEditor::checkMousePositionAndClickOnSection(const sf::Vector2i &mouseP
             if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
             {
                 std::cout << "Button Section Five Clicked!" << std::endl;
+                saveCurrentSectionState();
                 sectionSelected = 5;
                 changeColorButtonsSection();
             }
@@ -1110,6 +1252,7 @@ void WorldEditor::checkMousePositionAndClickOnSection(const sf::Vector2i &mouseP
             if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
             {
                 std::cout << "Button Section Six Clicked!" << std::endl;
+                saveCurrentSectionState();
                 sectionSelected = 6;
                 changeColorButtonsSection();
             }
@@ -1120,9 +1263,43 @@ void WorldEditor::checkMousePositionAndClickOnSection(const sf::Vector2i &mouseP
         }
     }
     
-
-    
 }
+//--------------------------------------------------------------------------------- Debug
+
+
+void WorldEditor::checkMousePositionAndClickOnDebugConsole(sf::Vector2i mousePosition, sf::Event event) {
+    if (isConsoleActive) {
+        // Check if enough time has passed since the last input
+        if (debounceClock.getElapsedTime().asSeconds() > debounceDelay) {
+            if (event.type == sf::Event::TextEntered) {
+                if (event.text.unicode == '\b') {
+                    // Handle backspace (remove last character)
+                    if (!consoleInput.empty()) {
+                        consoleInput.pop_back();
+                    }
+                } else if (event.text.unicode == '\r') {
+                    // Handle Enter key (submit the input)
+                    if (CurrentlySelectedIndex > 0 && newGameMap != nullptr) {
+                        newGameMap->texturesPath[CurrentlySelectedIndex - 1] = consoleInput; // Set path for the selected texture
+                        std::cout << "Texture path set for button " << CurrentlySelectedIndex << ": " << consoleInput << std::endl;
+                    }
+                    consoleInput.clear(); // Clear the input after submitting
+                } else if (event.text.unicode < 128) {
+                    // Only add ASCII characters to the input
+                    consoleInput += static_cast<char>(event.text.unicode);
+                }
+
+                // Update the displayed text in the debug console
+                texDebugConsole.setString("Logs: " + consoleInput);
+
+                // Reset the debounce timer
+                debounceClock.restart();
+            }
+        }
+    }
+}
+
+
 
 // ------------------------------------------------------------------------------- Update function 
 void WorldEditor::Update(sf::RenderWindow &window, const sf::Event& event)
@@ -1141,56 +1318,137 @@ void WorldEditor::Update(sf::RenderWindow &window, const sf::Event& event)
     // Section
     checkMousePositionAndClickOnSection(mousePosition, event);
     changeColorButtonsGridSize();
+
+    // Tile Textures
+    checkMousePositionAndClickOnTileTextures(mousePosition, event);
+    changeColorButtonsTextures();
+  //  checkMousePositionAndClickOnDebugConsole(mousePosition, event);
+
+   // checkMousePositionAndFVClicksWithShift(mousePosition, event);
+
 }
 
-void WorldEditor::allocateSpritesArrayForMapSection(int screenWidth, int screenHeight, int cellSize)
+void WorldEditor::allocateTileCellArray(MapSection* section, int gridSize)
 {
-        if (cellSize <= 0)
+    if (!section) return;
+
+    // Calculate number of cells based on grid size
+    section->numberOfCellsPerRow = gridSize;
+    
+    // Allocate the 2D array of TileCells
+    section->tilecellArray = new TileCell*[gridSize];
+    for(int y = 0; y < gridSize; y++)
+    {
+        section->tilecellArray[y] = new TileCell[gridSize];
+        
+        for(int x = 0; x < gridSize; x++)
         {
-            std::cerr << "Error: cellSize must be greater than zero!" << std::endl;
-            return; // Exit the function if cellSize is invalid
+            // Initialize each TileCell
+            section->tilecellArray[y][x].shape.setSize(sf::Vector2f(tileSize, tileSize));
+            section->tilecellArray[y][x].shape.setPosition(x * tileSize, y * tileSize);
+            section->tilecellArray[y][x].shape.setFillColor(sf::Color::Transparent);
+            section->tilecellArray[y][x].shape.setOutlineColor(sf::Color::Red);
+            section->tilecellArray[y][x].shape.setOutlineThickness(0.5f);
+            section->tilecellArray[y][x].cellType = 'V'; // Default to void
+        }
+    }
+    
+    std::cout << "TileCell array allocated for section with grid size: " << gridSize << std::endl;
+}
+
+void WorldEditor::deallocateTileSection(MapSection* section) 
+{
+    if (!section) return;
+
+    // Clean up the tilecell array
+    if (section->tilecellArray) 
+    {
+        for (int y = 0; y < section->numberOfCellsPerRow; y++) 
+        {
+            delete[] section->tilecellArray[y];
+        }
+        delete[] section->tilecellArray;
+        section->tilecellArray = nullptr;
+    }
+
+    std::cout << "Section tiles deallocated successfully." << std::endl;
+}
+
+// In WorldEditor.cpp
+
+void WorldEditor::saveBrushToTile(MapSection* section, int cellX, int cellY) {
+    if (!section || cellX < 0 || cellY < 0 || cellX >= section->numberOfCellsPerRow || cellY >= section->numberOfCellsPerRow) return;
+    
+    // Save the CurrentlySelectedIndex to the tile's local storage (e.g., cellType or another identifier)
+    section->tilecellArray[cellY][cellX].textureID = CurrentlySelectedIndex; // Save the brush (texture) index
+
+    std::cout << "Brush index " <<   section->tilecellArray[cellY][cellX].textureID<< " saved to tile at (" << cellX << ", " << cellY << ")" << std::endl;
+}
+
+// In WorldEditor.cpp
+void WorldEditor::loadTileTextures() {
+    // Paths to texture files, adjust according to your project's structure
+    const std::string textureFiles[NUM_TEXTURES] = {
+        "res/textures/World/32/tile_32_floor_B.png",
+        "res/textures/World/32/tile_32_floor_b2.png",
+        "res/textures/World/32/tile_32_floor_t.png",
+        "res/textures/World/32/tile_32_floor_t2.png",
+        "res/textures/World/32/tile_32_wall_l.png",
+        "res/textures/World/32/tile_32_wall_l2.png",
+        "res/textures/World/32/tile_32_wall_r.png",
+        "res/textures/World/32/tile_32_wall_r2.png",
+        "res/textures/World/32/tile_32_corner_l.png",
+        "res/textures/World/32/tile_32_corner_r.png",
+    };
+
+    // Load each texture into the tileTextures array
+    for (int i = 0; i < NUM_TEXTURES; ++i) {
+        if (!tileTextures[i].loadFromFile(textureFiles[i])) {
+            std::cerr << "Failed to load texture: " << textureFiles[i] << std::endl;
+        } else {
+            std::cout << "Successfully loaded texture: " << textureFiles[i] << std::endl;
+        }
+    }
+}
+
+
+void WorldEditor::applyTextureToTile(MapSection* section, int cellX, int cellY, int textureIndex) {
+    if (!section || cellX < 0 || cellY < 0 || 
+        cellX >= section->numberOfCellsPerRow || 
+        cellY >= section->numberOfCellsPerRow ||
+        textureIndex < 0 || textureIndex >= NUM_TEXTURES) {
+        return;
         }
 
-        if (hasAllocatedSpritesAndShapes) {
-            deallocateSpritesArray(rowsOfSprites); // Call deallocation function to free memory
-            hasAllocatedSpritesAndShapes = false;  // Reset allocation status
-        } 
-            // create an array for each line of pixels (pixel array) but take in consideration how many lines t
-            numberOfCellsPerRow = screenWidth / tileSize;
-            rowsOfSprites = screenHeight / tileSize;
-        
-        
-            spriteArrayTilemap = new sf::Sprite*[rowsOfSprites];
-            colliderArray = new sf::RectangleShape*[rowsOfSprites];
-            allocateArrayCharEncoder(rowsOfSprites, numberOfCellsPerRow);
-            textureIDArray = new int*[rowsOfSprites];
+    TileCell& cell = section->tilecellArray[cellY][cellX];
     
-            // iterate the total number of screen height devided between the number of cell size
-            for(int y = 0; y < rowsOfSprites; y++)
-            {
-                spriteArrayTilemap[y] = new sf::Sprite[numberOfCellsPerRow];
-                colliderArray[y] = new sf::RectangleShape[numberOfCellsPerRow];
-                textureIDArray[y] = new int[numberOfCellsPerRow];
-                
-                for(int x = 0; x < numberOfCellsPerRow; x++)
-                {
-                    spriteArrayTilemap[y][x].setPosition(x * tileSize, y * tileSize);
-                    spriteArrayTilemap[y][x] = sf::Sprite();
-
-                    colliderArray[y][x].setPosition(x * tileSize, y * tileSize);
-                    colliderArray[y][x].setSize(sf::Vector2f(tileSize, tileSize));
-                    colliderArray[y][x].setFillColor(sf::Color::Transparent);  // No fill
-                    colliderArray[y][x].setOutlineColor(sf::Color::Red);       // Red outline
-                    colliderArray[y][x].setOutlineThickness(0.5f);
-
-                    textureIDArray[y][x] = -1;
-                }
-            }
-            hasAllocatedSpritesAndShapes = true;
-            std::cout << "Sprites and colliders allocated." << std::endl;
-        
+    // Set the texture for the sprite
+    cell.sprite.setTexture(tileTextures[textureIndex]);
+    cell.sprite.setPosition(cell.shape.getPosition());
+    // Make shape transparent since we're using sprite
+    cell.shape.setFillColor(sf::Color::Transparent);
+    
+    // Update texture ID
+    cell.textureID = textureIndex;
+    
+    std::cout << "Applied texture " << textureIndex << " to tile at (" << cellX << ", " << cellY << ")" << std::endl;
 }
 
+
+void WorldEditor::deallocateTileCellArray(MapSection* section)
+{
+    if (!section || !section->tilecellArray) return;
+
+    for(int y = 0; y < section->numberOfCellsPerRow; y++)
+    {
+        delete[] section->tilecellArray[y];
+    }
+    delete[] section->tilecellArray;
+    section->tilecellArray = nullptr;
+    
+    std::cout << "TileCell array deallocated for section" << std::endl;
+}
+/*
 void WorldEditor::deallocateSpritesArray(int rows)
 {
     if (spriteArrayTilemap)
@@ -1228,33 +1486,51 @@ void WorldEditor::deallocateSpritesArray(int rows)
         deallocateArrayCharEncoder(rows);
         ArrayCharEncoder = nullptr; // Set to nullptr after deallocation
     }
-}
+}*/
 
-void WorldEditor::displaySpritesArray(sf::RenderWindow& window)
+void WorldEditor::displayTileSection(sf::RenderWindow& window, MapSection* section)
 {
-    std::cout << "Drawing sprites and colliders 0" << std::endl;
-    // get the window
-    // inside the window grab the array of pointer that points to an array of sprites and set position
-    for (int y = 0; y < rowsOfSprites; y++)
+    if (!section || !section->tilecellArray) return;
+
+    for (int y = 0; y < section->numberOfCellsPerRow; y++) 
     {
-        for (int x = 0; x < numberOfCellsPerRow; x++)
+        for (int x = 0; x < section->numberOfCellsPerRow; x++) 
         {
-            window.draw(colliderArray[y][x]);
-            if (ArrayCharEncoder[y][x] == 'C' || ArrayCharEncoder[y][x] == 'V')
+            TileCell& cell = section->tilecellArray[y][x];
+
+            // Draw the shape (grid cell)
+            window.draw(cell.shape);
+
+            // Draw sprite if there's a texture
+            if (cell.textureID >= 0) {
+                window.draw(cell.sprite);
+            }
+
+            // Draw label for cell type
+            if (cell.cellType == 'C' || cell.cellType == 'V') 
             {
                 sf::Text labelText;
                 labelText.setFont(fontEditor);
-                labelText.setString(std::string(1, ArrayCharEncoder[y][x]));
+                labelText.setString(std::string(1, cell.cellType));
                 labelText.setCharacterSize(8);
                 labelText.setFillColor(sf::Color::White);
-                labelText.setPosition(colliderArray[y][x].getPosition());
+
+                // Set label position based on cell position and tile size
+                labelText.setPosition(
+                    cell.shape.getPosition().x + 2,
+                    cell.shape.getPosition().y + 2
+                );
+
+                // Debug: Log cell properties
+                std::cout << "Cell Type: " << cell.cellType 
+                          << ", Position: (" << cell.shape.getPosition().x 
+                          << ", " << cell.shape.getPosition().y 
+                          << "), Tile Size: " << tileSize 
+                          << std::endl;
+
                 window.draw(labelText);
             }
-            window.draw(spriteArrayTilemap[y][x]);
-            window.draw(colliderArray[y][x]);
-            
         }
-        std::cout << "Drawing sprites and colliders 1" << std::endl;
     }
 }
 
@@ -1267,41 +1543,77 @@ void WorldEditor::setCellSize(int size) {
     tileSize = size;
 }
 
-void WorldEditor::displayColliderEncoderArray(sf::RenderWindow& window)
+void WorldEditor::checkMousePositionAndClicksWithShift(const sf::Vector2i &mousePosition, sf::Event event) {
+    if (!newGameMap || !newGameMap->sections) return;
+
+    MapSection *currentSection = newGameMap->sections[sectionSelected - 1];
+    if (!currentSection) return;
+
+    int cellX = mousePosition.x / tileSize;
+    int cellY = mousePosition.y / tileSize;
+
+    static int lastCellX = -1;
+    static int lastCellY = -1;
+
+    if ((cellX != lastCellX || cellY != lastCellY) && cellX >= 0 && cellY >= 0 && cellX < currentSection->numberOfCellsPerRow && cellY < currentSection->numberOfCellsPerRow) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)) {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::V)) {
+                currentSection->tilecellArray[cellY][cellX].cellType = 'V';
+           //     currentSection->tilecellArray[cellY][cellX].shape.setFillColor(sf::Color(100, 100, 100, 100));
+                std::cout << "Set cell (" << cellX << ", " << cellY << ") to V" << std::endl;
+            } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::C)) {
+                currentSection->tilecellArray[cellY][cellX].cellType = 'C';
+           //     currentSection->tilecellArray[cellY][cellX].shape.setFillColor(sf::Color(0, 0, 255, 100));
+                std::cout << "Set cell (" << cellX << ", " << cellY << ") to C" << std::endl;
+            }
+            lastCellX = cellX;
+            lastCellY = cellY;
+        }
+    }
+
+    if (event.type == sf::Event::MouseButtonReleased) {
+        lastCellX = -1;
+        lastCellY = -1;
+    }
+}
+
+void WorldEditor::displayColliderEncoderArray(sf::RenderWindow& window, MapSection* section)
 {
-    for (int y = 0; y < rowsOfSprites; y++)
+    if (!section || !section->tilecellArray) return;
+
+    for (int y = 0; y < section->numberOfCellsPerRow; y++)
     {
-        for (int x = 0; x < numberOfCellsPerRow; x++)
+        for (int x = 0; x < section->numberOfCellsPerRow; x++)
         {
-            // Set default transparent color
-            colliderArray[y][x].setFillColor(sf::Color::Transparent);
+            TileCell& cell = section->tilecellArray[y][x];
+            
+          //  cout << "Current state of cell at (" << x << ", " << y << "): Type = " << cell.cellType << cell.textureID << std::endl;
 
-            // Update color based on ArrayCharEncoder
-            if (ArrayCharEncoder[y][x] == 'V') 
+            if (cell.cellType == 'V' && cell.shape.getFillColor() != sf::Color(100, 100, 100, 100)) 
             {
-                colliderArray[y][x].setFillColor(sf::Color(100, 100, 100, 100)); // Gray for 'V'
+                cell.shape.setFillColor(sf::Color(100, 100, 100, 100)); // Gray for 'V'
+                std::cout << "Setting cell (" << x << ", " << y << ") to void with gray color\n";
             }
-            else if (ArrayCharEncoder[y][x] == 'C') 
+            else if (cell.cellType == 'C' && cell.shape.getFillColor() != sf::Color(0, 0, 255, 100)) 
             {
-                colliderArray[y][x].setFillColor(sf::Color(0, 0, 255, 100)); // Blue for 'C'
+                cell.shape.setFillColor(sf::Color(0, 0, 255, 100)); // Blue for 'C'
+                std::cout << "Setting cell (" << x << ", " << y << ") to collider with blue color\n";
             }
 
-            // Draw the collider and label if necessary
-            window.draw(colliderArray[y][x]);
+            // Draw the cell shape
+            window.draw(cell.shape);
 
-            if (ArrayCharEncoder[y][x] == 'C' || ArrayCharEncoder[y][x] == 'V')
+            // Draw label if cell is C or V
+            if (cell.cellType == 'C' || cell.cellType == 'V')
             {
-              //  std::cout << "Drawing label for " << ArrayCharEncoder[y][x] << " at (" << x << ", " << y << ")" << std::endl;
-
                 sf::Text labelText;
                 labelText.setFont(fontEditor);
-                labelText.setString(std::string(1, ArrayCharEncoder[y][x]));
+                labelText.setString(std::string(1, cell.cellType));
                 labelText.setCharacterSize(8);
                 labelText.setFillColor(sf::Color::White);
                 
-                sf::Vector2f colliderPos = colliderArray[y][x].getPosition();
-                labelText.setPosition(colliderPos.x + 2, colliderPos.y + 2);
-                
+                sf::Vector2f cellPos = cell.shape.getPosition();
+                labelText.setPosition(cell.shape.getPosition().x + 2, cell.shape.getPosition().y + 2);
                 window.draw(labelText);
             }
         }
@@ -1310,20 +1622,21 @@ void WorldEditor::displayColliderEncoderArray(sf::RenderWindow& window)
 
 void WorldEditor::tilemapDraw(sf::RenderWindow& window)
 {
+    if(!newGameMap || !newGameMap->sections || sectionSelected <= 0) return;
+    
+    MapSection* currentSection = newGameMap->sections[sectionSelected - 1];
+    if(!currentSection) return;
+
+    // If cell size changed, reallocate the grid
     if (getCellSize() != previousCellSize)
     {
-        // Deallocate previous arrays before reallocating
-        deallocateSpritesArray(512 / previousCellSize);
-
-        // Allocate new arrays with the updated cell size
-        allocateSpritesArrayForMapSection(512, 512, getCellSize());
-
-        // Update the previous cell size to the current one
+        int gridSize = 512 / getCellSize();
+        deallocateTileCellArray(currentSection);
+        allocateTileCellArray(currentSection, gridSize);
         previousCellSize = getCellSize();
     }
 
-    // Display the sprites with the new size
-    displayColliderEncoderArray(window);
+    displayColliderEncoderArray(window, currentSection);
 }
 void WorldEditor::tilemapUpdate(sf::RenderWindow& window, const sf::Event& event)
 {
@@ -1331,6 +1644,8 @@ void WorldEditor::tilemapUpdate(sf::RenderWindow& window, const sf::Event& event
     checkMousePositionAndClicksWithShift(mousePosition, event);
 }
 
+
+/*
 void WorldEditor::checkMousePositionAndClicksWithShift(const sf::Vector2i& mousePosition, sf::Event event)
 {
     // Ensure ArrayCharEncoder is allocated
@@ -1360,39 +1675,23 @@ void WorldEditor::checkMousePositionAndClicksWithShift(const sf::Vector2i& mouse
         }
 
     }
+}*/
+
+void WorldEditor::allocateArrayCharEncoder(TileCell& tileCell)
+{
+    // Initialize the TileCell with default values
+    tileCell.cellType = 'V';
+    tileCell.shape.setFillColor(sf::Color::Transparent);
+    tileCell.shape.setOutlineColor(sf::Color::Red);
+    tileCell.shape.setOutlineThickness(0.5f);
+    tileCell.textureID = -1;
 }
 
-void WorldEditor::allocateArrayCharEncoder(int rows, int cols)
-{
-    // Allocate only if not already allocated
-    if (ArrayCharEncoder == nullptr)
-    {
-        ArrayCharEncoder = new char*[rows];
-        for (int y = 0; y < rows; y++)
-        {
-            ArrayCharEncoder[y] = new char[cols];
-            for (int x = 0; x < cols; x++)
-            {
-                ArrayCharEncoder[y][x] = 'V'; // Initialize as empty
-            }
-        }
-    }
-}
-
-void WorldEditor::deallocateArrayCharEncoder(int rows)
-{
-    for (int y = 0; y < rows; y++)
-    {
-        delete[] ArrayCharEncoder[y];
-    }
-    delete[] ArrayCharEncoder;
-    ArrayCharEncoder = nullptr;
-}
 
 // enemigo collisiones player
-// Editor ( to be continue)
-// para la clase que viene, colision player con el mundo, player enemigo,
-// loose and win condition
+// para la clase que viene, colision player con el mundo, collision  player con el enemigo,
+// loose and win condition ( pierde es que se queeda sin vida) Gana es que collisiona con el enitty crown)
+
 /* Diego:
    
    Página de Itchio con Fuente, How To Play, Descripción. (Videos e Imágenes cuando el arte esté integrado)

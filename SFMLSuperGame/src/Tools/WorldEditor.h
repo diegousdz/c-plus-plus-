@@ -52,7 +52,12 @@ public:
     void changeColorButtonsTileSize();
     void changeColorButtonsGridSize();
     void changeColorButtonsSection();
+    std::string getClipboardText();
+    void checkMousePositionAndClickOnTileTextures(const sf::Vector2i& mousePosition, sf::Event event);
+    void changeColorButtonsTextures();
+    void saveCurrentSectionState();
     void checkMousePositionAndClickOnSection(const sf::Vector2i& mousePosition, sf::Event event);
+    void checkMousePositionAndClickOnDebugConsole(sf::Vector2i mousePosition, sf::Event event);
     void Update(sf::RenderWindow &window, const sf::Event& event);
 
     WorldEditor(): tileMapWidth(0), tileMapHeight(0), tileSize(0), gameOverLine(0)
@@ -76,10 +81,12 @@ public:
     sf::RenderWindow tileViewPort;
     
     // init
-    void allocateSpritesArrayForMapSection(int screenWidth, int screenHeight, int cellSize);
-    void deallocateSpritesArray(int rows);
+ //   void allocateSpritesArrayForMapSection(int screenWidth, int screenHeight, int cellSize);
+    void allocateTileCellArray(MapSection* section, int gridSize);
+    void deallocateTileCellArray(MapSection* section);
+   // void deallocateSpritesArray(int rows);
     // draw
-    void displaySpritesArray(sf::RenderWindow &window);
+    void displayTileSection(sf::RenderWindow &window, MapSection* section);
 
     // update
   //  void listenChangesInSpriteTilemap();
@@ -87,34 +94,35 @@ public:
  //   void loadSpriteTilemap();
  //   void saveSpriteTilemap();
     void setCellSize(int value);
-    void displayColliderEncoderArray(sf::RenderWindow& window);
+    void displayColliderEncoderArray(sf::RenderWindow& window, MapSection* section);
     void tilemapDraw(sf::RenderWindow& window);
     int getCellSize();
-    bool hasAllocatedSpritesAndShapes = false;
 
     void tilemapUpdate(sf::RenderWindow &window, const sf::Event& event);
     void checkMousePositionAndClicksWithShift(const sf::Vector2i &mousePosition,  sf::Event event);
-    void allocateArrayCharEncoder(int rows, int cols);
-    void deallocateArrayCharEncoder(int rows);
-
-
+    void allocateArrayCharEncoder(TileCell& tilecell);
+    void deallocateTileSection(MapSection* section);
+    void saveBrushToTile(MapSection* section, int x, int y);
+   void applyTextureToTile(MapSection* section, int cellX, int cellY, int textureIndex);
+    void loadTileTextures();
+ 
     
     int previousCellSize = 8;
 
 private:
     Tilemap tilemap;
-    
-    sf::Sprite** spriteArrayTilemap = nullptr;
-    sf::RectangleShape** colliderArray = nullptr;
-    char** ArrayCharEncoder = nullptr;
-    int** textureIDArray = nullptr;
-    
-    int rowsOfSprites;
-    int numberOfCellsPerRow;
 
     bool canEditCellSize = false;
 
     GameMap* newGameMap = nullptr;
+    MapSection** newMapSection = nullptr;
+    int CurrentlySelectedIndex = -1;
+    sf::String newTexturesPath[18];
+    MapSection* currentSection;
+
+    sf::String textures[18];
+    static const int NUM_TEXTURES = 10; // Adjust this based on your total textures
+    sf::Texture tileTextures[NUM_TEXTURES];
     
     sf::Vector2i mousePosition;
     sf::RenderWindow editorWindow;  // Editor window for rendering
@@ -156,6 +164,12 @@ private:
     // ------------------------------------------------- Debug Console
     sf::RectangleShape baseDebugConsole;
     sf::Text texDebugConsole;
+
+    std::string consoleInput; // Holds the current text input
+    bool isConsoleActive = false;
+
+    sf::Clock debounceClock;
+    float debounceDelay = 0.1f; // 100 ms delay
     // ------------------------------------------------- Sizes for math
     float sectionLoadTilemapHeight;
     float sectionTileSizeHeight;
@@ -196,6 +210,14 @@ private:
     sf::RectangleShape ButtonTextureSixteen;
     sf::RectangleShape ButtonTextureSeventeen;
     sf::RectangleShape ButtonTextureEighteen;
+
+    sf::RectangleShape* buttons[18] = {
+        &ButtonTextureOne, &ButtonTextureTwo, &ButtonTextureThree, &ButtonTextureFour,
+        &ButtonTextureFive, &ButtonTextureSix, &ButtonTextureSeven, &ButtonTextureEight,
+        &ButtonTextureNine, &ButtonTextureTen, &ButtonTextureEleven, &ButtonTextureTwelve,
+        &ButtonTextureThirteen, &ButtonTextureFourteen, &ButtonTextureFifteen, &ButtonTextureSixteen,
+        &ButtonTextureSeventeen, &ButtonTextureEighteen
+    };
 
     // ------------------------------------------------- Sprite Rotation
     sf::Text titleRotation;

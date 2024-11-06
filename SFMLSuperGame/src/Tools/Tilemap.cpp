@@ -121,7 +121,79 @@ void Tilemap::allocateGameMap(int cellSize, int screenWidth, int screenHeight, i
         deallocateGameMap();
 
     gameMap = new GameMap(cellSize, screenWidth, screenHeight, mapSize);
+    // Set mapSections based on mapSize
+    if (mapSize == 1) {
+        gameMap->createSections(2);
+    } else if (mapSize == 2) {
+        gameMap->createSections(4);
+    } else if (mapSize == 3) {
+        gameMap->createSections(6);
+    }
     std::cout << "GameMap allocated with cell size: " << cellSize 
               << ", screen dimensions: " << screenWidth << "x" << screenHeight 
               << ", map size: " << mapSize << std::endl;
+    
+    allocateMapSections(gameMap->sections);
+}
+
+bool Tilemap::loadTexturePathsFromFile(sf::String textures[], const std::string& configPath) {
+    std::ifstream file(configPath);
+    if (!file.is_open()) {
+        std::cerr << "Could not open the config file." << std::endl;
+        return false;
+    }
+
+    std::string line;
+    int index = 0;
+    while (std::getline(file, line) && index < 18) {
+        if (!line.empty()) {
+            textures[index] = sf::String(line); // Store in textures array
+            std::cout << "Loaded texture path for button " << index + 1 << ": " << line << std::endl;
+        }
+        index++;
+    }
+    file.close();
+    return true;
+}
+
+void Tilemap::allocateMapSections(MapSection** &sections) {
+    // Clear any existing MapSections if already allocated
+    if (gameMap == nullptr) {
+        std::cerr << "Error: gameMap is null. Please initialize gameMap first." << std::endl;
+        return;
+    }
+    
+    deallocateMapSections();
+    
+
+    int numberOfSections = gameMap->mapSections; // Get the number of sections from gameMap
+    if (numberOfSections <= 0) {
+        std::cerr << "Error: numberOfSections is invalid." << std::endl;
+        return;
+    }
+    // Allocate array for mapSection as an array of MapSection pointers
+    sections = new MapSection*[numberOfSections];
+    int sectionPosX = 0;
+    int sectionWidth = gameMap->screenWidth;
+
+    // Initialize each MapSection with its calculated position
+    for (int i = 0; i < numberOfSections; ++i) {
+        sections[i] = new MapSection(sectionPosX, gameMap->cellSize);
+        sectionPosX += sectionWidth;
+    }
+
+    // Assign sections to gameMap->sections if it’s not already
+    if (gameMap->sections != sections) {
+        gameMap->sections = sections;
+    }
+}
+void Tilemap::deallocateMapSections() {
+    // Deallocate each MapSection in the array and reset mapSection to nullptr
+    if (gameMap && gameMap->sections) {
+        for (int i = 0; i < gameMap->mapSections; ++i) {
+            delete gameMap->sections[i];
+        }
+        delete[] gameMap->sections;
+        gameMap->sections = nullptr;
+    }
 }
