@@ -19,6 +19,44 @@ WorldEditor::WorldEditor(int screenHeight): tileMapWidth(0), tileSize(0), gameOv
     previousCellSize = 0;
 }
 // ------------------------------------------------------------------------------- Init functions
+
+void WorldEditor::toggleMode() {
+    isTextureMode = !isTextureMode;
+
+    if(isTextureMode) {
+    ButtonRotateTwo.setFillColor(sf::Color(128 , 128, 128));
+    }
+    if(!isTextureMode) {
+    ButtonRotateTwo.setFillColor(sf::Color(56, 56, 56));
+    }
+}
+
+// In WorldEditor.cpp
+void WorldEditor::initTileTextures() {
+    // Paths to texture files, adjust according to your project's structure
+    const std::string textureFiles[NUM_TEXTURES] = {
+        "res/textures/World/32/tile_32_floor_B.png",
+        "res/textures/World/32/tile_32_floor_b2.png",
+        "res/textures/World/32/tile_32_floor_t.png",
+        "res/textures/World/32/tile_32_floor_t2.png",
+        "res/textures/World/32/tile_32_wall_l.png",
+        "res/textures/World/32/tile_32_wall_l2.png",
+        "res/textures/World/32/tile_32_wall_r.png",
+        "res/textures/World/32/tile_32_wall_r2.png",
+        "res/textures/World/32/tile_32_corner_l.png",
+        "res/textures/World/32/tile_32_corner_r.png",
+    };
+
+    // Load each texture into the tileTextures array
+    for (int i = 0; i < NUM_TEXTURES; ++i) {
+        if (!tileTextures[i].loadFromFile(textureFiles[i])) {
+            std::cerr << "Failed to load texture: " << textureFiles[i] << std::endl;
+        } else {
+            std::cout << "Successfully loaded texture: " << textureFiles[i] << std::endl;
+            // asign the texture to a sprite that will be created as new and then added in the position and scale of the Button that match the index
+        }
+    }
+}
 void WorldEditor::initLoadTilemap()
 {
     int baseTilePositionY = 0;
@@ -329,6 +367,15 @@ void WorldEditor::initBrushes()
     ButtonTextureEighteen.setSize(sf::Vector2f(buttonWidth, buttonHeight));
     ButtonTextureEighteen.setPosition(baseX + (buttonWidth + paddingBetweenButtons) * 5, thirdRowY);
     ButtonTextureEighteen.setFillColor(sf::Color(28, 28, 28));
+
+    for (int i = 0; i < NUM_TEXTURES; ++i) {
+        // Ensure tileSprites is positioned and sized to match each button but rendered on top
+        tileSprites[i].setPosition(buttons[i]->getPosition());
+        tileSprites[i].setScale(buttons[i]->getScale()/2.0f);
+
+        // Set any necessary Z-order for tileSprites, depending on the rendering system
+        // Alternatively, apply a color overlay or any visual style here to distinguish it.
+    }
 }
 
 void WorldEditor::initRotationControls()
@@ -341,7 +388,7 @@ void WorldEditor::initRotationControls()
 
     // Title for the rotation section
     titleRotation.setFont(fontEditor);
-    titleRotation.setString("SPRITE ROTATION");
+    titleRotation.setString("SPRITE VISIBILITY & ROTATION");
     titleRotation.setCharacterSize(8);
     titleRotation.setFillColor(sf::Color::White);
     titleRotation.setPosition(baseX, baseY);
@@ -356,7 +403,7 @@ void WorldEditor::initRotationControls()
     ButtonRotateOne.setFillColor(sf::Color(56, 56, 56));
 
     titleRotationLeft.setFont(fontEditor);
-    titleRotationLeft.setString("-90");
+    titleRotationLeft.setString("See C");
     titleRotationLeft.setCharacterSize(8);
     titleRotationLeft.setFillColor(sf::Color::White);
     titleRotationLeft.setPosition(
@@ -370,7 +417,7 @@ void WorldEditor::initRotationControls()
     ButtonRotateTwo.setFillColor(sf::Color(56, 56, 56));
 
     titleRotationRight.setFont(fontEditor);
-    titleRotationRight.setString("90");
+    titleRotationRight.setString("See T");
     titleRotationRight.setCharacterSize(8);
     titleRotationRight.setFillColor(sf::Color::White);
     titleRotationRight.setPosition(
@@ -384,7 +431,7 @@ void WorldEditor::initRotationControls()
     ButtonRotateThree.setFillColor(sf::Color(56, 56, 56));
 
     titleRotationTop.setFont(fontEditor);
-    titleRotationTop.setString("0");
+    titleRotationTop.setString("- Y");
     titleRotationTop.setCharacterSize(8);
     titleRotationTop.setFillColor(sf::Color::White);
     titleRotationTop.setPosition(
@@ -398,7 +445,7 @@ void WorldEditor::initRotationControls()
     ButtonRotateFour.setFillColor(sf::Color(56, 56, 56));
 
     titleRotationBottom.setFont(fontEditor); 
-    titleRotationBottom.setString("180");
+    titleRotationBottom.setString("- X");
     titleRotationBottom.setCharacterSize(8);
     titleRotationBottom.setFillColor(sf::Color::White);
     titleRotationBottom.setPosition(
@@ -475,7 +522,7 @@ void WorldEditor::init()
     {
         std::cout << "Font loaded  successfully " << std::endl;
     }
-    loadTileTextures();
+    initTileTextures();
     initVariablesToSave();
     initLoadTilemap();
     initTileSizeGroup();
@@ -592,6 +639,10 @@ void WorldEditor::drawBrushesTexture(sf::RenderWindow& window)
     window.draw(ButtonTextureSixteen);
     window.draw(ButtonTextureSeventeen);
     window.draw(ButtonTextureEighteen);
+
+    for (int i = 0; i < NUM_TEXTURES; ++i) {
+      window.draw(tileSprites[i]);
+    }
 }
 
 void WorldEditor::drawRotationControls(sf::RenderWindow& window) const
@@ -633,6 +684,15 @@ void WorldEditor::draw(sf::RenderWindow &window)
 }
 // ------------------------------------------------------------------------------- Update functions
 
+void WorldEditor::checkMousePOsitionAndClickOnVisibilityAndRotation(const sf::Vector2i &mousePosition, sf::Event event)
+{
+    if(ButtonRotateTwo.getGlobalBounds().contains(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y)))
+    {
+        if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+            toggleMode();
+        }
+    }
+}
 void WorldEditor::checkMousePositionAndClicksLoadSave(const sf::Vector2i &mousePosition, sf::Event event) {
     // Check if mouse is hovering over the Load button
     if (buttonLoad.getGlobalBounds().contains(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y))) {
@@ -990,7 +1050,8 @@ void WorldEditor::changeColorButtonsSection()
 void WorldEditor::checkMousePositionAndClickOnTileTextures(const sf::Vector2i &mousePosition, sf::Event event) {
     // Array of all buttons for easy iteration
   //  CurrentlySelectedIndex = 0;
-    for (int i = 0; i < 18; ++i) {
+   
+    for (int i = 0; i < NUM_TEXTURES; ++i) {
         if (buttons[i]->getGlobalBounds().contains(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y))) {
             if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
 
@@ -998,6 +1059,14 @@ void WorldEditor::checkMousePositionAndClickOnTileTextures(const sf::Vector2i &m
                 CurrentlySelectedIndex = i + 1;
 
                 std::cout << "CurrentlySelectedIndex: " << CurrentlySelectedIndex << std::endl;
+      
+                // Assign the texture to the corresponding sprite
+                tileSprites[i] .setTexture(tileTextures[i]);
+                tileSprites[i].setPosition(buttons[i]->getPosition());
+                tileSprites[i].setScale(buttons[i]->getScale());
+
+                // Adjust color or transparency for better visibility if needed
+                tileSprites[i].setColor(sf::Color(255, 255, 255, 200)); 
             }
         }
     }
@@ -1008,7 +1077,7 @@ void WorldEditor::changeColorButtonsTextures()
     // Ensure CurrentlySelectedIndex is within bounds (1 to 18)
     
     if (CurrentlySelectedIndex < 1 || CurrentlySelectedIndex > 18) {
-        cout << "Invalid CurrentlySelectedIndex: " << CurrentlySelectedIndex << std::endl;
+     //   cout << "Invalid CurrentlySelectedIndex: " << CurrentlySelectedIndex << std::endl;
         return;
     }
     int calc = CurrentlySelectedIndex - 1;
@@ -1317,15 +1386,16 @@ void WorldEditor::Update(sf::RenderWindow &window, const sf::Event& event)
 
     // Section
     checkMousePositionAndClickOnSection(mousePosition, event);
-    changeColorButtonsGridSize();
+
 
     // Tile Textures
     checkMousePositionAndClickOnTileTextures(mousePosition, event);
     changeColorButtonsTextures();
   //  checkMousePositionAndClickOnDebugConsole(mousePosition, event);
-
+    checkMousePOsitionAndClickOnVisibilityAndRotation(mousePosition, event);
    // checkMousePositionAndFVClicksWithShift(mousePosition, event);
-
+    // Encapsulated call to save and apply texture to tile
+    saveAndApplyTextureToTile();
 }
 
 void WorldEditor::allocateTileCellArray(MapSection* section, int gridSize)
@@ -1385,31 +1455,6 @@ void WorldEditor::saveBrushToTile(MapSection* section, int cellX, int cellY) {
     std::cout << "Brush index " <<   section->tilecellArray[cellY][cellX].textureID<< " saved to tile at (" << cellX << ", " << cellY << ")" << std::endl;
 }
 
-// In WorldEditor.cpp
-void WorldEditor::loadTileTextures() {
-    // Paths to texture files, adjust according to your project's structure
-    const std::string textureFiles[NUM_TEXTURES] = {
-        "res/textures/World/32/tile_32_floor_B.png",
-        "res/textures/World/32/tile_32_floor_b2.png",
-        "res/textures/World/32/tile_32_floor_t.png",
-        "res/textures/World/32/tile_32_floor_t2.png",
-        "res/textures/World/32/tile_32_wall_l.png",
-        "res/textures/World/32/tile_32_wall_l2.png",
-        "res/textures/World/32/tile_32_wall_r.png",
-        "res/textures/World/32/tile_32_wall_r2.png",
-        "res/textures/World/32/tile_32_corner_l.png",
-        "res/textures/World/32/tile_32_corner_r.png",
-    };
-
-    // Load each texture into the tileTextures array
-    for (int i = 0; i < NUM_TEXTURES; ++i) {
-        if (!tileTextures[i].loadFromFile(textureFiles[i])) {
-            std::cerr << "Failed to load texture: " << textureFiles[i] << std::endl;
-        } else {
-            std::cout << "Successfully loaded texture: " << textureFiles[i] << std::endl;
-        }
-    }
-}
 
 
 void WorldEditor::applyTextureToTile(MapSection* section, int cellX, int cellY, int textureIndex) {
@@ -1421,18 +1466,12 @@ void WorldEditor::applyTextureToTile(MapSection* section, int cellX, int cellY, 
         }
 
     TileCell& cell = section->tilecellArray[cellY][cellX];
-    
-    // Set the texture for the sprite
     cell.sprite.setTexture(tileTextures[textureIndex]);
     cell.sprite.setPosition(cell.shape.getPosition());
-    // Make shape transparent since we're using sprite
-    cell.shape.setFillColor(sf::Color::Transparent);
-    
-    // Update texture ID
+    cell.shape.setFillColor(sf::Color::Transparent); // Make shape transparent
     cell.textureID = textureIndex;
-    
-    std::cout << "Applied texture " << textureIndex << " to tile at (" << cellX << ", " << cellY << ")" << std::endl;
 }
+
 
 
 void WorldEditor::deallocateTileCellArray(MapSection* section)
@@ -1486,7 +1525,50 @@ void WorldEditor::deallocateSpritesArray(int rows)
         deallocateArrayCharEncoder(rows);
         ArrayCharEncoder = nullptr; // Set to nullptr after deallocation
     }
-}*/
+}*/void WorldEditor::saveAndApplyTextureToTile() {
+    // Check for Shift + P press
+    if ((sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)) &&
+        sf::Keyboard::isKeyPressed(sf::Keyboard::P)) {
+        
+        // Get mouse position relative to the tilemap viewport window
+        sf::Vector2i viewportMousePos = sf::Mouse::getPosition(tileViewPort);
+        
+        // Validate that mouse is within the viewport bounds
+        if (viewportMousePos.x < 0 || viewportMousePos.y < 0 || 
+            viewportMousePos.x >= 512 || viewportMousePos.y >= 512) {
+            return; // Mouse is outside the viewport
+        }
+
+        // Calculate cell coordinates using viewport mouse position
+        int cellX = viewportMousePos.x / tileSize;
+        int cellY = viewportMousePos.y / tileSize;
+
+        // Get the current section
+        if (!newGameMap || sectionSelected <= 0 || sectionSelected > newGameMap->mapSections) {
+            return;
+        }
+
+        MapSection* currentSection = newGameMap->sections[sectionSelected - 1];
+        if (!currentSection) {
+            return;
+        }
+
+        // Validate coordinates
+        if (cellX >= 0 && cellY >= 0 && 
+            cellX < currentSection->numberOfCellsPerRow && 
+            cellY < currentSection->numberOfCellsPerRow) {
+            
+            // Save the brush to the tile
+            saveBrushToTile(currentSection, cellX, cellY);
+            
+            // Apply the texture (subtract 1 from CurrentlySelectedIndex since it's 1-based)
+            applyTextureToTile(currentSection, cellX, cellY, CurrentlySelectedIndex - 1);
+            
+            std::cout << "Texture " << CurrentlySelectedIndex - 1 << " applied at position (" 
+                      << cellX << ", " << cellY << ")" << std::endl;
+        }
+    }
+}
 
 void WorldEditor::displayTileSection(sf::RenderWindow& window, MapSection* section)
 {
@@ -1498,36 +1580,31 @@ void WorldEditor::displayTileSection(sf::RenderWindow& window, MapSection* secti
         {
             TileCell& cell = section->tilecellArray[y][x];
 
-            // Draw the shape (grid cell)
-            window.draw(cell.shape);
-
-            // Draw sprite if there's a texture
-            if (cell.textureID >= 0) {
-                window.draw(cell.sprite);
+            // In texture mode, only draw sprites without grid or labels
+            if (isTextureMode) {
+                if (cell.textureID >= 0 && cell.textureID < NUM_TEXTURES) {
+                    cell.sprite.setTexture(tileTextures[cell.textureID]);
+                    window.draw(cell.sprite);
+                }
             }
+            // In editor mode, draw everything (grid, sprites, and labels)
+            else {
+                // Draw the grid cell
+                window.draw(cell.shape);
 
-            // Draw label for cell type
-            if (cell.cellType == 'C' || cell.cellType == 'V') 
-            {
+                // Draw sprite if there's a texture
+                if (cell.textureID >= 0 && cell.textureID < NUM_TEXTURES) {
+                    cell.sprite.setTexture(tileTextures[cell.textureID]);
+                    window.draw(cell.sprite);
+                }
+
+                // Draw the cell type label
                 sf::Text labelText;
                 labelText.setFont(fontEditor);
                 labelText.setString(std::string(1, cell.cellType));
                 labelText.setCharacterSize(8);
                 labelText.setFillColor(sf::Color::White);
-
-                // Set label position based on cell position and tile size
-                labelText.setPosition(
-                    cell.shape.getPosition().x + 2,
-                    cell.shape.getPosition().y + 2
-                );
-
-                // Debug: Log cell properties
-                std::cout << "Cell Type: " << cell.cellType 
-                          << ", Position: (" << cell.shape.getPosition().x 
-                          << ", " << cell.shape.getPosition().y 
-                          << "), Tile Size: " << tileSize 
-                          << std::endl;
-
+                labelText.setPosition(cell.shape.getPosition().x + 2, cell.shape.getPosition().y + 2);
                 window.draw(labelText);
             }
         }
@@ -1542,34 +1619,44 @@ int WorldEditor::getCellSize() {
 void WorldEditor::setCellSize(int size) {
     tileSize = size;
 }
-
-void WorldEditor::checkMousePositionAndClicksWithShift(const sf::Vector2i &mousePosition, sf::Event event) {
+void WorldEditor::checkMousePositionAndClicksWithShift(const sf::Vector2i& mousePosition, sf::Event event) {
     if (!newGameMap || !newGameMap->sections) return;
 
-    MapSection *currentSection = newGameMap->sections[sectionSelected - 1];
+    MapSection* currentSection = newGameMap->sections[sectionSelected - 1];
     if (!currentSection) return;
 
-    int cellX = mousePosition.x / tileSize;
-    int cellY = mousePosition.y / tileSize;
+    // Get mouse position relative to the tilemap viewport window
+    sf::Vector2i viewportMousePos = sf::Mouse::getPosition(tileViewPort);
+    
+    // Validate that mouse is within the viewport bounds
+    if (viewportMousePos.x < 0 || viewportMousePos.y < 0 || 
+        viewportMousePos.x >= 512 || viewportMousePos.y >= 512) {
+        return; // Mouse is outside the viewport
+        }
+
+    int cellX = viewportMousePos.x / tileSize;
+    int cellY = viewportMousePos.y / tileSize;
 
     static int lastCellX = -1;
     static int lastCellY = -1;
 
-    if ((cellX != lastCellX || cellY != lastCellY) && cellX >= 0 && cellY >= 0 && cellX < currentSection->numberOfCellsPerRow && cellY < currentSection->numberOfCellsPerRow) {
+    if ((cellX != lastCellX || cellY != lastCellY) && 
+        cellX >= 0 && cellY >= 0 && 
+        cellX < currentSection->numberOfCellsPerRow && 
+        cellY < currentSection->numberOfCellsPerRow) {
+        
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)) {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::V)) {
                 currentSection->tilecellArray[cellY][cellX].cellType = 'V';
-           //     currentSection->tilecellArray[cellY][cellX].shape.setFillColor(sf::Color(100, 100, 100, 100));
                 std::cout << "Set cell (" << cellX << ", " << cellY << ") to V" << std::endl;
             } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::C)) {
                 currentSection->tilecellArray[cellY][cellX].cellType = 'C';
-           //     currentSection->tilecellArray[cellY][cellX].shape.setFillColor(sf::Color(0, 0, 255, 100));
                 std::cout << "Set cell (" << cellX << ", " << cellY << ") to C" << std::endl;
             }
             lastCellX = cellX;
             lastCellY = cellY;
         }
-    }
+        }
 
     if (event.type == sf::Event::MouseButtonReleased) {
         lastCellX = -1;
@@ -1636,12 +1723,14 @@ void WorldEditor::tilemapDraw(sf::RenderWindow& window)
         previousCellSize = getCellSize();
     }
 
-    displayColliderEncoderArray(window, currentSection);
+    //displayColliderEncoderArray(window, currentSection);
+    displayTileSection(window, currentSection);
 }
+
 void WorldEditor::tilemapUpdate(sf::RenderWindow& window, const sf::Event& event)
 {
-    mousePosition = sf::Mouse::getPosition(window);
-    checkMousePositionAndClicksWithShift(mousePosition, event);
+    sf::Vector2i viewportMousePos = sf::Mouse::getPosition(tileViewPort);
+    checkMousePositionAndClicksWithShift(viewportMousePos, event);
 }
 
 

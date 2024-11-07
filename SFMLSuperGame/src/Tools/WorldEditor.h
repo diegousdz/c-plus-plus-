@@ -23,6 +23,7 @@ public:
     }
     
     WorldEditor(int screenHeight);
+    void toggleMode();
     void initTileSizeGroup();
     void initGridSizeGroup();
     void initTileMiniViewport();
@@ -44,6 +45,7 @@ public:
     void drawBrushesTexture(sf::RenderWindow& window);
     void drawRotationControls(sf::RenderWindow& window) const;
     void draw(sf::RenderWindow &window);
+    void checkMousePOsitionAndClickOnVisibilityAndRotation(const sf::Vector2i& mousePosition, sf::Event event);
     void checkMousePositionAndClicksLoadSave(const sf::Vector2i& mousePosition, sf::Event event);
 
     void createTilemap(int tileSizeType);
@@ -79,12 +81,13 @@ public:
     int modules = 0;
     bool hasCreatedTilemap;
     sf::RenderWindow tileViewPort;
-    
+
     // init
  //   void allocateSpritesArrayForMapSection(int screenWidth, int screenHeight, int cellSize);
     void allocateTileCellArray(MapSection* section, int gridSize);
     void deallocateTileCellArray(MapSection* section);
-   // void deallocateSpritesArray(int rows);
+    void saveAndApplyTextureToTile();
+    // void deallocateSpritesArray(int rows);
     // draw
     void displayTileSection(sf::RenderWindow &window, MapSection* section);
 
@@ -104,10 +107,12 @@ public:
     void deallocateTileSection(MapSection* section);
     void saveBrushToTile(MapSection* section, int x, int y);
    void applyTextureToTile(MapSection* section, int cellX, int cellY, int textureIndex);
-    void loadTileTextures();
+    void initTileTextures();
  
     
     int previousCellSize = 8;
+
+    bool isTextureMode = false;
 
 private:
     Tilemap tilemap;
@@ -123,6 +128,8 @@ private:
     sf::String textures[18];
     static const int NUM_TEXTURES = 10; // Adjust this based on your total textures
     sf::Texture tileTextures[NUM_TEXTURES];
+    sf::Sprite tileSprites[NUM_TEXTURES];  
+
     
     sf::Vector2i mousePosition;
     sf::RenderWindow editorWindow;  // Editor window for rendering
