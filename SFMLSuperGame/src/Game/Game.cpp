@@ -1,7 +1,6 @@
 ﻿#include "Game.h"
 #include "./../Core/ResourceManager.h"
 #include "../GameEntities/Orc.h"
-
 Game::Game()
 {
     
@@ -22,6 +21,15 @@ void Game::updateBackgroundPosition()
 }
 void Game::update(float deltaTime, Player player)
 {
+    // Update player movement first
+    player.handleMovement(deltaTime);
+    
+    // Let GEM handle all collisions
+    entityManager.gemUpdate(player);
+    
+    // Update camera after final player position is determined
+  //  updateCamera(deltaTime, player);
+    /*
     const float cameraSmoothing = 0.001f;
 
     // Get the current camera center and player position
@@ -35,7 +43,7 @@ void Game::update(float deltaTime, Player player)
 
    // camera.setCenter(cameraCenter);
     camera.setCenter(player.shape.getPosition());
-    updateBackgroundPosition();
+    updateBackgroundPosition();*/
 }
 
 void Game::draw(sf::RenderWindow& window, Player user)

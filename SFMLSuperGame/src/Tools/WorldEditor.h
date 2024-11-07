@@ -46,6 +46,7 @@ public:
     void drawRotationControls(sf::RenderWindow& window) const;
     void draw(sf::RenderWindow &window);
     void checkMousePOsitionAndClickOnVisibilityAndRotation(const sf::Vector2i& mousePosition, sf::Event event);
+    void onLoadButtonClick();
     void checkMousePositionAndClicksLoadSave(const sf::Vector2i& mousePosition, sf::Event event);
 
     void createTilemap(int tileSizeType);
@@ -125,8 +126,20 @@ private:
     sf::String newTexturesPath[18];
     MapSection* currentSection;
 
-    sf::String textures[18];
+  
     static const int NUM_TEXTURES = 10; // Adjust this based on your total textures
+    sf::String textures[NUM_TEXTURES]  = {
+        "res/textures/World/32/tile_32_floor_B.png",
+        "res/textures/World/32/tile_32_floor_b2.png",
+        "res/textures/World/32/tile_32_floor_t.png",
+        "res/textures/World/32/tile_32_floor_t2.png",
+        "res/textures/World/32/tile_32_wall_l.png",
+        "res/textures/World/32/tile_32_wall_l2.png",
+        "res/textures/World/32/tile_32_wall_r.png",
+        "res/textures/World/32/tile_32_wall_r2.png",
+        "res/textures/World/32/tile_32_corner_l.png",
+        "res/textures/World/32/tile_32_corner_r.png",
+    };
     sf::Texture tileTextures[NUM_TEXTURES];
     sf::Sprite tileSprites[NUM_TEXTURES];  
 

@@ -194,6 +194,7 @@
     <ClInclude Include="src\GameEntities\Player.h" />
     <ClInclude Include="src\GameEntities\Warrior.h" />
     <ClInclude Include="src\Game\Game.h" />
+    <ClInclude Include="src\Game\GameEntityManager.h" />
     <ClInclude Include="src\Game\StoneAndFrostWorld.h" />
     <ClInclude Include="src\Tools\Tilemap.h" />
     <ClInclude Include="src\Tools\WorldEditor.h" />
@@ -507,6 +508,7 @@
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
     <ClCompile Include="src\Game\Game.cpp" />
+    <ClCompile Include="src\Game\GameEntityManager.cpp" />
     <ClCompile Include="src\Game\main.cpp">
 
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>

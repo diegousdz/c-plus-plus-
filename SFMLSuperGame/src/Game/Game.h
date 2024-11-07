@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "GameEntityManager.h"
 #include "../GameEntities/Player.h"
 
 struct gameSection
@@ -31,6 +32,10 @@ public:
 
     void setMapWidth(int totalMapSectionWidth);
 
+    static const int ENEMIES_L1 = 10;
+    static const int POWERUPS_L2 = 5;
+
+    GameEntityManager entityManager;
 private:
     int mapWidth = 0;
     sf::View camera;

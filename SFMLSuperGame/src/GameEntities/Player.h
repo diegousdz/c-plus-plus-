@@ -72,7 +72,9 @@ public:
     void handleMovement(float deltaTime);
     void updateAnimation(float deltaTime);
    // void createPlayer();
-
+    sf::Vector2f previousPosition;
+    sf::Vector2f getPosition() const { return shape.getPosition(); }
+    void setPosition(const sf::Vector2f& pos) { shape.setPosition(pos); }
 private:
     bool isMagicBeltEquipped;
     bool hasKingdomCrownInInventory;

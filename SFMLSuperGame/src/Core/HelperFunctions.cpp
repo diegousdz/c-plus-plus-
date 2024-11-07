@@ -1,9 +1,21 @@
 ﻿#include "HelperFunctions.h"
 
-bool HelperFunctions::checkCollisionAABB(const AABB& box1, const  AABB& box2)
+bool HelperFunctions::checkCollisionAABB(const sf::RectangleShape& shape1, const sf::RectangleShape& shape2)
 {
-    bool collisionX = box1.positionX + box1.positionX >= box2.positionX && box2.positionX + box2.width >= box1.positionX;
-    bool collisionY = box1.positionY + box2.positionY >= box2.positionY && box2.positionY + box2.height >= box1.positionY;
+    // Get positions and sizes of both shapes
+    float x1 = shape1.getPosition().x;
+    float y1 = shape1.getPosition().y;
+    float width1 = shape1.getSize().x;
+    float height1 = shape1.getSize().y;
+
+    float x2 = shape2.getPosition().x;
+    float y2 = shape2.getPosition().y;
+    float width2 = shape2.getSize().x;
+    float height2 = shape2.getSize().y;
+
+    // Check for overlap on both x and y axes
+    bool collisionX = x1 + width1 >= x2 && x2 + width2 >= x1;
+    bool collisionY = y1 + height1 >= y2 && y2 + height2 >= y1;
 
     return collisionX && collisionY;
 }

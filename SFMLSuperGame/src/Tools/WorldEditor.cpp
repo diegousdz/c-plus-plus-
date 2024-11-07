@@ -34,25 +34,13 @@ void WorldEditor::toggleMode() {
 // In WorldEditor.cpp
 void WorldEditor::initTileTextures() {
     // Paths to texture files, adjust according to your project's structure
-    const std::string textureFiles[NUM_TEXTURES] = {
-        "res/textures/World/32/tile_32_floor_B.png",
-        "res/textures/World/32/tile_32_floor_b2.png",
-        "res/textures/World/32/tile_32_floor_t.png",
-        "res/textures/World/32/tile_32_floor_t2.png",
-        "res/textures/World/32/tile_32_wall_l.png",
-        "res/textures/World/32/tile_32_wall_l2.png",
-        "res/textures/World/32/tile_32_wall_r.png",
-        "res/textures/World/32/tile_32_wall_r2.png",
-        "res/textures/World/32/tile_32_corner_l.png",
-        "res/textures/World/32/tile_32_corner_r.png",
-    };
 
     // Load each texture into the tileTextures array
     for (int i = 0; i < NUM_TEXTURES; ++i) {
-        if (!tileTextures[i].loadFromFile(textureFiles[i])) {
-            std::cerr << "Failed to load texture: " << textureFiles[i] << std::endl;
+        if (!tileTextures[i].loadFromFile(textures[i])) {
+            std::cerr << "Failed to load texture: " << textures[i].toAnsiString() << std::endl;
         } else {
-            std::cout << "Successfully loaded texture: " << textureFiles[i] << std::endl;
+            std::cout << "Successfully loaded texture: " << textures[i].toAnsiString() << std::endl;
             // asign the texture to a sprite that will be created as new and then added in the position and scale of the Button that match the index
         }
     }
@@ -465,6 +453,13 @@ void WorldEditor::onSaveButtonClick() {
         return;
     }
 
+    for (int i = 0; i < NUM_TEXTURES; i++) {
+        // Save the default texture paths if they're not already set
+        if (newGameMap->texturesPath[i] == "none") {
+            newGameMap->texturesPath[i] = textures[i];  // Adjust path as needed
+        }
+    }
+
     newGameMap->saveToFile("res/data", "gameMap");
 
     std::cout << "Saving " << newGameMap->mapSections << " sections..." << std::endl;
@@ -693,12 +688,121 @@ void WorldEditor::checkMousePOsitionAndClickOnVisibilityAndRotation(const sf::Ve
         }
     }
 }
+
+void WorldEditor::onLoadButtonClick() {
+    if (!newGameMap) {
+        std::cerr << "Error: No GameMap exists to load into." << std::endl;
+        return;
+    }
+
+    // Load the main game map data
+    if (!newGameMap->loadFromFile("res/data", "gameMap")) {
+        std::cerr << "Failed to load game map data" << std::endl;
+        return;
+    }
+
+    // Update UI based on loaded map size
+    tileSizeType = newGameMap->mapSize;
+    gridSizeType = newGameMap->cellSize / 8; // Convert cell size back to type (8->1, 16->2, 32->3)
+    std::cout << "Loaded map size: " << tileSizeType << ", cell size: " << newGameMap->cellSize << std::endl;
+
+    // Update cell size
+    setCellSize(newGameMap->cellSize);
+
+    // Clear existing sections before loading
+    newGameMap->clearSections();
+
+    // Create correct number of sections based on map size
+    int numSections;
+    switch(tileSizeType) {
+        case 1: numSections = 2; break;
+        case 2: numSections = 4; break;
+        case 3: numSections = 6; break;
+        default: 
+            std::cerr << "Invalid map size loaded: " << tileSizeType << std::endl;
+            return;
+    }
+
+    // Create and load sections
+    newGameMap->createSections(numSections);
+    
+    for (int i = 0; i < numSections; i++) {
+        std::string sectionFileName = "mapSection_" + std::to_string(i);
+        
+        if (!newGameMap->sections[i]) {
+            std::cerr << "Section " << i << " is null after creation" << std::endl;
+            continue;
+        }
+
+        try {
+            if (newGameMap->sections[i]->loadFromFile("res/data", sectionFileName)) {
+                std::cout << "Successfully loaded section " << i << std::endl;
+                
+                // Recreate the grid for this section
+                int gridSize = 512 / tileSize;
+                deallocateTileCellArray(newGameMap->sections[i]);
+                allocateTileCellArray(newGameMap->sections[i], gridSize);
+                
+                // Load data into the grid
+                // This assumes your MapSection save format includes the tile data
+                // Adjust according to your actual save format
+                for (int y = 0; y < newGameMap->sections[i]->numberOfCellsPerRow; y++) {
+                    for (int x = 0; x < newGameMap->sections[i]->numberOfCellsPerRow; x++) {
+                        TileCell& cell = newGameMap->sections[i]->tilecellArray[y][x];
+                        
+                        // If textureID is 0 from the file, increment it by 1
+                        if (cell.textureID == 0) {
+                            cell.textureID = 1;
+                        }
+                        
+                        // Apply texture if there is one
+                        if (cell.textureID > 0 && cell.textureID <= NUM_TEXTURES) {
+                            cell.sprite.setTexture(tileTextures[cell.textureID - 1]);
+                            cell.sprite.setPosition(cell.shape.getPosition());
+                            
+                            // Calculate scale based on tile size
+                            sf::Vector2u textureSize = tileTextures[cell.textureID - 1].getSize();
+                            float scaleX = static_cast<float>(tileSize) / textureSize.x;
+                            float scaleY = static_cast<float>(tileSize) / textureSize.y;
+                            cell.sprite.setScale(scaleX, scaleY);
+                        }
+                    }
+                }
+            } else {
+                std::cerr << "Failed to load section " << i << std::endl;
+            }
+        } catch (const std::exception& e) {
+            std::cerr << "Error loading section " << i << ": " << e.what() << std::endl;
+        }
+    }
+
+    // Load texture paths
+    for (int i = 0; i < NUM_TEXTURES; i++) {
+        if (newGameMap->texturesPath[i] != "none") {
+            if (!tileTextures[i].loadFromFile(newGameMap->texturesPath[i])) {
+                std::cerr << "Failed to load texture from path: " << newGameMap->texturesPath[i].toAnsiString() << std::endl;
+            }
+        }
+    }
+
+    // Update UI state
+    sectionSelected = 1;  // Reset to first section
+    changeColorButtonsTileSize();  // Update tile size button colors
+    changeColorButtonsGridSize();  // Update grid size button colors
+    changeColorButtonsSection();   // Update section button colors
+
+    // Recreate viewport if needed
+    tileViewPort.create(sf::VideoMode(512, 512), "Tilemap Viewport");
+}
+
 void WorldEditor::checkMousePositionAndClicksLoadSave(const sf::Vector2i &mousePosition, sf::Event event) {
     // Check if mouse is hovering over the Load button
     if (buttonLoad.getGlobalBounds().contains(static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y))) {
         if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
             if (!loadButtonClicked) {
                 std::cout << "Load Button Clicked!" << std::endl;
+
+           //     onLoadButtonClick();
                 loadButtonClicked = true; // Set the flag so it doesn't log multiple times
             }
         } else if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left) {
@@ -768,6 +872,7 @@ void WorldEditor::checkMousePositionAndClicksTileSize(const sf::Vector2i &mouseP
             tileSizeType = 1;
             
             if(newGameMap) {
+                newGameMap->mapSize = tileSizeType;
                 newGameMap->clearSections(); // Clear existing sections
                 newGameMap->setMapSize(tileSizeType);
                 newGameMap->createSections(2); // Create 2 sections for size 1
@@ -1420,6 +1525,7 @@ void WorldEditor::allocateTileCellArray(MapSection* section, int gridSize)
             section->tilecellArray[y][x].shape.setOutlineColor(sf::Color::Red);
             section->tilecellArray[y][x].shape.setOutlineThickness(0.5f);
             section->tilecellArray[y][x].cellType = 'V'; // Default to void
+            section->tilecellArray[y][x].textureID = -1;
         }
     }
     
@@ -1449,10 +1555,9 @@ void WorldEditor::deallocateTileSection(MapSection* section)
 void WorldEditor::saveBrushToTile(MapSection* section, int cellX, int cellY) {
     if (!section || cellX < 0 || cellY < 0 || cellX >= section->numberOfCellsPerRow || cellY >= section->numberOfCellsPerRow) return;
     
-    // Save the CurrentlySelectedIndex to the tile's local storage (e.g., cellType or another identifier)
-    section->tilecellArray[cellY][cellX].textureID = CurrentlySelectedIndex; // Save the brush (texture) index
-
-    std::cout << "Brush index " <<   section->tilecellArray[cellY][cellX].textureID<< " saved to tile at (" << cellX << ", " << cellY << ")" << std::endl;
+    // Save the CurrentlySelectedIndex to the tile's local storage
+    section->tilecellArray[cellY][cellX].textureID = CurrentlySelectedIndex; // Save as 0-based index for file storage
+    std::cout << "Brush index " << section->tilecellArray[cellY][cellX].textureID << " saved to tile at (" << cellX << ", " << cellY << ")" << std::endl;
 }
 
 
@@ -1468,8 +1573,14 @@ void WorldEditor::applyTextureToTile(MapSection* section, int cellX, int cellY, 
     TileCell& cell = section->tilecellArray[cellY][cellX];
     cell.sprite.setTexture(tileTextures[textureIndex]);
     cell.sprite.setPosition(cell.shape.getPosition());
-    cell.shape.setFillColor(sf::Color::Transparent); // Make shape transparent
-    cell.textureID = textureIndex;
+    cell.shape.setFillColor(sf::Color::Transparent);
+    cell.textureID = textureIndex; // Store as 0-based index
+
+    // Calculate and apply proper scaling for the sprite
+    sf::Vector2u textureSize = tileTextures[textureIndex].getSize();
+    float scaleX = static_cast<float>(tileSize) / textureSize.x;
+    float scaleY = static_cast<float>(tileSize) / textureSize.y;
+    cell.sprite.setScale(scaleX, scaleY);
 }
 
 
@@ -1564,7 +1675,7 @@ void WorldEditor::deallocateSpritesArray(int rows)
             // Apply the texture (subtract 1 from CurrentlySelectedIndex since it's 1-based)
             applyTextureToTile(currentSection, cellX, cellY, CurrentlySelectedIndex - 1);
             
-            std::cout << "Texture " << CurrentlySelectedIndex - 1 << " applied at position (" 
+            std::cout << "Texture " << CurrentlySelectedIndex << " applied at position (" 
                       << cellX << ", " << cellY << ")" << std::endl;
         }
     }
@@ -1583,7 +1694,9 @@ void WorldEditor::displayTileSection(sf::RenderWindow& window, MapSection* secti
             // In texture mode, only draw sprites without grid or labels
             if (isTextureMode) {
                 if (cell.textureID >= 0 && cell.textureID < NUM_TEXTURES) {
-                    cell.sprite.setTexture(tileTextures[cell.textureID]);
+                    // Convert 0-based index to 1-based for texture access
+                    int adjustedTextureId = cell.textureID;
+                    cell.sprite.setTexture(tileTextures[adjustedTextureId]);
                     window.draw(cell.sprite);
                 }
             }
@@ -1594,7 +1707,9 @@ void WorldEditor::displayTileSection(sf::RenderWindow& window, MapSection* secti
 
                 // Draw sprite if there's a texture
                 if (cell.textureID >= 0 && cell.textureID < NUM_TEXTURES) {
-                    cell.sprite.setTexture(tileTextures[cell.textureID]);
+                    // Convert 0-based index to 1-based for texture access
+                    int adjustedTextureId = cell.textureID;
+                    cell.sprite.setTexture(tileTextures[adjustedTextureId]);
                     window.draw(cell.sprite);
                 }
 

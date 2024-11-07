@@ -7,6 +7,7 @@
 #pragma once
 #include <fstream>
 #include <iostream>
+#include <sstream>
 #include <SFML/Graphics.hpp>
 
 struct TileCell
@@ -254,6 +255,86 @@ struct MapSection
     void setBackgroundArray(sf::Sprite* newBackgroundArray) {
         backgroundArray = newBackgroundArray;
     }
+
+    bool loadFromFile(const char* basePath, const std::string& fileName)
+    {
+        std::string filePath = std::string(basePath) + "/" + fileName + ".dat";
+        std::ifstream inFile(filePath);
+
+        if (inFile.is_open()) {
+            std::string line, key;
+            while (std::getline(inFile, line)) {
+                std::istringstream iss(line);
+                iss >> key;
+
+                if (key == "mapSectionPositionX") {
+                    iss >> mapSectionPositionX;
+                }
+                else if (key == "numberOfCellsPerRow") {
+                    iss >> numberOfCellsPerRow;
+                }
+                else if (key.find("TileCell[") != std::string::npos) {
+                    // Extract row and column indices
+                    int row, col;
+                    sscanf_s(key.c_str(), "TileCell[%d][%d]", &row, &col);
+                
+                    std::string cellKey;
+                    while (iss >> cellKey) {
+                        if (cellKey == "cellSize") {
+                            iss >> tilecellArray[row][col].cellSize;
+                        }
+                        else if (cellKey == "cellType") {
+                            iss >> tilecellArray[row][col].cellType;
+                        }
+                        else if (cellKey == "textureID") {
+                            iss >> tilecellArray[row][col].textureID;
+                        }
+                        else if (cellKey == "xPos") {
+                            iss >> tilecellArray[row][col].xPos;
+                        }
+                        else if (cellKey == "yPos") {
+                            iss >> tilecellArray[row][col].yPos;
+                        }
+                        else if (cellKey == "isDoor") {
+                            iss >> tilecellArray[row][col].isDoor;
+                        }
+                        else if (cellKey == "isCheckpoint") {
+                            iss >> tilecellArray[row][col].isCheckpoint;
+                        }
+                        else if (cellKey == "isReadyToRender") {
+                            iss >> tilecellArray[row][col].isReadyToRender;
+                        }
+                    }
+
+                    // Update sprite and shape positions after loading data
+                    if (tilecellArray[row][col].textureID >= 0) {
+                        tilecellArray[row][col].shape.setPosition(
+                            tilecellArray[row][col].xPos,
+                            tilecellArray[row][col].yPos
+                        );
+                        tilecellArray[row][col].sprite.setPosition(
+                            tilecellArray[row][col].xPos,
+                            tilecellArray[row][col].yPos
+                        );
+                    }
+                }
+                else if (key == "Sprite[") {
+                    // Handle background array loading here if needed
+                    // Similar to the sprite loading in the save function
+                }
+            }
+
+            inFile.close();
+            std::cout << "MapSection loaded from " << filePath << std::endl;
+            std::cout << "Loaded values: position=" << mapSectionPositionX 
+                      << ", cells per row=" << numberOfCellsPerRow << std::endl;
+            return true;
+        }
+        else {
+            std::cerr << "Failed to open file for loading: " << filePath << std::endl;
+            return false;
+        }
+    }
 };
 
 struct GameMap
@@ -404,6 +485,41 @@ struct GameMap
     
     ~GameMap() {
         clearSections();  // Ensure cleanup in destructor
+    }
+
+   
+    bool loadFromFile(const char* basePath, const char* fileName)
+    {
+        std::string filePath = std::string(basePath) + "/" + std::string(fileName) + ".dat";
+        std::ifstream inFile(filePath);
+
+        if (inFile.is_open()) {
+            // Read basic properties
+            inFile >> cellSize;
+            inFile >> screenWidth;
+            inFile >> screenHeight;
+            inFile >> mapSize;
+            inFile >> mapSections;
+
+            // Read texture paths
+            for (int i = 0; i < 18; i++) {
+                std::string path;
+                inFile >> path;
+                texturesPath[i] = path;
+            }
+
+            inFile.close();
+            std::cout << "GameMap loaded from " << filePath << std::endl;
+            std::cout << "Loaded values: cellSize=" << cellSize 
+                      << ", screenWidth=" << screenWidth 
+                      << ", screenHeight=" << screenHeight 
+                      << ", mapSize=" << mapSize 
+                      << ", mapSections=" << mapSections << std::endl;
+            return true;
+        } else {
+            std::cerr << "Failed to open file for loading: " << filePath << std::endl;
+            return false;
+        }
     }
 };
 

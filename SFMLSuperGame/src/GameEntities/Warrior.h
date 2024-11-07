@@ -13,5 +13,5 @@ public:
     int defense = 10;
 
     virtual void attack();
-    
+
 };
