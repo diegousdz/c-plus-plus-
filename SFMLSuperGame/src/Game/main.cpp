@@ -1,7 +1,13 @@
+#ifdef NDEBUG
+#define _ITERATOR_DEBUG_LEVEL 0
+#else
+#define _ITERATOR_DEBUG_LEVEL 2
+#endif
+
 #include "../Tools/WorldEditor.h"
 #include "./../Core/NexusEngine.h"
 
-bool inEditorMode = true;
+bool inEditorMode = false;
 
 int main()
 {
@@ -52,7 +58,7 @@ int main()
     {
         // create an instance of the engine
         NexusEngine& engine = NexusEngine::getInstance();
-        engine.initializeWindow(engine.getResourceManager().gameWindow, 512, 512, "Stone & Frost");
+        engine.initializeWindow(engine.getResourceManager().gameWindow, 1280, 720, "Stone & Frost");
         engine.init();
 
         while (engine.getResourceManager().gameWindow.isOpen())

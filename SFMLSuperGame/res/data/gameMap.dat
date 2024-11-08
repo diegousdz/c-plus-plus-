@@ -2,7 +2,7 @@ cellSize 32
 screenWidth 512
 screenHeight 512
 mapSize 3
-mapSections 2
+mapSections 4
 texturePath0 res/textures/World/32/tile_32_floor_B.png
 texturePath1 res/textures/World/32/tile_32_floor_b2.png
 texturePath2 res/textures/World/32/tile_32_floor_t.png
