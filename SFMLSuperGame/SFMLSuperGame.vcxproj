@@ -167,22 +167,30 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)\libs\SFML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <WholeProgramOptimization>true</WholeProgramOptimization> <!-- Enable optimization for release -->
-      <Optimization>MaxSpeed</Optimization> <!-- Optimize for speed in release builds -->
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks> <!-- Remove runtime checks for release -->
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <!-- Enable optimization for release -->
+      <Optimization>MaxSpeed</Optimization>
+      <!-- Optimize for speed in release builds -->
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <!-- Remove runtime checks for release -->
       <BufferSecurityCheck>true</BufferSecurityCheck>
-      <FloatingPointModel>Fast</FloatingPointModel> <!-- Set floating-point model to Fast for release -->
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat> <!-- Use Program Database for release -->
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary> <!-- Set to MultiThreadedDLL for release -->
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <!-- Set floating-point model to Fast for release -->
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <!-- Use Program Database for release -->
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <!-- Set to MultiThreadedDLL for release -->
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>false</GenerateDebugInformation> <!-- Disable debug information for release -->
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <!-- Disable debug information for release -->
       <AdditionalLibraryDirectories>$(ProjectDir)\libs\SFML\lib\</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-graphics.lib;sfml-window.lib;sfml-system.lib</AdditionalDependencies>
-      <WholeProgramOptimization>true</WholeProgramOptimization> <!-- Enable whole program optimization for the linker as well -->
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <!-- Enable whole program optimization for the linker as well -->
     </Link>
     <PostBuildEvent>
       <Command>if not exist "$(TargetDir)res\" (
@@ -229,6 +237,9 @@
     <ClCompile Include="src\Game\StoneAndFrostWorld.cpp" />
     <ClCompile Include="src\Tools\Tilemap.cpp" />
     <ClCompile Include="src\Tools\WorldEditor.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".gitignore" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
