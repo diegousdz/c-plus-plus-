@@ -193,9 +193,7 @@
       <!-- Enable whole program optimization for the linker as well -->
     </Link>
     <PostBuildEvent>
-      <Command>if not exist "$(TargetDir)res\" (
-        MKDIR "$(TargetDir)res\"
-        )</Command>
+      <Command>if not exist "$(ProjectDir)bin\x64\Release\res\" mkdir "$(ProjectDir)bin\x64\Release\res\" if not exist "$(ProjectDir)bin\x64\Release\res\data\" mkdir "$(ProjectDir)bin\x64\Release\res\data\" if not exist "$(ProjectDir)bin\x64\Release\res\dll\" mkdir "$(ProjectDir)bin\x64\Release\res\dll\" if not exist "$(ProjectDir)bin\x64\Release\res\fonts\" mkdir "$(ProjectDir)bin\x64\Release\res\fonts\" if not exist "$(ProjectDir)bin\x64\Release\res\textures\" mkdir "$(ProjectDir)bin\x64\Release\res\textures\" xcopy /E /I /Y "$(ProjectDir)res\data\*" "$(ProjectDir)bin\x64\Release\res\data\" xcopy /E /I /Y "$(ProjectDir)res\dll\*" "$(ProjectDir)bin\x64\Release\res\dll\" xcopy /E /I /Y "$(ProjectDir)res\fonts\*" "$(ProjectDir)bin\x64\Release\res\fonts\" xcopy /E /I /Y "$(ProjectDir)res\textures\*" "$(ProjectDir)bin\x64\Release\res\textures\"</Command>
       <Message> "$(ProjectDir)res\" "$(TargetDir)res\" /e /h /y /s</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>

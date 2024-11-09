@@ -1,7 +1,6 @@
 ﻿#pragma once
 #include <string>
 
-#include <iostream>
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -55,7 +54,6 @@ public:
     void changeColorButtonsTileSize();
     void changeColorButtonsGridSize();
     void changeColorButtonsSection();
-    std::string getClipboardText();
     void checkMousePositionAndClickOnTileTextures(const sf::Vector2i& mousePosition, sf::Event event);
     void changeColorButtonsTextures();
     void saveCurrentSectionState();

@@ -140,7 +140,7 @@ struct MapSection
                 for (int x = 0; x < numberOfCellsPerRow; ++x) {
                     tilecellArray[y][x] = TileCell(8, 'v', -1, static_cast<float>(x * 8), static_cast<float>(y * 8));
                     tilecellArray[y][x].shape.setSize(sf::Vector2f(8, 8));
-                    tilecellArray[y][x].shape.setPosition(x * 8, y * 8);
+                    tilecellArray[y][x].shape.setPosition(static_cast<float>(x) * 8.0f, static_cast<float>(y) * 8.0f);
                     tilecellArray[y][x].shape.setOutlineColor(sf::Color::Red);
                     tilecellArray[y][x].shape.setOutlineThickness(0.5f);
                     tilecellArray[y][x].shape.setFillColor(sf::Color::Transparent);
@@ -158,7 +158,7 @@ struct MapSection
             // Clean up any partially allocated memory
             if (tilecellArray) {
                 for (int y = 0; y < numberOfCellsPerRow; ++y) {
-                    delete[] tilecellArray[y];
+                    delete[] &tilecellArray[y];
                 }
                 delete[] tilecellArray;
                 tilecellArray = nullptr;
@@ -567,7 +567,7 @@ public:
     void allocateMapSections(MapSection** &sections);
     void deallocateMapSections();
 
-    MapSection** getMapSection() { return mapSection; }
+    MapSection** getMapSection() const { return mapSection; }
     MapSection** mapSection = nullptr;
 
     // ---------------- tile cell

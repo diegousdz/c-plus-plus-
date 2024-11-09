@@ -11,38 +11,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4ebaf2a7-b303-4b47-9b94-e1a48fb7e990" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/bin/x64/Release/SFMLSuperGame.exe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Release/AnimationSequencer.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Release/FileManager.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Release/GUIHandler.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Release/Game.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Release/GameEntityManager.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Release/HelperFunctions.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Release/InputManager.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Release/NexusEngine.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Release/Orc.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Release/Player.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Release/RenderAndFXManager.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Release/ResourceManager.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.SFMLSuperGame/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SFMLSuperGame/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/SFMLSuperGame.vcxproj" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/SFMLSuperGame.vcxproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/bin/x64/Debug/SFMLSuperGame.exe" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/bin/x64/Debug/SFMLSuperGame.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/bin/x64/Debug/SFMLSuperGame.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/bin/x64/Debug/SFMLSuperGame.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/NexusEngine.obj" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/NexusEngine.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/RenderAndFXManager.obj" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/RenderAndFXManager.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/SFMLSuperGame.ilk" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/SFMLSuperGame.ilk" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/SFMLSuperGame.tlog/CL.command.1.tlog" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/SFMLSuperGame.tlog/CL.command.1.tlog" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/SFMLSuperGame.tlog/CL.read.1.tlog" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/SFMLSuperGame.tlog/CL.read.1.tlog" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/SFMLSuperGame.tlog/CL.write.1.tlog" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/SFMLSuperGame.tlog/CL.write.1.tlog" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/SFMLSuperGame.tlog/link.read.1.tlog" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/SFMLSuperGame.tlog/link.read.1.tlog" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/Tilemap.obj" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/Tilemap.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/WorldEditor.obj" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/WorldEditor.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/main.obj" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/main.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/vc143.idb" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/vc143.idb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/vc143.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/vc143.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Release/SFMLSuperGame.Build.CppClean.log" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Release/SFMLSuperGame.Build.CppClean.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Release/SFMLSuperGame.iobj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Release/SFMLSuperGame.ipdb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Release/SFMLSuperGame.tlog/CL.command.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Release/SFMLSuperGame.tlog/CL.read.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Release/SFMLSuperGame.tlog/CL.write.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Release/SFMLSuperGame.tlog/Cl.items.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Release/SFMLSuperGame.tlog/SFMLSuperGame.lastbuildstate" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Release/SFMLSuperGame.tlog/link.command.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Release/SFMLSuperGame.tlog/link.read.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Release/SFMLSuperGame.tlog/link.secondary.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Release/SFMLSuperGame.tlog/link.write.1.tlog" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Release/SoundSequencer.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Release/StoneAndFrostWorld.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Release/Tilemap.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Release/Warrior.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Release/WorldEditor.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Release/main.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Release/vc143.pdb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/src/Tools/Tilemap.h" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/src/Tools/Tilemap.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/src/Tools/WorldEditor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/src/Tools/WorldEditor.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/src/Tools/WorldEditor.h" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/src/Tools/WorldEditor.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -239,6 +227,9 @@
       <workItem from="1731094398759" duration="1723000" />
       <workItem from="1731097793889" duration="252000" />
       <workItem from="1731114862362" duration="618000" />
+      <workItem from="1731124292419" duration="1000" />
+      <workItem from="1731128508418" duration="60000" />
+      <workItem from="1731128617180" duration="50000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit - Base of Engine">
       <option name="closed" value="true" />
@@ -344,7 +335,15 @@
       <option name="project" value="LOCAL" />
       <updated>1731096992854</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="git ignore corrected">
+      <option name="closed" value="true" />
+      <created>1731117211054</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1731117211054</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -379,29 +378,30 @@
     <MESSAGE value="Release mode fixed by removing extra tags in the vcxproj under itemGroup" />
     <MESSAGE value="Fix for Build in release and git ignore" />
     <MESSAGE value="Removing files for the GitIgnore" />
-    <option name="LAST_COMMIT_MESSAGE" value="Removing files for the GitIgnore" />
+    <MESSAGE value="git ignore corrected" />
+    <option name="LAST_COMMIT_MESSAGE" value="git ignore corrected" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/SFMLSuperGame/src/Tools/WorldEditor.cpp</url>
-          <line>1824</line>
+          <line>1834</line>
           <option name="timeStamp" value="19" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/SFMLSuperGame/src/Tools/WorldEditor.cpp</url>
-          <line>1781</line>
+          <line>1791</line>
           <option name="timeStamp" value="21" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/SFMLSuperGame/src/Tools/WorldEditor.h</url>
-          <line>229</line>
+          <line>227</line>
           <option name="timeStamp" value="24" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/SFMLSuperGame/src/Tools/WorldEditor.h</url>
-          <line>118</line>
+          <line>116</line>
           <option name="timeStamp" value="25" />
         </line-breakpoint>
       </breakpoints>

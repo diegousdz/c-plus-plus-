@@ -63,33 +63,35 @@ void WorldEditor::initLoadTilemap()
     float textWidth = textTilemap.getGlobalBounds().width;
 
     buttonLoad.setSize(sf::Vector2f(64, 16));
-    buttonLoad.setPosition(textWidth + 32, baseTilePositionY + paddingLoadTile * 0.5);
+    buttonLoad.setPosition(static_cast<float>(textWidth) + 32.0f, static_cast<float>(baseTilePositionY) + static_cast<float>(paddingLoadTile) * 0.5f);
     buttonLoad.setFillColor(sf::Color(86, 86, 86));
 
     buttonTextLoad.setFont(fontEditor);
     buttonTextLoad.setString("Load");
     buttonTextLoad.setCharacterSize(8);
-    buttonTextLoad.setPosition(textWidth + 32 + (paddingLoadTile * 2), static_cast<float>(baseTilePositionY) + paddingLoadTile);
+    buttonTextLoad.setPosition(static_cast<float>(textWidth) + 32.0f + static_cast<float>(paddingLoadTile) * 2.0f, static_cast<float>(baseTilePositionY) + static_cast<float>(paddingLoadTile));
     buttonTextLoad.setFillColor(sf::Color::White);
 
-    buttonSave.setSize(sf::Vector2f(64, 16));
-    buttonSave.setPosition(buttonTextLoad.getPosition().x + 64 + static_cast<float>(paddingLoadTile), baseTilePositionY + paddingLoadTile * 0.5);
+    buttonSave.setSize(sf::Vector2f(64.0f, 16.0f));
+    buttonSave.setPosition(buttonTextLoad.getPosition().x + 64.0f + static_cast<float>(paddingLoadTile), static_cast<float>(baseTilePositionY) + static_cast<float>(paddingLoadTile) * 0.5f);
     buttonSave.setFillColor(sf::Color(86, 86, 86));
 
     buttonTextSave.setFont(fontEditor);
     buttonTextSave.setString("Save");
     buttonTextSave.setCharacterSize(8);
-    buttonTextSave.setPosition(buttonSave.getPosition().x + 8, baseTilePositionY + paddingLoadTile);
+    buttonTextSave.setPosition(buttonSave.getPosition().x + 8.0f, static_cast<float>(baseTilePositionY) + static_cast<float>(paddingLoadTile));
     buttonTextSave.setFillColor(sf::Color::White);
 
-    sectionLoadTilemapHeight = baseLoadTilemap.getSize().y + paddingLoadTile * 2;
+    sectionLoadTilemapHeight = static_cast<int>(static_cast<float>(baseLoadTilemap.getSize().y) + static_cast<float>(
+        paddingLoadTile) * 2.0f);
+
 }
 
 void WorldEditor::initTileSizeGroup()
 {
     int buttonWidth = 64;
     int padding = 16;
-    int buttonVerticalPositionY = sectionLoadTilemapHeight + padding;
+    float buttonVerticalPositionY = (sectionLoadTilemapHeight) + padding;
 
     titleEditor.setFont(fontEditor);
     titleEditor.setString("TILEMAP SIZE");
@@ -97,7 +99,7 @@ void WorldEditor::initTileSizeGroup()
     titleEditor.setPosition(16, buttonVerticalPositionY - padding);
     titleEditor.setFillColor(sf::Color::White);
 
-    buttonOneFileSize.setSize(sf::Vector2f(buttonWidth, 24));
+    buttonOneFileSize.setSize(sf::Vector2f(static_cast<float>(buttonWidth), 24.0f));
     buttonOneFileSize.setPosition(16, buttonVerticalPositionY);
     buttonOneFileSize.setFillColor(sf::Color(56, 56, 56));
 
@@ -107,8 +109,8 @@ void WorldEditor::initTileSizeGroup()
     buttonTextOneFileSize.setPosition(buttonOneFileSize.getPosition().x + 8, buttonOneFileSize.getPosition().y + padding / 2);
     buttonTextOneFileSize.setFillColor(sf::Color::White);
 
-    buttonTwoFileSize.setSize(sf::Vector2f(buttonWidth, 24));
-    buttonTwoFileSize.setPosition(buttonOneFileSize.getPosition().x + buttonWidth + padding, buttonVerticalPositionY);
+    buttonTwoFileSize.setSize(sf::Vector2f(static_cast<float>(buttonWidth), 24.0f));
+    buttonTwoFileSize.setPosition(static_cast<float>(buttonOneFileSize.getPosition().x + buttonWidth + padding), static_cast<float>(buttonVerticalPositionY));
     buttonTwoFileSize.setFillColor(sf::Color(56, 56, 56));
 
     buttonTextTwoFileSize.setFont(fontEditor);
@@ -117,8 +119,9 @@ void WorldEditor::initTileSizeGroup()
     buttonTextTwoFileSize.setPosition(buttonTwoFileSize.getPosition().x + 8, buttonTwoFileSize.getPosition().y + padding / 2);
     buttonTextTwoFileSize.setFillColor(sf::Color::White);
 
-    buttonThreeFileSize.setSize(sf::Vector2f(buttonWidth, 24));
-    buttonThreeFileSize.setPosition(buttonTwoFileSize.getPosition().x + buttonWidth + padding, buttonVerticalPositionY);
+    buttonThreeFileSize.setSize(sf::Vector2f(static_cast<float>(buttonWidth), 24.0f));
+    buttonThreeFileSize.setPosition(static_cast<float>(buttonTwoFileSize.getPosition().x) + static_cast<float>(buttonWidth) + static_cast<float>(padding),static_cast<float>(buttonVerticalPositionY));
+
     buttonThreeFileSize.setFillColor(sf::Color(56, 56, 56));
 
     buttonTextThreeFileSize.setFont(fontEditor);
@@ -134,17 +137,17 @@ void WorldEditor::initGridSizeGroup()
 {
     int buttonWidth = 64;
     int padding = 16;
-    int buttonVerticalPositionY = sectionLoadTilemapHeight + sectionTileSizeHeight + padding * 2;
+    int buttonVerticalPositionY = static_cast<int>(sectionLoadTilemapHeight + sectionTileSizeHeight + padding * 2);
 
     // Set the position for the title text properly
     titleGrid.setFont(fontEditor);
     titleGrid.setString("GRID SIZE");
     titleGrid.setCharacterSize(8);
-    titleGrid.setPosition(16, buttonVerticalPositionY - padding); // Adjusted position for the title
+    titleGrid.setPosition(static_cast<float>(16), static_cast<float>(buttonVerticalPositionY - padding));
     titleGrid.setFillColor(sf::Color::White);
 
-    ButtonOneGrid.setSize(sf::Vector2f(buttonWidth, 24));
-    ButtonOneGrid.setPosition(16, buttonVerticalPositionY);
+    ButtonOneGrid.setSize(sf::Vector2f(static_cast<float>(buttonWidth), 24.0f));
+    ButtonOneGrid.setPosition(static_cast<float>(16), static_cast<float>(buttonVerticalPositionY));
     ButtonOneGrid.setFillColor(sf::Color(56, 56, 56));
 
     ButtonTextOneGrid.setFont(fontEditor);
@@ -153,8 +156,9 @@ void WorldEditor::initGridSizeGroup()
     ButtonTextOneGrid.setPosition(ButtonOneGrid.getPosition().x + 8, ButtonOneGrid.getPosition().y + padding / 2);
     ButtonTextOneGrid.setFillColor(sf::Color::White);
 
-    ButtonTwoGrid.setSize(sf::Vector2f(buttonWidth, 24));
-    ButtonTwoGrid.setPosition(ButtonOneGrid.getPosition().x + buttonWidth + padding, buttonVerticalPositionY);
+    ButtonTwoGrid.setSize(sf::Vector2f(static_cast<float>(buttonWidth), 24.0f));
+    ButtonTwoGrid.setPosition(static_cast<float>(ButtonOneGrid.getPosition().x) + static_cast<float>(buttonWidth) + static_cast<float>(padding),static_cast<float>(buttonVerticalPositionY));
+
     ButtonTwoGrid.setFillColor(sf::Color(56, 56, 56));
 
     ButtonTextTwoGrid.setFont(fontEditor);
@@ -163,8 +167,9 @@ void WorldEditor::initGridSizeGroup()
     ButtonTextTwoGrid.setPosition(ButtonTwoGrid.getPosition().x + 4, ButtonTwoGrid.getPosition().y + padding / 2);
     ButtonTextTwoGrid.setFillColor(sf::Color::White);
 
-    ButtonThreeGrid.setSize(sf::Vector2f(buttonWidth, 24));
-    ButtonThreeGrid.setPosition(ButtonTwoGrid.getPosition().x + buttonWidth + padding, buttonVerticalPositionY);
+    ButtonThreeGrid.setSize(sf::Vector2f(static_cast<float>(buttonWidth), 24.0f));
+    ButtonThreeGrid.setPosition(static_cast<float>(ButtonTwoGrid.getPosition().x) + static_cast<float>(buttonWidth) + static_cast<float>(padding),static_cast<float>(buttonVerticalPositionY));
+
     ButtonThreeGrid.setFillColor(sf::Color(56, 56, 56));
 
     ButtonTextThreeGrid.setFont(fontEditor);
@@ -177,39 +182,42 @@ void WorldEditor::initGridSizeGroup()
 void WorldEditor::initTileMiniViewport()
 {
     int baseTileWidth = 256;
-    int baseTilePositionY = sectionLoadTilemapHeight + sectionTileSizeHeight + 64;
-    int topHeaderHeight = baseTileWidth / 4;
+    int baseTilePositionY = static_cast<int>(sectionLoadTilemapHeight + sectionTileSizeHeight + 64);
+    int topHeaderHeight = static_cast<int>(static_cast<float>(baseTileWidth) / 4.0f);
 
-    miniViewportBaseTile.setSize(sf::Vector2f(baseTileWidth, baseTileWidth));
-    miniViewportBaseTile.setPosition(0, baseTilePositionY);
+    miniViewportBaseTile.setSize(sf::Vector2f(static_cast<float>(baseTileWidth), static_cast<float>(topHeaderHeight)));
+    miniViewportBaseTile.setPosition(0.0f, static_cast<float>(baseTilePositionY));
+
     miniViewportBaseTile.setFillColor(sf::Color(56, 56, 56));
 
-    gamePreview.setSize(sf::Vector2f(baseTileWidth, baseTileWidth));
-    gamePreview.setPosition(0, baseTilePositionY);
+    gamePreview.setSize(sf::Vector2f(static_cast<float>(baseTileWidth), static_cast<float>(topHeaderHeight)));
+    gamePreview.setPosition(0.0f, static_cast<float>(baseTilePositionY));
+
     gamePreview.setFillColor(sf::Color(48, 48, 48));
 
     topHeader.setSize(sf::Vector2f(static_cast<float>(baseTileWidth), static_cast<float>(topHeaderHeight)));
-    topHeader.setPosition(0, static_cast<float>(baseTilePositionY));
+    topHeader.setPosition(0.0f, static_cast<float>(baseTilePositionY));
     topHeader.setFillColor(sf::Color(56, 56, 56));
 
     magicBelt.setSize(sf::Vector2f(static_cast<float>(baseTileWidth), static_cast<float>(topHeaderHeight)));
-    magicBelt.setPosition(0, static_cast<float>(baseTilePositionY) + static_cast<float>(baseTileWidth));
+    magicBelt.setPosition(0.0f, static_cast<float>(baseTilePositionY) + static_cast<float>(baseTileWidth));
     magicBelt.setFillColor(sf::Color(56, 56, 56));
 }
 
 void WorldEditor::initDebugConsole() {
     int baseTileWidth = 256;
-    int baseTilePositionY = sectionLoadTilemapHeight + sectionTileSizeHeight + 256 + 96;
+    float baseTilePositionY = static_cast<float>(sectionLoadTilemapHeight) + static_cast<float>(sectionTileSizeHeight) + 256.0f + 96.0f;
+
     int paddingLoadTile = 8;
 
-    baseDebugConsole.setSize(sf::Vector2f(baseTileWidth, 64));
-    baseDebugConsole.setPosition(0, baseTilePositionY);
+    baseDebugConsole.setSize(sf::Vector2f(static_cast<float>(baseTileWidth), 64.0f));
+    baseDebugConsole.setPosition(0.0f, static_cast<float>(baseTilePositionY));
     baseDebugConsole.setFillColor(sf::Color(8, 8, 8));
 
     texDebugConsole.setFont(fontEditor);
     texDebugConsole.setString("Logs:");
     texDebugConsole.setCharacterSize(8);
-    texDebugConsole.setPosition(16, baseTilePositionY + paddingLoadTile);
+    texDebugConsole.setPosition(16.0f, static_cast<float>(baseTilePositionY) + static_cast<float>(paddingLoadTile));
     texDebugConsole.setFillColor(sf::Color::Green);
 
     consoleInput = ""; // Initialize with an empty string
@@ -219,7 +227,8 @@ void WorldEditor::initDebugConsole() {
 void WorldEditor::initSectionMap()
 {
     // Use MiniViewport dimensions
-    int baseTilePositionY = static_cast<float>(sectionLoadTilemapHeight) + sectionTileSizeHeight + 64;
+    float baseTilePositionY = static_cast<float>(sectionLoadTilemapHeight) + sectionTileSizeHeight + 64.0f;
+
     float baseX = 16;
     float buttonWidth = 30;  // Assuming a width; update as needed
     float paddingBetweenButtons = 8; // Adjust padding between buttons
@@ -235,27 +244,27 @@ void WorldEditor::initSectionMap()
  
     // Set positions for each button, adding up widths and padding
 
-    ButtonSectionOne.setSize(sf::Vector2f(buttonWidth, 24));
+    ButtonSectionOne.setSize(sf::Vector2f(static_cast<float>(buttonWidth), 24.0f));
     ButtonSectionOne.setPosition(baseX, baseY + paddingBetweenButtons);
     ButtonSectionOne.setFillColor(sf::Color(100, 100, 100));
 
-    ButtonSectionTwo.setSize(sf::Vector2f(buttonWidth, 24));
+    ButtonSectionTwo.setSize(sf::Vector2f(static_cast<float>(buttonWidth), 24.0f));
     ButtonSectionTwo.setPosition(baseX + buttonWidth + paddingBetweenButtons, baseY + paddingBetweenButtons);
     ButtonSectionTwo.setFillColor(sf::Color(28, 28, 28));
 
-    ButtonSectionThree.setSize(sf::Vector2f(buttonWidth, 24));
+    ButtonSectionThree.setSize(sf::Vector2f(static_cast<float>(buttonWidth), 24.0f));
     ButtonSectionThree.setPosition(baseX + 2 * (buttonWidth + paddingBetweenButtons), baseY + paddingBetweenButtons);
     ButtonSectionThree.setFillColor(sf::Color(28, 28, 28));
 
-    ButtonSectionFour.setSize(sf::Vector2f(buttonWidth, 24));
+    ButtonSectionFour.setSize(sf::Vector2f(static_cast<float>(buttonWidth), 24.0f));
     ButtonSectionFour.setPosition(baseX + 3 * (buttonWidth + paddingBetweenButtons), baseY + paddingBetweenButtons);
     ButtonSectionFour.setFillColor(sf::Color(28, 28, 28));
 
-    ButtonSectionFive.setSize(sf::Vector2f(buttonWidth, 24));
+    ButtonSectionFive.setSize(sf::Vector2f(static_cast<float>(buttonWidth), 24.0f));
     ButtonSectionFive.setPosition(baseX + 4 * (buttonWidth + paddingBetweenButtons), baseY + paddingBetweenButtons);
     ButtonSectionFive.setFillColor(sf::Color(28, 28, 28));
 
-    ButtonSectionSix.setSize(sf::Vector2f(buttonWidth, 24));
+    ButtonSectionSix.setSize(sf::Vector2f(static_cast<float>(buttonWidth), 24.0f));
     ButtonSectionSix.setPosition(baseX + 5 * (buttonWidth + paddingBetweenButtons), baseY + paddingBetweenButtons);
     ButtonSectionSix.setFillColor(sf::Color(28, 28, 28));
 
@@ -282,77 +291,77 @@ void WorldEditor::initBrushes()
     float thirdRowY = secondRowY + buttonHeight + paddingBetweenButtons;
 
     // First row of texture buttons
-    ButtonTextureOne.setSize(sf::Vector2f(buttonWidth, buttonHeight));
+    ButtonTextureOne.setSize(sf::Vector2f(static_cast<float>(buttonWidth), static_cast<float>(buttonHeight)));
     ButtonTextureOne.setPosition(baseX, firstRowY);
     ButtonTextureOne.setFillColor(sf::Color(100, 100, 100));
 
-    ButtonTextureTwo.setSize(sf::Vector2f(buttonWidth, buttonHeight));
+    ButtonTextureTwo.setSize(sf::Vector2f(static_cast<float>(buttonWidth), static_cast<float>(buttonHeight)));
     ButtonTextureTwo.setPosition(baseX + (buttonWidth + paddingBetweenButtons) * 1, firstRowY);
     ButtonTextureTwo.setFillColor(sf::Color(28, 28, 28));
 
-    ButtonTextureThree.setSize(sf::Vector2f(buttonWidth, buttonHeight));
+    ButtonTextureThree.setSize(sf::Vector2f(static_cast<float>(buttonWidth), static_cast<float>(buttonHeight)));
     ButtonTextureThree.setPosition(baseX + (buttonWidth + paddingBetweenButtons) * 2, firstRowY);
     ButtonTextureThree.setFillColor(sf::Color(28, 28, 28));
 
-    ButtonTextureFour.setSize(sf::Vector2f(buttonWidth, buttonHeight));
+    ButtonTextureFour.setSize(sf::Vector2f(static_cast<float>(buttonWidth), static_cast<float>(buttonHeight)));
     ButtonTextureFour.setPosition(baseX + (buttonWidth + paddingBetweenButtons) * 3, firstRowY);
     ButtonTextureFour.setFillColor(sf::Color(28, 28, 28));
 
-    ButtonTextureFive.setSize(sf::Vector2f(buttonWidth, buttonHeight));
+    ButtonTextureFive.setSize(sf::Vector2f(static_cast<float>(buttonWidth), static_cast<float>(buttonHeight)));
     ButtonTextureFive.setPosition(baseX + (buttonWidth + paddingBetweenButtons) * 4, firstRowY);
     ButtonTextureFive.setFillColor(sf::Color(28, 28, 28));
 
-    ButtonTextureSix.setSize(sf::Vector2f(buttonWidth, buttonHeight));
+    ButtonTextureSix.setSize(sf::Vector2f(static_cast<float>(buttonWidth), static_cast<float>(buttonHeight)));
     ButtonTextureSix.setPosition(baseX + (buttonWidth + paddingBetweenButtons) * 5, firstRowY);
     ButtonTextureSix.setFillColor(sf::Color(28, 28, 28));
 
     // Second row of texture buttons
-    ButtonTextureSeven.setSize(sf::Vector2f(buttonWidth, buttonHeight));
+    ButtonTextureSeven.setSize(sf::Vector2f(static_cast<float>(buttonWidth), static_cast<float>(buttonHeight)));
     ButtonTextureSeven.setPosition(baseX, secondRowY);
     ButtonTextureSeven.setFillColor(sf::Color(28, 28, 28));
 
-    ButtonTextureEight.setSize(sf::Vector2f(buttonWidth, buttonHeight));
+    ButtonTextureEight.setSize(sf::Vector2f(static_cast<float>(buttonWidth), static_cast<float>(buttonHeight)));
     ButtonTextureEight.setPosition(baseX + (buttonWidth + paddingBetweenButtons) * 1, secondRowY);
     ButtonTextureEight.setFillColor(sf::Color(28, 28, 28));
 
-    ButtonTextureNine.setSize(sf::Vector2f(buttonWidth, buttonHeight));
+    ButtonTextureNine.setSize(sf::Vector2f(static_cast<float>(buttonWidth), static_cast<float>(buttonHeight)));
     ButtonTextureNine.setPosition(baseX + (buttonWidth + paddingBetweenButtons) * 2, secondRowY);
     ButtonTextureNine.setFillColor(sf::Color(28, 28, 28));
 
-    ButtonTextureTen.setSize(sf::Vector2f(buttonWidth, buttonHeight));
+    ButtonTextureTen.setSize(sf::Vector2f(static_cast<float>(buttonWidth), static_cast<float>(buttonHeight)));
     ButtonTextureTen.setPosition(baseX + (buttonWidth + paddingBetweenButtons) * 3, secondRowY);
     ButtonTextureTen.setFillColor(sf::Color(28, 28, 28));
 
-    ButtonTextureEleven.setSize(sf::Vector2f(buttonWidth, buttonHeight));
+    ButtonTextureEleven.setSize(sf::Vector2f(static_cast<float>(buttonWidth), static_cast<float>(buttonHeight)));
     ButtonTextureEleven.setPosition(baseX + (buttonWidth + paddingBetweenButtons) * 4, secondRowY);
     ButtonTextureEleven.setFillColor(sf::Color(28, 28, 28));
 
-    ButtonTextureTwelve.setSize(sf::Vector2f(buttonWidth, buttonHeight));
+    ButtonTextureTwelve.setSize(sf::Vector2f(static_cast<float>(buttonWidth), static_cast<float>(buttonHeight)));
     ButtonTextureTwelve.setPosition(baseX + (buttonWidth + paddingBetweenButtons) * 5, secondRowY);
     ButtonTextureTwelve.setFillColor(sf::Color(28, 28, 28));
 
     // Third row of texture buttons
-    ButtonTextureThirteen.setSize(sf::Vector2f(buttonWidth, buttonHeight));
+    ButtonTextureThirteen.setSize(sf::Vector2f(static_cast<float>(buttonWidth), static_cast<float>(buttonHeight)));
     ButtonTextureThirteen.setPosition(baseX, thirdRowY);
     ButtonTextureThirteen.setFillColor(sf::Color(28, 28, 28));
 
-    ButtonTextureFourteen.setSize(sf::Vector2f(buttonWidth, buttonHeight));
+    ButtonTextureFourteen.setSize(sf::Vector2f(static_cast<float>(buttonWidth), static_cast<float>(buttonHeight)));
     ButtonTextureFourteen.setPosition(baseX + (buttonWidth + paddingBetweenButtons) * 1, thirdRowY);
     ButtonTextureFourteen.setFillColor(sf::Color(28, 28, 28));
 
-    ButtonTextureFifteen.setSize(sf::Vector2f(buttonWidth, buttonHeight));
+    ButtonTextureFifteen.setSize(sf::Vector2f(static_cast<float>(buttonWidth), static_cast<float>(buttonHeight)));
     ButtonTextureFifteen.setPosition(baseX + (buttonWidth + paddingBetweenButtons) * 2, thirdRowY);
     ButtonTextureFifteen.setFillColor(sf::Color(28, 28, 28));
 
-    ButtonTextureSixteen.setSize(sf::Vector2f(buttonWidth, buttonHeight));
+    ButtonTextureSixteen.setSize(sf::Vector2f(static_cast<float>(buttonWidth), static_cast<float>(buttonHeight)));
     ButtonTextureSixteen.setPosition(baseX + (buttonWidth + paddingBetweenButtons) * 3, thirdRowY);
     ButtonTextureSixteen.setFillColor(sf::Color(28, 28, 28));
 
-    ButtonTextureSeventeen.setSize(sf::Vector2f(buttonWidth, buttonHeight));
+    ButtonTextureSeventeen.setSize(sf::Vector2f(static_cast<float>(buttonWidth), static_cast<float>(buttonHeight)));
     ButtonTextureSeventeen.setPosition(baseX + (buttonWidth + paddingBetweenButtons) * 4, thirdRowY);
     ButtonTextureSeventeen.setFillColor(sf::Color(28, 28, 28));
 
-    ButtonTextureEighteen.setSize(sf::Vector2f(buttonWidth, buttonHeight));
+    ButtonTextureEighteen.setSize(sf::Vector2f(static_cast<float>(buttonWidth), static_cast<float>(buttonHeight)));
     ButtonTextureEighteen.setPosition(baseX + (buttonWidth + paddingBetweenButtons) * 5, thirdRowY);
     ButtonTextureEighteen.setFillColor(sf::Color(28, 28, 28));
 
@@ -379,15 +388,15 @@ void WorldEditor::initRotationControls()
     titleRotation.setString("SPRITE VISIBILITY & ROTATION");
     titleRotation.setCharacterSize(8);
     titleRotation.setFillColor(sf::Color::White);
-    titleRotation.setPosition(baseX, baseY);
+    titleRotation.setPosition(static_cast<float>(baseX), static_cast<float>(baseY));
 
     // Calculate the Y position for the buttons, below the title
     float buttonStartY = baseY + titleRotation.getGlobalBounds().height + padding / 2;
 
     // Configure buttons and their labels with angle text
     // Button: -90 (Left)
-    ButtonRotateOne.setSize(sf::Vector2f(buttonWidth, buttonHeight));
-    ButtonRotateOne.setPosition(baseX, buttonStartY);
+    ButtonRotateOne.setSize(sf::Vector2f(static_cast<float>(buttonWidth), static_cast<float>(buttonHeight)));
+    ButtonRotateOne.setPosition(static_cast<float>(baseX), buttonStartY);
     ButtonRotateOne.setFillColor(sf::Color(56, 56, 56));
 
     titleRotationLeft.setFont(fontEditor);
@@ -400,8 +409,8 @@ void WorldEditor::initRotationControls()
     );
 
     // Button: 90 (Right)
-    ButtonRotateTwo.setSize(sf::Vector2f(buttonWidth, buttonHeight));
-    ButtonRotateTwo.setPosition(baseX + buttonWidth + padding / 2, buttonStartY);
+    ButtonRotateTwo.setSize(sf::Vector2f(static_cast<float>(buttonWidth), static_cast<float>(buttonHeight)));
+    ButtonRotateTwo.setPosition(baseX + buttonWidth + padding / static_cast<float>(2), buttonStartY);
     ButtonRotateTwo.setFillColor(sf::Color(56, 56, 56));
 
     titleRotationRight.setFont(fontEditor);
@@ -414,8 +423,8 @@ void WorldEditor::initRotationControls()
     );
 
     // Button: 0 (Top)
-    ButtonRotateThree.setSize(sf::Vector2f(buttonWidth, buttonHeight));
-    ButtonRotateThree.setPosition(baseX + 2 * (buttonWidth + padding / 2), buttonStartY);
+    ButtonRotateThree.setSize(sf::Vector2f(static_cast<float>(buttonWidth), static_cast<float>(buttonHeight)));
+    ButtonRotateThree.setPosition(baseX + 2 * (buttonWidth + padding / static_cast<float>(2)), buttonStartY);
     ButtonRotateThree.setFillColor(sf::Color(56, 56, 56));
 
     titleRotationTop.setFont(fontEditor);
@@ -428,8 +437,8 @@ void WorldEditor::initRotationControls()
     );
 
     // Button: 180 (Bottom)
-    ButtonRotateFour.setSize(sf::Vector2f(buttonWidth, buttonHeight));
-    ButtonRotateFour.setPosition(baseX + 3 * (buttonWidth + padding / 2), buttonStartY);
+    ButtonRotateFour.setSize(sf::Vector2f(static_cast<float>(buttonWidth), static_cast<float>(buttonHeight)));
+    ButtonRotateFour.setPosition(baseX + 3 * (buttonWidth + padding / static_cast<float>(2)), buttonStartY);
     ButtonRotateFour.setFillColor(sf::Color(56, 56, 56));
 
     titleRotationBottom.setFont(fontEditor); 
@@ -1519,13 +1528,15 @@ void WorldEditor::allocateTileCellArray(MapSection* section, int gridSize)
         for(int x = 0; x < gridSize; x++)
         {
             // Initialize each TileCell
-            section->tilecellArray[y][x].shape.setSize(sf::Vector2f(tileSize, tileSize));
-            section->tilecellArray[y][x].shape.setPosition(x * tileSize, y * tileSize);
+// Initialize each TileCell
+            section->tilecellArray[y][x].shape.setSize(sf::Vector2f(static_cast<float>(tileSize), static_cast<float>(tileSize)));
+            section->tilecellArray[y][x].shape.setPosition(static_cast<float>(x) * static_cast<float>(tileSize), static_cast<float>(y) * static_cast<float>(tileSize));
             section->tilecellArray[y][x].shape.setFillColor(sf::Color::Transparent);
             section->tilecellArray[y][x].shape.setOutlineColor(sf::Color::Red);
             section->tilecellArray[y][x].shape.setOutlineThickness(0.5f);
             section->tilecellArray[y][x].cellType = 'V'; // Default to void
             section->tilecellArray[y][x].textureID = -1;
+
         }
     }
     
