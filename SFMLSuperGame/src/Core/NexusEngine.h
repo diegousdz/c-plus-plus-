@@ -4,7 +4,7 @@
 #include "FileManager.h"
 #include "ResourceManager.h"
 #include "AnimationSequencer.h"
-
+#include "../Game/Game.h"
 #include "../Tools/WorldEditor.h"
 
 class NexusEngine
@@ -32,5 +32,7 @@ private:
     } // Singleton pattern
 
     ResourceManager resourceManager; // The central resource manager
+        
+    Game game;
 
 };

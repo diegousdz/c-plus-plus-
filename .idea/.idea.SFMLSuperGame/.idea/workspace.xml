@@ -15,20 +15,43 @@
       <change beforePath="$PROJECT_DIR$/SFMLSuperGame/SFMLSuperGame.vcxproj" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/SFMLSuperGame.vcxproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SFMLSuperGame/bin/x64/Debug/SFMLSuperGame.exe" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/bin/x64/Debug/SFMLSuperGame.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SFMLSuperGame/bin/x64/Debug/SFMLSuperGame.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/bin/x64/Debug/SFMLSuperGame.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/AnimationSequencer.obj" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/AnimationSequencer.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/FileManager.obj" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/FileManager.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/GUIHandler.obj" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/GUIHandler.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/Game.obj" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/Game.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/GameEntityManager.obj" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/GameEntityManager.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/HelperFunctions.obj" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/HelperFunctions.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/InputManager.obj" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/InputManager.obj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/NexusEngine.obj" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/NexusEngine.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/Orc.obj" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/Orc.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/Player.obj" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/Player.obj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/RenderAndFXManager.obj" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/RenderAndFXManager.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/ResourceManager.obj" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/ResourceManager.obj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/SFMLSuperGame.ilk" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/SFMLSuperGame.ilk" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/SFMLSuperGame.tlog/CL.command.1.tlog" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/SFMLSuperGame.tlog/CL.command.1.tlog" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/SFMLSuperGame.tlog/CL.read.1.tlog" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/SFMLSuperGame.tlog/CL.read.1.tlog" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/SFMLSuperGame.tlog/CL.write.1.tlog" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/SFMLSuperGame.tlog/CL.write.1.tlog" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/SFMLSuperGame.tlog/link.read.1.tlog" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/SFMLSuperGame.tlog/link.read.1.tlog" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/SoundSequencer.obj" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/SoundSequencer.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/StoneAndFrostWorld.obj" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/StoneAndFrostWorld.obj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/Tilemap.obj" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/Tilemap.obj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/Warrior.obj" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/Warrior.obj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/WorldEditor.obj" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/WorldEditor.obj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/main.obj" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/main.obj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/vc143.idb" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/vc143.idb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/vc143.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Debug/vc143.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Release/SFMLSuperGame.Build.CppClean.log" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/obj/x64/Release/SFMLSuperGame.Build.CppClean.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/src/Tools/Tilemap.h" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/src/Tools/Tilemap.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/src/Core/GUIHandler.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/src/Core/GUIHandler.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/src/Core/NexusEngine.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/src/Core/NexusEngine.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/src/Core/NexusEngine.h" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/src/Core/NexusEngine.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/src/Core/ResourceManager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/src/Core/ResourceManager.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/src/Core/ResourceManager.h" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/src/Core/ResourceManager.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/src/Game/Game.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/src/Game/Game.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/src/Game/Game.h" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/src/Game/Game.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/src/Game/GameEntityManager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/src/Game/GameEntityManager.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/src/Game/GameEntityManager.h" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/src/Game/GameEntityManager.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/src/Game/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/src/Game/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/src/GameEntities/Player.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/src/GameEntities/Player.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/src/GameEntities/Player.h" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/src/GameEntities/Player.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SFMLSuperGame/src/Tools/Tilemap.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/src/Tools/Tilemap.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SFMLSuperGame/src/Tools/WorldEditor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/src/Tools/WorldEditor.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SFMLSuperGame/src/Tools/WorldEditor.h" beforeDir="false" afterPath="$PROJECT_DIR$/SFMLSuperGame/src/Tools/WorldEditor.h" afterDir="false" />
     </list>
@@ -61,23 +84,31 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="cidr-memory-view://0" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../../../Program Files (x86)/Windows Kits/10/Include/10.0.26100.0/shared/rpcndr.h" root0="SKIP_HIGHLIGHTING" />
     <setting file="jar://$APPLICATION_HOME_DIR$/lib/modules/intellij.rider.jar!/schemas/msbuild/Microsoft.Build.Core.xsd" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../../Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.41.34120/include/iosfwd" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../../Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.41.34120/include/ostream" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../../Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.41.34120/include/xstring" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/SFMLSuperGame/libs/SFML/include/SFML/Graphics/Rect.inl" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/SFMLSuperGame/libs/SFML/include/SFML/Graphics/RenderWindow.hpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/SFMLSuperGame/libs/SFML/include/SFML/Graphics/Shape.hpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/SFMLSuperGame/src/Core/FileManager.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/SFMLSuperGame/src/Core/FileManager.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/diego/source/repos/EntregablesImage/SFMLSuperGame/SFMLSuperGame/src/Core/GUIHandler.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/SFMLSuperGame/src/Core/GUIHandler.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/SFMLSuperGame/src/Core/HelperFunctions.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/diego/source/repos/EntregablesImage/SFMLSuperGame/SFMLSuperGame/src/Core/NexusEngine.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/SFMLSuperGame/src/Core/NexusEngine.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/diego/source/repos/EntregablesImage/SFMLSuperGame/SFMLSuperGame/src/Core/NexusEngine.h" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/SFMLSuperGame/src/Core/NexusEngine.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/SFMLSuperGame/src/Core/ResourceManager.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/SFMLSuperGame/src/Game/Game.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/SFMLSuperGame/src/Game/Game.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/SFMLSuperGame/src/Game/GameEntityManager.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/diego/source/repos/EntregablesImage/SFMLSuperGame/SFMLSuperGame/src/Game/GameEntityManager.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/SFMLSuperGame/src/Game/GameEntityManager.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://C:/Users/diego/source/repos/EntregablesImage/SFMLSuperGame/SFMLSuperGame/src/Game/GameEntityManager.h" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/SFMLSuperGame/src/Game/StoneAndFrostWorld.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/SFMLSuperGame/src/Game/main.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/SFMLSuperGame/src/GameEntities/Orc.cpp" root0="FORCE_HIGHLIGHTING" />
@@ -105,20 +136,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;C++ Project.SFMLSuperGame.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;staging&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "C++ Project.SFMLSuperGame.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "staging",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.keymap",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="SFMLSuperGame" type="CppProject" factoryName="C++ Project">
       <configuration_1>
@@ -230,6 +261,9 @@
       <workItem from="1731124292419" duration="1000" />
       <workItem from="1731128508418" duration="60000" />
       <workItem from="1731128617180" duration="50000" />
+      <workItem from="1731345541139" duration="1957000" />
+      <workItem from="1731377563117" duration="6421000" />
+      <workItem from="1731412615132" duration="9313000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit - Base of Engine">
       <option name="closed" value="true" />
@@ -379,7 +413,8 @@
     <MESSAGE value="Fix for Build in release and git ignore" />
     <MESSAGE value="Removing files for the GitIgnore" />
     <MESSAGE value="git ignore corrected" />
-    <option name="LAST_COMMIT_MESSAGE" value="git ignore corrected" />
+    <MESSAGE value="Updated bash of code foundation regarding the engine work" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated bash of code foundation regarding the engine work" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -395,14 +430,9 @@
           <option name="timeStamp" value="21" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/SFMLSuperGame/src/Tools/WorldEditor.h</url>
-          <line>227</line>
-          <option name="timeStamp" value="24" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/SFMLSuperGame/src/Tools/WorldEditor.h</url>
-          <line>116</line>
-          <option name="timeStamp" value="25" />
+          <url>file://$PROJECT_DIR$/SFMLSuperGame/src/Game/Game.h</url>
+          <line>7</line>
+          <option name="timeStamp" value="23" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

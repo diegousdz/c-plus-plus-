@@ -37,10 +37,10 @@ void WorldEditor::initTileTextures() {
 
     // Load each texture into the tileTextures array
     for (int i = 0; i < NUM_TEXTURES; ++i) {
-        if (!tileTextures[i].loadFromFile(textures[i])) {
-            std::cerr << "Failed to load texture: " << textures[i].toAnsiString() << std::endl;
+        if (!tileTextures[i].loadFromFile(texturesPath[i])) {
+            std::cerr << "Failed to load texture: " << texturesPath[i].toAnsiString() << std::endl;
         } else {
-            std::cout << "Successfully loaded texture: " << textures[i].toAnsiString() << std::endl;
+            std::cout << "Successfully loaded texture: " << texturesPath[i].toAnsiString() << std::endl;
             // asign the texture to a sprite that will be created as new and then added in the position and scale of the Button that match the index
         }
     }
@@ -465,7 +465,7 @@ void WorldEditor::onSaveButtonClick() {
     for (int i = 0; i < NUM_TEXTURES; i++) {
         // Save the default texture paths if they're not already set
         if (newGameMap->texturesPath[i] == "none") {
-            newGameMap->texturesPath[i] = textures[i];  // Adjust path as needed
+            newGameMap->texturesPath[i] = texturesPath[i];  // Adjust path as needed
         }
     }
 

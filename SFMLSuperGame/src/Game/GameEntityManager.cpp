@@ -134,6 +134,20 @@ void GameEntityManager::updatePlayerOnCollisionWithDoor(Player& player)
     // Implement the logic for when the player collides with the door
 }
 
+void GameEntityManager::createEnemiesLevelOne()
+{
+    /* for (int i = 0; i < 5; i++)
+     {
+         Orc newOrc = resocreateOrc();
+         orcWarriorsPoolShapes[i] = newOrc;
+         float xPosition = 50.0f + (i * 70); 
+         float yPosition = windowHeight - newOrc.enemySize;            
+ 
+         orcWarriorsPoolShapes[i].shape.setPosition(xPosition, yPosition);
+         
+         // TODD:  gameWindow.draw(orcWarriorsPoolShapes[i].shape);
+     } */
+}
 
 void GameEntityManager::gemUpdate(Player& player)
 {

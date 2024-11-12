@@ -17,9 +17,10 @@ void GUIHandler::mainMenuInit(ResourceManager& resourceManager)
     }
 
     resourceManager.title.setFont(resourceManager.font);
-    resourceManager.title.setString("Stone & Frost");
+    resourceManager.title.setString("Frost & Stone");
     resourceManager.title.setCharacterSize(32);
     resourceManager.title.setFillColor(sf::Color::White);
+    
     resourceManager.title.setPosition(50, 50);
 }
 

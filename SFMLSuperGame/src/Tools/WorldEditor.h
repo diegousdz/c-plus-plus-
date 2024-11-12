@@ -1,6 +1,5 @@
 ﻿#pragma once
 #include <string>
-
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -64,7 +63,7 @@ public:
     WorldEditor(): tileMapWidth(0), tileMapHeight(0), tileSize(0), gameOverLine(0)
     {
     }
-    bool loadButtonClicked = false; // Flag to control Load button clicks
+    bool loadButtonClicked = false; 
     bool saveButtonClicked = false;
     
     int tileMapWidth;
@@ -117,16 +116,14 @@ private:
     Tilemap tilemap;
 
     bool canEditCellSize = false;
-
     GameMap* newGameMap = nullptr;
     MapSection** newMapSection = nullptr;
     int CurrentlySelectedIndex = -1;
-    sf::String newTexturesPath[18];
     MapSection* currentSection;
 
   
-    static const int NUM_TEXTURES = 10; // Adjust this based on your total textures
-    sf::String textures[NUM_TEXTURES]  = {
+    static const int NUM_TEXTURES = 10; // 
+    sf::String texturesPath[NUM_TEXTURES]  = {
         "res/textures/World/32/tile_32_floor_B.png",
         "res/textures/World/32/tile_32_floor_b2.png",
         "res/textures/World/32/tile_32_floor_t.png",

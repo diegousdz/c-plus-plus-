@@ -1,44 +1,27 @@
 ﻿#pragma once
 #include "GameEntityManager.h"
+#include "../Core/ResourceManager.h"
 #include "../GameEntities/Player.h"
 
-struct gameSection
-{
-    sf::String id = "map#1";
-
-    int numberOfSections  = 2;
-    
-    int width;
-    int height;
-    
-    float positionX;
-    float positionY;
-};
+class ResourceManager;
 
 class Game
 {
 public:
     
-    Game();  // Constructor with parameters
+    Game();  
 
-    void init(sf::RenderWindow& window, Player user);
-    void updateBackgroundPosition();
-    void update(float deltaTime, Player player);
-    void draw(sf::RenderWindow& window, Player user);
+    void init(sf::RenderWindow& window, ResourceManager& resourceManager, Player& player);
+    void inputHandle();
+    void update(float deltaTime, Player& player);
+    void draw(sf::RenderWindow& window, ResourceManager& resourceManager);
     
-    void NewGame();
-    void LoadGame();
-    void createEnemiesLevelOne();
-
-    void setMapWidth(int totalMapSectionWidth);
-
-    static const int ENEMIES_L1 = 10;
-    static const int POWERUPS_L2 = 5;
-
     GameEntityManager entityManager;
+    bool  isGameMapLoaded = false;
+    
+    void composeRender(sf::RenderWindow& window, ResourceManager& resourceManager);
+    
 private:
-    int mapWidth = 0;
     sf::View camera;
-    sf::Sprite background;
-    sf::Vector2f worldOffset;
+    sf::Sprite backgroundLevelOne;
 };

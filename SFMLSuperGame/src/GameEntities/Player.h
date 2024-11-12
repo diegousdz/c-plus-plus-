@@ -41,6 +41,7 @@ public:
     std::string name;
 
     Player();
+    void setPlayerPosition(sf::Vector2f incomingPosition);
     void loadAnimations();
     Player(std::string playerName, Inventory inventory);
 

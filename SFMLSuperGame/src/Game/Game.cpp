@@ -1,31 +1,52 @@
 ﻿#include "Game.h"
 #include "./../Core/ResourceManager.h"
 #include "../GameEntities/Orc.h"
+#include "../Tools/Tilemap.h"
+
 Game::Game()
 {
     
 }
 
-void Game::init(sf::RenderWindow& window, Player user)
+void Game::init(sf::RenderWindow& window, ResourceManager& resourceManager, Player& player)
 {
+
+    player.setPlayerPosition(resourceManager.initalSpawnPositionLevelOne);
+    if(!isGameMapLoaded)
+    {
+      //  Tilemap tilemap;
+        // tilemap.LoadMapData
+    }
+
+    if(resourceManager.currentUserLevel == 1)
+    {
+       
+    }
+
     camera.setSize(static_cast<float>(window.getSize().x), static_cast<float>(window.getSize().y));
-    camera.setCenter(user.shape.getPosition());
-   //  game.setMapWidth(resourceManager.gameWindow.);
+    camera.setCenter(player.shape.getPosition().x, 0.0f);
+    camera.zoom(0.8f);
+
+    std::cout << "Finished initializing: " << std::endl;
 }
 
-void Game::updateBackgroundPosition()
+void Game::inputHandle()
 {
-    worldOffset.x = camera.getCenter().x - (camera.getSize().x / 2);
-    worldOffset.y = camera.getCenter().y - (camera.getSize().y / 2);
-    background.setPosition(worldOffset.x * 0.5f, worldOffset.y * 0.5f); 
+    
 }
-void Game::update(float deltaTime, Player player)
+
+void Game::update(float deltaTime, Player& player)
 {
+ //   player.setPlayerPosition(sf::Vector2f(100.0f, 512.0f));
+    std::cout << "Camera Center: " << camera.getCenter().x << ", " << camera.getCenter().y << std::endl;
+ //   std::cout << "Player Position: " << player.shape.getPosition().x << ", " << player.shape.getPosition().y << std::endl;
+    camera.setCenter(player.shape.getPosition());
+   // calculate position
     // Update player movement first
-    player.handleMovement(deltaTime);
+  //  player.handleMovement(deltaTime);
     
     // Let GEM handle all collisions
-    entityManager.gemUpdate(player);
+ //   entityManager.gemUpdate(player);
     
     // Update camera after final player position is determined
   //  updateCamera(deltaTime, player);
@@ -46,34 +67,17 @@ void Game::update(float deltaTime, Player player)
     updateBackgroundPosition();*/
 }
 
-void Game::draw(sf::RenderWindow& window, Player user)
+void Game::draw(sf::RenderWindow& window, ResourceManager& resourceManager)
 {
     window.setView(camera);
-    
-    sf::RectangleShape debugShape(user.shape.getSize());
-    debugShape.setFillColor(sf::Color(0, 255, 0, 128)); // Semi-transparent green
-    debugShape.setPosition(user.shape.getPosition());
-    
-    window.draw(debugShape);
-    window.draw(user.currentSprite);
+   // window.setView(camera);
+    window.draw(resourceManager.backgroundSpriteOne);
+    window.draw(resourceManager.newGamePlayer.currentSprite);
+ //   window.draw(resourceManager.backgroundSpriteOne);
 }
 
-void Game::createEnemiesLevelOne()
-{
-   /* for (int i = 0; i < 5; i++)
-    {
-        Orc newOrc = resocreateOrc();
-        orcWarriorsPoolShapes[i] = newOrc;
-        float xPosition = 50.0f + (i * 70); 
-        float yPosition = windowHeight - newOrc.enemySize;            
 
-        orcWarriorsPoolShapes[i].shape.setPosition(xPosition, yPosition);
-        
-        // TODD:  gameWindow.draw(orcWarriorsPoolShapes[i].shape);
-    } */
-}
-
-void Game::setMapWidth(int totalMapSectionWidth)
+void Game::composeRender(sf::RenderWindow& window, ResourceManager& resourceManager)
 {
-    mapWidth = totalMapSectionWidth;
+    window.draw(resourceManager.backgroundSpriteOne);
 }

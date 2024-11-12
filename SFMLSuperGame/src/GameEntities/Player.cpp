@@ -71,6 +71,12 @@ Player::Player()
     loadAnimations();
 }
 
+void Player::setPlayerPosition(sf::Vector2f incomingPosition)
+{
+    shape.setPosition(incomingPosition);
+    currentSprite.setPosition(incomingPosition);
+}
+
 // Set texture for the player
 void Player::setTexture(sf::Texture* texture)
 {

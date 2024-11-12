@@ -68,7 +68,7 @@ public:
         return staticWorldEntities;
     }
 
-    // Door entity setter and getter
+    // Door entity setter
     void setDoorEntity(const sf::RectangleShape& door)
     {
         doorEntity = door;
@@ -93,14 +93,10 @@ public:
     void updatePlayerOnCollisionWithDeadZone(Player& player, sf::RectangleShape& entity);
     void updatePlayerOnCollisionWithWorld(Player& player, sf::RectangleShape& entity);
     void updatePlayerOnCollisionWithDoor(Player& player);
+    void createEnemiesLevelOne();
 
     // Initialization and update methods
-    void gemInit(int levelEnemiesCount, sf::RectangleShape* enemies,
-                 int levelPowerUpsCount, sf::RectangleShape* powerUps,
-                 int levelDeadZoneCount, sf::RectangleShape* deadZones,
-                 int levelStaticWorldEntitiesCount, sf::RectangleShape* staticWorld,
-                 const sf::RectangleShape& door);
-
+    void gemInit(int levelEnemiesCount, sf::RectangleShape* enemies, int levelPowerUpsCount, sf::RectangleShape* powerUps, int levelDeadZoneCount, sf::RectangleShape* deadZones, int levelStaticWorldEntitiesCount, sf::RectangleShape* staticWorld, const sf::RectangleShape& door);
     void gemUpdate(Player& player);
 
     // Setters for entity counts
@@ -108,17 +104,14 @@ public:
     {
         this->numberOfEnemies = value;
     }
-
     void setPowerUpsNumber(int value)
     {
         this->numberOfPowerUps = value;
     }
-
     void setDeadZoneNumber(int value)
     {
         this->numberDeadZone = value;
     }
-
     void setStaticWorldNumber(int value)
     {
         this->numberOfStaticWorldEntities = value;

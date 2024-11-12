@@ -48,6 +48,7 @@ int main()
             }
             else if (editor.hasCreatedTilemap)
             {
+       
                 // Create the tileViewPort window
                 editor.tileViewPort.create(sf::VideoMode(512, 512), "Tilemap Viewport");
                 editor.hasCreatedTilemap = false;
@@ -58,7 +59,9 @@ int main()
     {
         // create an instance of the engine
         NexusEngine& engine = NexusEngine::getInstance();
-        engine.initializeWindow(engine.getResourceManager().gameWindow, 1280, 720, "Stone & Frost");
+        engine.getResourceManager().setWindowWidth(1280);
+        engine.getResourceManager().setWindowHeight(720);
+        engine.initializeWindow(engine.getResourceManager().gameWindow, engine.getResourceManager().windowWidth, engine.getResourceManager().windowHeight, "Stone & Frost");
         engine.init();
 
         while (engine.getResourceManager().gameWindow.isOpen())
