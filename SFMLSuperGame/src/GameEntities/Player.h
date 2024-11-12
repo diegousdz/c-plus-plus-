@@ -50,7 +50,7 @@ public:
     sf::Vector2f velocity;
     
     float gravity = 300.0f;
-    bool isOnGround = false;
+    bool isOnGround = false; 
     bool isMoving = false;
     bool onInverseDirection = false;
 
@@ -68,11 +68,10 @@ public:
     void setTexture(sf::Texture* texture);
     void setSize(float sizeX, float sizeY);
     void configureSprite(sf::Texture playerTexture);
-    void createPlayer(std::string incomingString, sf::Vector2f scaleVector);
 
     void handleMovement(float deltaTime);
     void updateAnimation(float deltaTime);
-   // void createPlayer();
+    
     sf::Vector2f previousPosition;
     sf::Vector2f getPosition() const { return shape.getPosition(); }
     void setPosition(const sf::Vector2f& pos) { shape.setPosition(pos); }

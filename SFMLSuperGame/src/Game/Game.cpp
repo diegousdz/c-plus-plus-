@@ -22,28 +22,30 @@ void Game::init(sf::RenderWindow& window, ResourceManager& resourceManager, Play
     {
        
     }
+    sf::View view = window.getDefaultView();
+    camera.setSize(static_cast<float>(window.getSize().x) , static_cast<float>(window.getSize().y));
+    camera.setCenter(player.shape.getPosition().x + static_cast<float>(window.getSize().x) /2, 0.0f);
+    camera.zoom(0.6);
 
-    camera.setSize(static_cast<float>(window.getSize().x), static_cast<float>(window.getSize().y));
-    camera.setCenter(player.shape.getPosition().x, 0.0f);
-    camera.zoom(0.8f);
-
-    std::cout << "Finished initializing: " << std::endl;
+ //   std::cout << "Finished initializing: " << std::endl;
 }
 
 void Game::inputHandle()
 {
-    
+     
 }
 
 void Game::update(float deltaTime, Player& player)
 {
  //   player.setPlayerPosition(sf::Vector2f(100.0f, 512.0f));
-    std::cout << "Camera Center: " << camera.getCenter().x << ", " << camera.getCenter().y << std::endl;
+  //  std::cout << "Camera Center: " << camera.getCenter().x << ", " << camera.getCenter().y << std::endl;
  //   std::cout << "Player Position: " << player.shape.getPosition().x << ", " << player.shape.getPosition().y << std::endl;
     camera.setCenter(player.shape.getPosition());
    // calculate position
     // Update player movement first
-  //  player.handleMovement(deltaTime);
+   // player.onInverseDirection;
+    //isFlipedPlayer = false;
+    player.handleMovement(deltaTime);
     
     // Let GEM handle all collisions
  //   entityManager.gemUpdate(player);
@@ -69,7 +71,8 @@ void Game::update(float deltaTime, Player& player)
 
 void Game::draw(sf::RenderWindow& window, ResourceManager& resourceManager)
 {
-    window.setView(camera);
+    if(!resourceManager.isMainMenuActive)
+        window.setView(camera);
    // window.setView(camera);
     window.draw(resourceManager.backgroundSpriteOne);
     window.draw(resourceManager.newGamePlayer.currentSprite);

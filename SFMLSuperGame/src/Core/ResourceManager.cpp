@@ -39,6 +39,7 @@ void ResourceManager::loadGameBackgrounds()
         if (!backgroundOne.loadFromFile("res/textures/World/backgrounds/backgroundOne.png")) {
             std::cout << "FAILED to load bg 1 texture!" << std::endl;
         } else {
+            backgroundOne.setSmooth(true);
             backgroundSpriteOne.setTexture(backgroundOne);  // Set the texture to backgroundOne
             backgroundSpriteOne.setPosition(0, 0);          // Position it at the origin
             hasTextureToSpriteOneFinished = true;

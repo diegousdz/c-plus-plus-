@@ -40,17 +40,18 @@ void NexusEngine::update(float deltaTime)
 
         
         // ----------------------------------------------------------- Animation Switch
-       
+        /*
             switch (resourceManager.getPlayerTypeOfAnimationLastSet()) {
             case 0:
                 resourceManager.newGamePlayer.currentSprite.setTexture(resourceManager.playerIdleTexture);
                 //     resourceManager.newGamePlayer.loadAnimations();
-              //  std::cout << "Switched to Idle Texture" << std::endl;
+               std::cout << "Switched to Idle Texture" << std::endl;
                 break;
             case 1:
                 resourceManager.newGamePlayer.currentSprite.setTexture(resourceManager.playerRunTexture);
+                
                 //    resourceManager.newGamePlayer.loadAnimations();
-            //    std::cout << "Switched to Run Texture" << std::endl;
+                std::cout << "Switched to Run Texture" << std::endl;
                 break;
             case 2:
 
@@ -61,7 +62,7 @@ void NexusEngine::update(float deltaTime)
             default:  resourceManager.newGamePlayer.currentSprite.setTexture(resourceManager.playerIdleTexture);;
                 resourceManager.newGamePlayer.loadAnimations();
             }
-        
+        */
         /*
         // Check if the player is on the ground
         float playerBottom = resourceManager.newGamePlayer.shape.getPosition().y + resourceManager.newGamePlayer.shape.getSize().y;
@@ -104,14 +105,14 @@ void NexusEngine::draw(sf::RenderWindow &gameWindow)
         else
         {
             resourceManager.guiHandler.setIsInGame(resourceManager, true);
-            /*
-          //  resourceManager.guiHandler.draw(gameWindow, resourceManager);
+   
+                
+            game.draw(gameWindow, resourceManager );
+            //  resourceManager.guiHandler.draw(gameWindow, resourceManager);
             sf::RectangleShape debugShape(sf::Vector2f(50.0f, 37.0f));
             debugShape.setFillColor(sf::Color(0, 255, 0, 128)); // Semi-transparent green
             debugShape.setPosition(resourceManager.newGamePlayer.shape.getPosition());
-            gameWindow.draw(debugShape); */ 
-                
-            game.draw(gameWindow, resourceManager );
+            gameWindow.draw(debugShape); 
 
         }
     

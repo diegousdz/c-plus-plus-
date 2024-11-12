@@ -1,5 +1,7 @@
 #include "Player.h"
 
+#include "../Core/ResourceManager.h"
+
 // New function to load animations
 void Player::loadAnimations()
 {
@@ -49,6 +51,8 @@ Player::Player(std::string playerName, Inventory inventory)
     velocity = sf::Vector2f(0.0f, 0.0f);
     currentSprite = sf::Sprite();
     loadAnimations();
+    isMoving = false;
+    onInverseDirection = false;
 }
 
 Player::Player()
@@ -69,6 +73,8 @@ Player::Player()
     velocity = sf::Vector2f(0.0f, 0.0f);
     currentSprite = sf::Sprite();
     loadAnimations();
+    isMoving = false;
+    onInverseDirection = false;
 }
 
 void Player::setPlayerPosition(sf::Vector2f incomingPosition)
@@ -102,28 +108,10 @@ void Player::configureSprite(sf::Texture playerTexture)
 {
     shape.setTexture(&playerTexture, false);
 }
-
-// Create the player using a texture file and scale
-void Player::createPlayer(std::string incomingString, sf::Vector2f scaleVector)
-{
-    sf::Texture texture;
-    if (!texture.loadFromFile(incomingString))
-    {
-        std::cout << "Failed to load texture: " << incomingString << std::endl;
-    }
-    else
-    {
-        currentSprite.setTexture(texture);
-        currentSprite.setScale(scaleVector);
-        currentSprite.setColor(sf::Color(255, 255, 255, 200));
-        currentSprite.setPosition(100, 25);
-    }
-}
-
+ 
 // Handle player movement and update action (run, jump, idle, etc.)
 void Player::handleMovement(float deltaTime)
 {
-    isMoving = false;
     
     if (movingLeft)
     {
@@ -136,12 +124,17 @@ void Player::handleMovement(float deltaTime)
     else if (movingRight)
     {
         onInverseDirection = false;
+        
         velocity.x = speed;
         currentAction = Run;
-        
         isMoving = true;
         std::cout << "Player is moving right. currentAction: " << currentAction << std::endl;
-    } else if (isOnGround) {  // Only set Idle if on the ground and not moving
+    }
+    
+  
+    shape.move(velocity * deltaTime);
+    currentSprite.setPosition(shape.getPosition());
+    /*else if (isOnGround) {  // Only set Idle if on the ground and not moving
         currentAction = Idle;
     }
         
@@ -177,12 +170,16 @@ void Player::handleMovement(float deltaTime)
             currentAction = Idle;
             std::cout << "Player landed and is idle. currentAction: " << currentAction << std::endl;
     }
+    */
 }
 
 
 // Update the player's animation based on the current action
 void Player::updateAnimation(float deltaTime)
 {
+    float horizontalPositionSprite = currentSprite.getPosition().x;
+    float correctedPositionIfInverse = horizontalPositionSprite - shape.getPosition().x;
+    
     if (animationClock.getElapsedTime().asSeconds() >= animationInterval)
     {
         animationClock.restart();
@@ -195,22 +192,25 @@ void Player::updateAnimation(float deltaTime)
 
         // Get the current sprite based on the current action
         currentSprite = animSequencer.getCurrentSprite(currentAction, currentFrame);
+        currentSprite.setPosition(shape.getPosition().x + shape.getGlobalBounds().width, shape.getPosition().y);
 
         // Set position
-        currentSprite.setPosition(shape.getPosition());
-
+        //currentSprite.setPosition(shape.getPosition());
         // Handle flipping based on movement direction
+        // Flip the sprite if moving left and adjust position
+        float frameWidth = currentSprite.getLocalBounds().width;
+        const sf::IntRect& frameRect = animSequencer.getCurrentFrameRect(currentAction, currentFrame);
+
+        
         if (onInverseDirection)
         {
-        //    shape.setPosition(shape.getPosition().x -4.0f, shape.getPosition().y);
-            currentSprite.setScale(-1.f, 1.f); // Flip sprite for left movement
-            currentSprite.setPosition(currentSprite.getPosition().x + 50.0f, currentSprite.getPosition().y);
+            currentSprite.setScale(-1.f, 1.f);
+            currentSprite.setOrigin(static_cast<float>(animSequencer.frameRect.width), 0.f);
         }
         else
         {
-
-            shape.setScale(1.f, 1.f);
-            currentSprite.setScale(1.f, 1.f); // Default scale for right movement
+            currentSprite.setScale(1.f, 1.f);
+            currentSprite.setPosition(shape.getPosition());
         }
     }
 }
