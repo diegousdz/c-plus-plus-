@@ -45,13 +45,13 @@ void NexusEngine::update(float deltaTime)
             case 0:
                 resourceManager.newGamePlayer.currentSprite.setTexture(resourceManager.playerIdleTexture);
                 //     resourceManager.newGamePlayer.loadAnimations();
-               std::cout << "Switched to Idle Texture" << std::endl;
+              // std::cout << "Switched to Idle Texture" << std::endl;
                 break;
             case 1:
                 resourceManager.newGamePlayer.currentSprite.setTexture(resourceManager.playerRunTexture);
                 
                 //    resourceManager.newGamePlayer.loadAnimations();
-                std::cout << "Switched to Run Texture" << std::endl;
+             //   std::cout << "Switched to Run Texture" << std::endl;
                 break;
             case 2:
 

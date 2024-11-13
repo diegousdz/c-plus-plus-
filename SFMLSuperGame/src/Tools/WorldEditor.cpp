@@ -1213,7 +1213,7 @@ void WorldEditor::saveCurrentSectionState()
 {
     if (!newGameMap || !newGameMap->sections || sectionSelected <= 0) return;
 
-    MapSection* currentSection = newGameMap->sections[sectionSelected - 1];
+    currentSection = newGameMap->sections[sectionSelected - 1];
     if (!currentSection) return;
 
     std::string sectionFileName = "section_" + std::to_string(sectionSelected) + "_data";
