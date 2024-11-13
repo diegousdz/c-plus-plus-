@@ -95,3 +95,65 @@ void GUIHandler::setWindowBounds(ResourceManager& resourceManager) {
 void GUIHandler::setIsInGame(ResourceManager& resourceManager, bool value) {
     resourceManager.isInGame = value;
 }
+
+void GUIHandler::gameOverInit(ResourceManager& resourceManager) {
+    // Set up game over text
+    resourceManager.gameOverText.setFont(resourceManager.font);
+    resourceManager.gameOverText.setString("GAME OVER");
+    resourceManager.gameOverText.setCharacterSize(64);
+    resourceManager.gameOverText.setFillColor(sf::Color::Red);
+    
+    // Center game over text
+    sf::FloatRect textBounds = resourceManager.gameOverText.getLocalBounds();
+    resourceManager.gameOverText.setPosition(
+        (resourceManager.windowWidth - textBounds.width) / 2,
+        (resourceManager.windowHeight - textBounds.height) / 2
+    );
+
+    // Set up restart prompt
+    resourceManager.restartPrompt.setFont(resourceManager.font);
+    resourceManager.restartPrompt.setString("Press SPACEBAR to restart");
+    resourceManager.restartPrompt.setCharacterSize(20);
+    resourceManager.restartPrompt.setFillColor(sf::Color::White);
+    
+    // Position restart prompt below game over text
+    sf::FloatRect promptBounds = resourceManager.restartPrompt.getLocalBounds();
+    resourceManager.restartPrompt.setPosition(
+        (resourceManager.windowWidth - promptBounds.width) / 2,
+        resourceManager.gameOverText.getPosition().y + textBounds.height + 30
+    );
+}
+
+
+void GUIHandler::drawGameOver(sf::RenderWindow& window, ResourceManager& resourceManager) {
+    // Debug print to verify this method is being called
+    window.setView(window.getDefaultView());
+    if (!resourceManager.gameOverInitialized) {
+        gameOverInit(resourceManager); // Check if gameOverInit is called
+        resourceManager.gameOverInitialized = true;
+        std::cout << "Drawing game INITIALIZED over screen" << std::endl;
+    }
+    
+    // Draw the black background
+    sf::RectangleShape overlay(sf::Vector2f(resourceManager.windowWidth, resourceManager.windowHeight));
+    overlay.setFillColor(sf::Color(0, 0, 0, 50));
+    window.draw(overlay);
+
+    // Make sure text is properly initialized
+    if (!resourceManager.gameOverInitialized) {
+        gameOverInit(resourceManager);
+        resourceManager.gameOverInitialized = true;
+    }
+    
+    // Debug prints to verify text positions
+    std::cout << "Game Over Text Position: " << resourceManager.gameOverText.getPosition().x << ", " 
+              << resourceManager.gameOverText.getPosition().y << std::endl;
+    
+    window.draw(resourceManager.gameOverText);
+    window.draw(resourceManager.restartPrompt);
+}
+
+
+void GUIHandler::handleGameOverInput(ResourceManager& resourceManager)
+{
+}

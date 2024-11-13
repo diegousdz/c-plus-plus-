@@ -13,4 +13,7 @@ public:
     void gameHeaderInit(ResourceManager& resourceManager);
     void setWindowBounds(ResourceManager& resourceManager);
     void setIsInGame(ResourceManager& resourceManager, bool value);
+    void drawGameOver(sf::RenderWindow& window, ResourceManager& resourceManager); // New
+    void gameOverInit(ResourceManager& resourceManager); // New
+    void handleGameOverInput(ResourceManager& resourceManager); // New
 };

@@ -6,14 +6,17 @@ void NexusEngine::init()
     resourceManager.loadResources();
     resourceManager.isGameInitialized = false;
     game = Game();
+    resourceManager.guiHandler.gameOverInit(resourceManager);
     game.init(resourceManager.gameWindow, resourceManager, resourceManager.newGamePlayer);
 }
 
 void NexusEngine::update(float deltaTime)
 {
-//    std::cout << "Shape Position: " << resourceManager.newGamePlayer.shape.getPosition().x << ", " << resourceManager.newGamePlayer.shape.getPosition().y << std::endl;
-//    std::cout << "Sprite Position: " << resourceManager.newGamePlayer.currentSprite.getPosition().x << ", " << resourceManager.newGamePlayer.currentSprite.getPosition().y << std::endl;
-    
+
+    if(resourceManager.newGamePlayer.shape.getPosition().y >= resourceManager.deadZoneYPosition)
+    {
+        resourceManager.gameOver = true;
+    }
     // --------------------------------------------------- check Main menu is not activated
     if (resourceManager.isMainMenuActive)
     {
@@ -22,99 +25,96 @@ void NexusEngine::update(float deltaTime)
             resourceManager.loadGameBackgrounds();
         }
     }
-    else {
-        
-        game.update(deltaTime, resourceManager.newGamePlayer);
-        
-        // Apply gravity to the player when not on the ground
-        if (!resourceManager.newGamePlayer.isOnGround)
-        {
-            resourceManager.newGamePlayer.velocity.y += resourceManager.newGamePlayer.gravity * deltaTime;
-        }
-        
-        // Update player position based on velocity
-        resourceManager.newGamePlayer.shape.move(
-            resourceManager.newGamePlayer.velocity.x * deltaTime, 
-            resourceManager.newGamePlayer.velocity.y * deltaTime
-        );
+    else
+    {
+        if (!resourceManager.gameOver) {
+            std::cout << "Shape Position: " << resourceManager.newGamePlayer.shape.getPosition().x << ", " << resourceManager.newGamePlayer.shape.getPosition().y << std::endl;
+            std::cout << "Sprite Position: " << resourceManager.newGamePlayer.currentSprite.getPosition().x << ", " << resourceManager.newGamePlayer.currentSprite.getPosition().y << std::endl;
 
-        // Check if the player has landed on the ground or a platform
-        float playerBottom = resourceManager.newGamePlayer.shape.getPosition().y + resourceManager.newGamePlayer.shape.getSize().y;
-        if (playerBottom >= resourceManager.windowHeight) // Replace with platform collision detection
-        {
-            // Player hits the ground
-            resourceManager.newGamePlayer.shape.setPosition(
-                resourceManager.newGamePlayer.shape.getPosition().x,
-                resourceManager.windowHeight - resourceManager.newGamePlayer.shape.getSize().y
-            );
-            resourceManager.newGamePlayer.velocity.y = 0; // Stop vertical movement
-            resourceManager.newGamePlayer.isOnGround = true;
-        }
-        else
-        {
-            resourceManager.newGamePlayer.isOnGround = false; // Player is airborne
-        }
+            game.update(deltaTime, resourceManager.newGamePlayer);
         
-        resourceManager.newGamePlayer.updateAnimation(deltaTime);
+            // Apply gravity to the player when not on the ground
+            if (!resourceManager.newGamePlayer.isOnGround)
+            {
+                resourceManager.newGamePlayer.velocity.y += resourceManager.newGamePlayer.gravity * deltaTime;
+            }
+
+            // Check if the player has landed on the ground or a platform
+            float playerBottom = resourceManager.newGamePlayer.shape.getPosition().y + resourceManager.newGamePlayer.shape.getSize().y;
+            if (playerBottom >= resourceManager.windowHeight) // Replace with platform collision detection
+            {
+                // Player hits the ground
+                resourceManager.newGamePlayer.shape.setPosition(
+                    resourceManager.newGamePlayer.shape.getPosition().x,
+                    resourceManager.windowHeight - resourceManager.newGamePlayer.shape.getSize().y
+                );
+                resourceManager.newGamePlayer.velocity.y = 0; // Stop vertical movement
+                resourceManager.newGamePlayer.isOnGround = true;
+            }
+            else
+            {
+                resourceManager.newGamePlayer.isOnGround = false; // Player is airborne
+            }
+        
+            resourceManager.newGamePlayer.updateAnimation(deltaTime);
 
         
-        // ----------------------------------------------------------- Animation Switch
+            // ----------------------------------------------------------- Animation Switch
         
             switch (resourceManager.getPlayerTypeOfAnimationLastSet()) {
             case 0:
                 resourceManager.newGamePlayer.currentSprite.setTexture(resourceManager.playerIdleTexture);
                 //     resourceManager.newGamePlayer.loadAnimations();
-              // std::cout << "Switched to Idle Texture" << std::endl;
+                // std::cout << "Switched to Idle Texture" << std::endl;
                 break;
             case 1:
                 resourceManager.newGamePlayer.currentSprite.setTexture(resourceManager.playerRunTexture);
                 
                 //    resourceManager.newGamePlayer.loadAnimations();
-             //   std::cout << "Switched to Run Texture" << std::endl;
+                //   std::cout << "Switched to Run Texture" << std::endl;
                 break;
             case 2:
 
                 resourceManager.newGamePlayer.currentSprite.setTexture(resourceManager.playerJumpTexture);
                 //    resourceManager.newGamePlayer.loadAnimations();
-            //    std::cout << "Switched to Jump Texture" << std::endl;
+                //    std::cout << "Switched to Jump Texture" << std::endl;
                 break;
             default:  resourceManager.newGamePlayer.currentSprite.setTexture(resourceManager.playerIdleTexture);;
                 resourceManager.newGamePlayer.loadAnimations();
             }
         
-        /*
-        // Check if the player is on the ground
-        float playerBottom = resourceManager.newGamePlayer.shape.getPosition().y + resourceManager.newGamePlayer.shape.getSize().y;
-        if (playerBottom >= static_cast<float>(resourceManager.windowHeight))
-        {
-            // Player hits the ground
-            resourceManager.newGamePlayer.shape.setPosition(
-                resourceManager.newGamePlayer.shape.getPosition().x, 
-                static_cast<float>(resourceManager.windowHeight) - resourceManager.newGamePlayer.shape.getSize().y); // Remove extra semicolon
-            resourceManager.newGamePlayer.velocity.y = 0;  // Stop vertical movement
-            resourceManager.newGamePlayer.isOnGround = true;
-            // Player is now on the ground
-            if(resourceManager.isFirstFall)
-                resourceManager.isFirstFall = false;
-            
-            resourceManager.newGamePlayer.currentSprite.setPosition(
-                resourceManager.newGamePlayer.shape.getPosition()
-            ); 
-        } else
-        {
-            resourceManager.newGamePlayer.isOnGround = false;  // Player is airborne
-        } */
+            /*
+            // Check if the player is on the ground
+            float playerBottom = resourceManager.newGamePlayer.shape.getPosition().y + resourceManager.newGamePlayer.shape.getSize().y;
+            if (playerBottom >= static_cast<float>(resourceManager.windowHeight))
+            {
+                // Player hits the ground
+                resourceManager.newGamePlayer.shape.setPosition(
+                    resourceManager.newGamePlayer.shape.getPosition().x, 
+                    static_cast<float>(resourceManager.windowHeight) - resourceManager.newGamePlayer.shape.getSize().y); // Remove extra semicolon
+                resourceManager.newGamePlayer.velocity.y = 0;  // Stop vertical movement
+                resourceManager.newGamePlayer.isOnGround = true;
+                // Player is now on the ground
+                if(resourceManager.isFirstFall)
+                    resourceManager.isFirstFall = false;
+                
+                resourceManager.newGamePlayer.currentSprite.setPosition(
+                    resourceManager.newGamePlayer.shape.getPosition()
+                ); 
+            } else
+            {
+                resourceManager.newGamePlayer.isOnGround = false;  // Player is airborne
+            } */
 
     
-        resourceManager.newGamePlayer.updateAnimation(deltaTime);
+            resourceManager.newGamePlayer.updateAnimation(deltaTime);
+        }
     }
 }
 void NexusEngine::draw(sf::RenderWindow &gameWindow)
 {
-    
     gameWindow.clear();
-
- 
+    
         if (resourceManager.isMainMenuActive)
         {
             
@@ -123,17 +123,28 @@ void NexusEngine::draw(sf::RenderWindow &gameWindow)
         }
         else
         {
-            resourceManager.guiHandler.setIsInGame(resourceManager, true);
-   
-                
-            game.draw(gameWindow, resourceManager );
-            //  resourceManager.guiHandler.draw(gameWindow, resourceManager);
-            sf::RectangleShape debugShape(sf::Vector2f(50.0f, 37.0f));
-            debugShape.setFillColor(sf::Color(0, 255, 0, 128)); // Semi-transparent green
-            debugShape.setPosition(resourceManager.newGamePlayer.shape.getPosition());
-            gameWindow.draw(debugShape); 
-
+            if (!resourceManager.gameOver)
+            {
+                resourceManager.guiHandler.setIsInGame(resourceManager, true);
+                game.draw(gameWindow, resourceManager );
+                //  resourceManager.guiHandler.draw(gameWindow, resourceManager);
+                sf::RectangleShape debugShape(sf::Vector2f(50.0f, 37.0f));
+                debugShape.setFillColor(sf::Color(0, 255, 0, 128)); // Semi-transparent green
+                debugShape.setPosition(resourceManager.newGamePlayer.shape.getPosition());
+                gameWindow.draw(debugShape); 
+            } else
+            {
+                /*
+                if (!resourceManager.gameOverInitialized) {
+                    resourceManager.guiHandler.gameOverInit(resourceManager);
+                    resourceManager.gameOverInitialized = true;
+                }
+                resourceManager.guiHandler.drawGameOver(gameWindow, resourceManager); */
+            }
         }
+    if (resourceManager.gameOver) {
+        resourceManager.guiHandler.drawGameOver(gameWindow, resourceManager);
+    }
     
     gameWindow.display();
 }

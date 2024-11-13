@@ -78,12 +78,17 @@ public:
 
     bool hasTexturesForGameLoaded = false;
 
-    sf::Vector2f initalSpawnPositionLevelOne = sf::Vector2f(64, 200);
+    sf::Vector2f initalSpawnPositionLevelOne = sf::Vector2f(50, 0);
     sf::Vector2f initalSpawnPositionLevelTwo;
     sf::Vector2f initalSpawnPositionLevelThree;
 
     int currentUserLevel = 1;
-
+    float deadZoneYPosition = 510.0f;
+    bool gameOver = false; // Add this variable to track game over state
+    bool gameOverInitialized = false;
+    sf::Text gameOverText;
+    sf::Text restartPrompt;
+    
 private:
     int playerTypeOfAnimationLastSet; 
     
