@@ -40,7 +40,7 @@ void NexusEngine::update(float deltaTime)
 
         
         // ----------------------------------------------------------- Animation Switch
-        /*
+        
             switch (resourceManager.getPlayerTypeOfAnimationLastSet()) {
             case 0:
                 resourceManager.newGamePlayer.currentSprite.setTexture(resourceManager.playerIdleTexture);
@@ -62,7 +62,7 @@ void NexusEngine::update(float deltaTime)
             default:  resourceManager.newGamePlayer.currentSprite.setTexture(resourceManager.playerIdleTexture);;
                 resourceManager.newGamePlayer.loadAnimations();
             }
-        */
+        
         /*
         // Check if the player is on the ground
         float playerBottom = resourceManager.newGamePlayer.shape.getPosition().y + resourceManager.newGamePlayer.shape.getSize().y;
