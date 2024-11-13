@@ -19,9 +19,22 @@ void Game::initializeTileTexturesLevelOne() {
     }
 }
 
-GameMap* Game::loadGameMap(const std::string& basePath)
+GameMap* Game::loadGameMap(const std::string& basePath, int playerLevel)
 {
-    std::string mapPath = basePath + "/gameMap.dat";
+    std::string mapPath;
+    if(playerLevel == 1)
+    {
+        mapPath = basePath + "/mapLevel_One/gameMap.dat";
+        std::cout << mapPath << std::endl;
+       // std::cout << mapPath;
+    } else if (playerLevel == 2)
+    {
+        mapPath = basePath + "/mapLevel_Two/gameMap.dat";
+    } else
+    {
+        mapPath = basePath + "/mapLevel_Three/gameMap.dat";
+    }
+    
     std::ifstream mapFile(mapPath);
 
     if (mapFile.is_open()) {
@@ -57,10 +70,9 @@ GameMap* Game::loadGameMap(const std::string& basePath)
             gameMap->createSections(mapSections);
             
             // Load textures
-            sf::Texture tileTextures[NUM_LEVEL_TEXTURES];
             for (int i = 0; i < NUM_LEVEL_TEXTURES; i++) {
                 if (texturesPathlevelOne[i] != "none") {
-                    if (!tileTextures[i].loadFromFile(texturesPathlevelOne[i])) {
+                    if (!tileTexturesLevelOne[i].loadFromFile(texturesPathlevelOne[i])) {
                         std::cerr << "Failed to load texture: " << texturesPathlevelOne[i].toAnsiString() << std::endl;
                     }
                 }
@@ -68,7 +80,7 @@ GameMap* Game::loadGameMap(const std::string& basePath)
             
             // Load each map section
             for (int i = 0; i < mapSections; i++) {
-                loadMapSection(gameMap, basePath, i, tileTextures);
+                loadMapSection(gameMap, basePath, i, tileTexturesLevelOne, playerLevel);
             }
             
             std::cout << "Game map loaded successfully" << std::endl;
@@ -80,8 +92,20 @@ GameMap* Game::loadGameMap(const std::string& basePath)
     return gameMap;
 }
 
-bool Game::loadMapSection(GameMap* gameMap, const std::string& basePath, int sectionIndex, sf::Texture* textures) {
-    std::string sectionPath = basePath + "/mapSection_" + std::to_string(sectionIndex) + ".dat";
+bool Game::loadMapSection(GameMap* gameMap, const std::string& basePath, int sectionIndex, sf::Texture* textures, int playerLevel) {
+    std::string sectionPath;
+
+    if(playerLevel == 1)
+    {
+        sectionPath = basePath + "/mapLevel_One/mapSection_" + std::to_string(sectionIndex) + ".dat";
+    } else if (playerLevel == 2)
+    {
+        sectionPath = basePath + "/mapLevel_Two/mapSection_" + std::to_string(sectionIndex) + ".dat";
+    } else
+    {
+        sectionPath = basePath + "/mapLevel_Three/mapSection_" + std::to_string(sectionIndex) + ".dat";
+    }
+
     std::ifstream sectionFile(sectionPath);
     
     if (!sectionFile.is_open()) {
@@ -137,22 +161,6 @@ bool Game::loadMapSection(GameMap* gameMap, const std::string& basePath, int sec
                 }
                 else if (key == "cellType") {
                     iss >> cell.cellType;
-                }
-                else if (key == "textureID") {
-                    int textureID;
-                    iss >> textureID;
-                    
-                    // Set texture ID but don't store texture
-                    cell.textureID = textureID;
-                    
-                    // Only set up sprite if valid texture ID
-                    if (textureID >= 0 && textureID < NUM_LEVEL_TEXTURES) {
-                        cell.sprite.setTexture(tileTexturesLevelOne[textureID], true);
-                        sf::Vector2u textureSize = tileTexturesLevelOne[textureID].getSize();
-                        float scaleX = static_cast<float>(cell.cellSize) / textureSize.x;
-                        float scaleY = static_cast<float>(cell.cellSize) / textureSize.y;
-                        cell.sprite.setScale(scaleX, scaleY);
-                    }
                 }
                 else if (key == "textureID") {
                     int textureID;
@@ -228,7 +236,7 @@ void Game::init(sf::RenderWindow& window, ResourceManager& resourceManager, Play
     {
         initializeTileTexturesLevelOne();
         
-        gameMap = loadGameMap("res/data");
+        gameMap = loadGameMap("res/data", 1);
         if (gameMap) {
             std::cout << "Map loaded successfully!\n"
                       << "Screen Map width: " << gameMap->screenWidth << "\n"
@@ -245,7 +253,7 @@ void Game::init(sf::RenderWindow& window, ResourceManager& resourceManager, Play
     sf::View view = window.getDefaultView();
     camera.setSize(1280.0f, 720.0f);
     camera.setCenter(player.shape.getPosition().x - static_cast<float>(window.getSize().x) /2, 0);
-    camera.zoom(0.6);
+    camera.zoom(static_cast<float>(0.6));
 
  //   std::cout << "Finished initializing: " << std::endl;
 }
@@ -314,15 +322,21 @@ void Game::draw(sf::RenderWindow& window, ResourceManager& resourceManager) {
                         float cellXPos = cell.xPos + sectionOffsetX;
                         float cellYPos = cell.yPos;
 
+                    //    std::cout << y << std::endl;
                         // Update cell positions with the offset
                         cell.shape.setPosition(cellXPos, cellYPos);
                         cell.sprite.setPosition(cellXPos, cellYPos);
                         
                         // Make all shapes visible with red fill
-                        cell.shape.setFillColor(sf::Color(255, 0, 0, 128)); // Semi-transparent red
+                         // Semi-transparent red
                         if(cell.cellType == 'C') {
                             window.draw(cell.sprite);
                         }
+
+                        /*
+                        cell.shape.setFillColor(sf::Color(255, 0, 0, 128));
+                        window.draw(cell.shape);*/
+                        
                     }
                 }
             }

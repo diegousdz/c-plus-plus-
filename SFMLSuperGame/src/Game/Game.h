@@ -44,7 +44,7 @@ public:
     };
     sf::Texture tileTexturesLevelOne[NUM_LEVEL_TEXTURES];
     
-    GameMap* loadGameMap(const std::string& basePath);
+    GameMap* loadGameMap(const std::string& basePath, int playerLevel);
 
     
     
@@ -52,5 +52,5 @@ public:
 private:
     sf::View camera;
     sf::Sprite backgroundLevelOne;
-    bool loadMapSection(GameMap* gameMap, const std::string& basePath, int sectionIndex, sf::Texture* textures);
+    bool loadMapSection(GameMap* gameMap, const std::string& basePath, int sectionIndex, sf::Texture* textures, int playerLevel);
 };

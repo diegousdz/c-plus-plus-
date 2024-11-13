@@ -8,6 +8,8 @@ Tilemap::Tilemap(int type, int cellSize)
     createTilemapBySize(type, cellSize);
 }
 
+
+
 Tilemap::~Tilemap()
 {
     clearTilemap();
@@ -15,15 +17,35 @@ Tilemap::~Tilemap()
 
 void Tilemap::clearTilemap()
 {
+    std::cout << "Starting clearTilemap()" << std::endl;
+    
     if (tilemapSprite != nullptr)
     {
-        for (int row = 0; row < rows; row++)
-        {
-            delete[] tilemapSprite[row];
+        std::cout << "tilemapSprite is not null, rows = " << rows << std::endl;
+        try {
+            for (int row = 0; row < rows; row++)
+            {
+                if (tilemapSprite[row] != nullptr) {
+                    std::cout << "Deleting row " << row << std::endl;
+                    delete[] tilemapSprite[row];
+                    tilemapSprite[row] = nullptr;
+                }
+            }
+            delete[] tilemapSprite;
+            tilemapSprite = nullptr;
+            std::cout << "Successfully cleared tilemap" << std::endl;
         }
-        delete[] tilemapSprite;
-        tilemapSprite = nullptr;
+        catch (const std::exception& e) {
+            std::cerr << "Exception during clearTilemap: " << e.what() << std::endl;
+        }
     }
+    else {
+        std::cout << "tilemapSprite is already null" << std::endl;
+    }
+    
+    // Reset other related variables
+    rows = 0;
+    cols = 0;
 }
 
 sf::Sprite** Tilemap::createTilemapShort(int cellSize)
