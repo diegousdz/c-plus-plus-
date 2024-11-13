@@ -39,7 +39,7 @@ void NexusEngine::update(float deltaTime)
 
         
             // ----------------------------------------------------------- Animation Switch
-        /*
+        
             switch (resourceManager.getPlayerTypeOfAnimationLastSet()) {
             case 0:
                 resourceManager.newGamePlayer.currentSprite.setTexture(resourceManager.playerIdleTexture);
@@ -61,7 +61,7 @@ void NexusEngine::update(float deltaTime)
             default:  resourceManager.newGamePlayer.currentSprite.setTexture(resourceManager.playerIdleTexture);;
                 resourceManager.newGamePlayer.loadAnimations();
             }
-*/
+
 
             resourceManager.newGamePlayer.updateAnimation(deltaTime);
         }

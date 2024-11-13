@@ -95,7 +95,7 @@ void GameEntityManager::updatePlayerOnCollisionWithDeadZone(Player& player, sf::
 
 void GameEntityManager::updatePlayerOnCollisionWithWorld(Player& player, TileCell* cell) {
     if (!cell) return;  // Safety check if cell is null
-
+    const float GROUND_TOLERANCE = 1.0f;
     const float Y_OFFSET = 0.1f;  // Small offset to avoid overlap
 
     // Store the player's previous position for reset on collision
@@ -116,7 +116,7 @@ void GameEntityManager::updatePlayerOnCollisionWithWorld(Player& player, TileCel
     // Resolve collision based on the smallest overlap
     if (minOverlap == overlapTop) {
         // Collision from above
-        player.setPosition({player.getPosition().x, entityBounds.top - playerBounds.height - Y_OFFSET});
+        player.setPosition({player.getPosition().x, entityBounds.top - playerBounds.height - GROUND_TOLERANCE});
         player.velocity.y = 0;
         player.isOnGround = true;
     } else if (minOverlap == overlapBottom) {
@@ -201,6 +201,8 @@ void GameEntityManager::createEnemiesLevelOne()
 }
 
 void GameEntityManager::gemUpdate(Player& player, const std::vector<TileCell*>& collisionCells) {
+
+    
     if (hasEnemiesBeenAdded) {
         if (!hasEnemyIndex) {
             enemyIndex = checkCollisionEnemies(player);
@@ -257,12 +259,39 @@ void GameEntityManager::gemUpdate(Player& player, const std::vector<TileCell*>& 
         // For example:
         
     }
-
-    for (size_t i = 0; i < collisionCells.size(); ++i) {
-        TileCell* cell = collisionCells[i];
+    // Check and resolve collisions with cells in collisionCells
+    for (TileCell* cell : collisionCells) {
         if (HelperFunctions::checkCollisionAABB(player.shape, cell->shape)) {
-            updatePlayerOnCollisionWithWorld(player, cell);
-            std::cout << "update " << std::endl;
+            // Check and resolve each collision based on direction
+            sf::FloatRect playerBounds = player.shape.getGlobalBounds();
+            sf::FloatRect cellBounds = cell->shape.getGlobalBounds();
+
+            // Calculate overlap distances
+            float overlapLeft = (playerBounds.left + playerBounds.width) - cellBounds.left;
+            float overlapRight = (cellBounds.left + cellBounds.width) - playerBounds.left;
+            float overlapTop = (playerBounds.top + playerBounds.height) - cellBounds.top;
+            float overlapBottom = (cellBounds.top + cellBounds.height) - playerBounds.top;
+
+            float minOverlap = std::min({overlapLeft, overlapRight, overlapTop, overlapBottom});
+
+            if (minOverlap == overlapTop) {
+                // Collision from above
+                player.setPosition({player.getPosition().x, cellBounds.top - playerBounds.height - GROUND_TOLERANCE});
+                player.velocity.y = 0;
+                player.isOnGround = true;  // Set grounded if collision occurs from above
+            } else if (minOverlap == overlapBottom) {
+                // Collision from below
+                player.setPosition({player.getPosition().x, cellBounds.top + cellBounds.height + GROUND_TOLERANCE});
+                player.velocity.y = 0;
+            } else if (minOverlap == overlapLeft) {
+                // Collision from the left
+                player.setPosition({cellBounds.left - playerBounds.width, player.getPosition().y});
+                player.velocity.x = 0;
+            } else if (minOverlap == overlapRight) {
+                // Collision from the right
+                player.setPosition({cellBounds.left + cellBounds.width, player.getPosition().y});
+                player.velocity.x = 0;
+            }
         }
     }
 

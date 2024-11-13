@@ -130,7 +130,7 @@ public:
     bool hasDeadZoneIndex = false;
     int staticWorldIndex = -1;
     bool hasStaticWorldIndex = false;
-
+     float GROUND_TOLERANCE = 1.0f;
 private:
     int numberOfEnemies = 0;
     int numberOfPowerUps = 0;
