@@ -277,7 +277,7 @@ void Game::update(float deltaTime, Player& player)
    // player.onInverseDirection;
     //isFlipedPlayer = false;
     player.handleMovement(deltaTime);
-    entityManager.gemUpdate(player);
+    entityManager.gemUpdate(player, collisionCells);
     
     // Let GEM handle all collisions
  //   entityManager.gemUpdate(player);
@@ -330,9 +330,15 @@ void Game::draw(sf::RenderWindow& window, ResourceManager& resourceManager) {
                         // Make all shapes visible with red fill
                          // Semi-transparent red
                         if(cell.cellType == 'C') {
+                            collisionCells.push_back(&cell);
                             window.draw(cell.sprite);
                         }
 
+                        if(!cell.textureID == -1)
+                        {
+                         
+                             window.draw(cell.shape);
+                        }
                         /*
                         cell.shape.setFillColor(sf::Color(255, 0, 0, 128));
                         window.draw(cell.shape);*/

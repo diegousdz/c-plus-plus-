@@ -1,8 +1,11 @@
 ﻿#pragma once
 #include <SFML/Graphics.hpp>
-
 #include "../GameEntities/Player.h"
 #include "../Core/HelperFunctions.h"
+
+
+struct TileCell;
+
 
 class GameEntityManager
 {
@@ -91,13 +94,15 @@ public:
     void updatePlayerOnCollisionWithEnemy(Player& player, sf::RectangleShape& entity);
     void updatePlayerOnCollisionWithPowerUp(Player& player, sf::RectangleShape& entity);
     void updatePlayerOnCollisionWithDeadZone(Player& player, sf::RectangleShape& entity);
+    void updatePlayerOnCollisionWithWorld(Player& player, TileCell* cell);
     void updatePlayerOnCollisionWithWorld(Player& player, sf::RectangleShape& entity);
     void updatePlayerOnCollisionWithDoor(Player& player);
     void createEnemiesLevelOne();
 
     // Initialization and update methods
     void gemInit(int levelEnemiesCount, sf::RectangleShape* enemies, int levelPowerUpsCount, sf::RectangleShape* powerUps, int levelDeadZoneCount, sf::RectangleShape* deadZones, int levelStaticWorldEntitiesCount, sf::RectangleShape* staticWorld, const sf::RectangleShape& door);
-    void gemUpdate(Player& player);
+    void gemUpdate(Player& player, const std::vector<TileCell*>& collisionCells);
+    int checkCollisionWithCells(Player& player, const std::vector<TileCell*>& collisionCells);
 
     // Setters for entity counts
     void setEnemiesNumber(int value)

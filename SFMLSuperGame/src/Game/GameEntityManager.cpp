@@ -2,12 +2,14 @@
 
 #include "../Core/FileManager.h"
 
+struct TileCell;
+#include "../Tools/Tilemap.h"
 
 void GameEntityManager::gemInit(int levelEnemiesCount, sf::RectangleShape* enemies,
-                 int levelPowerUpsCount, sf::RectangleShape* powerUps,
-                 int levelDeadZoneCount, sf::RectangleShape* deadZones,
-                 int levelStaticWorldEntitiesCount, sf::RectangleShape* staticWorld,
-                 const sf::RectangleShape& door)
+                                int levelPowerUpsCount, sf::RectangleShape* powerUps,
+                                int levelDeadZoneCount, sf::RectangleShape* deadZones,
+                                int levelStaticWorldEntitiesCount, sf::RectangleShape* staticWorld,
+                                const sf::RectangleShape& door)
 {
     // define the max lenght of the entities array
     setEnemiesNumber(levelEnemiesCount);
@@ -91,6 +93,45 @@ void GameEntityManager::updatePlayerOnCollisionWithDeadZone(Player& player, sf::
     // Implement the logic for when the player collides with a dead zone
 }
 
+void GameEntityManager::updatePlayerOnCollisionWithWorld(Player& player, TileCell* cell) {
+    if (!cell) return;  // Safety check if cell is null
+    
+    sf::FloatRect playerBounds = player.shape.getGlobalBounds();
+    sf::FloatRect entityBounds = cell->shape.getGlobalBounds();  // Access the shape within TileCell
+    
+    // Calculate overlap
+    float overlapLeft = (playerBounds.left + playerBounds.width) - entityBounds.left;
+    float overlapRight = (entityBounds.left + entityBounds.width) - playerBounds.left;
+    float overlapTop = (playerBounds.top + playerBounds.height) - entityBounds.top;
+    float overlapBottom = (entityBounds.top + entityBounds.height) - playerBounds.top;
+
+    // Find the smallest overlap
+    float minOverlap = std::min({overlapLeft, overlapRight, overlapTop, overlapBottom});
+
+    // Resolve collision based on the smallest overlap
+    if (minOverlap == overlapLeft) {
+        // Collision from the left
+        player.setPosition({entityBounds.left - playerBounds.width, player.getPosition().y});
+        player.velocity.x = 0;
+    }
+    else if (minOverlap == overlapRight) {
+        // Collision from the right
+        player.setPosition({entityBounds.left + entityBounds.width, player.getPosition().y});
+        player.velocity.x = 0;
+    }
+    else if (minOverlap == overlapTop) {
+        // Collision from above
+        player.setPosition({player.getPosition().x, entityBounds.top - playerBounds.height});
+        player.velocity.y = 0;
+        player.isOnGround = true;
+    }
+    else if (minOverlap == overlapBottom) {
+        // Collision from below
+        player.setPosition({player.getPosition().x, entityBounds.top + entityBounds.height});
+        player.velocity.y = 0;
+    }
+}
+
 void GameEntityManager::updatePlayerOnCollisionWithWorld(Player& player, sf::RectangleShape& entity)
 {
     sf::FloatRect playerBounds = player.shape.getGlobalBounds();
@@ -149,68 +190,80 @@ void GameEntityManager::createEnemiesLevelOne()
      } */
 }
 
-void GameEntityManager::gemUpdate(Player& player)
-{
-    if (hasEnemiesBeenAdded)
-    {
-        if(!hasEnemyIndex)
-        {
+void GameEntityManager::gemUpdate(Player& player, const std::vector<TileCell*>& collisionCells) {
+    if (hasEnemiesBeenAdded) {
+        if (!hasEnemyIndex) {
             enemyIndex = checkCollisionEnemies(player);
             hasEnemyIndex = true;
         }
-        if (enemyIndex != -1)
-        {
+        if (enemyIndex != -1) {
             updatePlayerOnCollisionWithEnemy(player, enemyEntities[enemyIndex]);
         }
     }
 
-    if (hasPowerUpsBeenAdded)
-    {
-        if(!hasPowerUpIndex)
-        {
+    if (hasPowerUpsBeenAdded) {
+        if (!hasPowerUpIndex) {
             powerUpIndex = checkCollisionPowerUps(player);
             hasPowerUpIndex = true;
         }
-        
-        if (powerUpIndex != -1)
-        {
+
+        if (powerUpIndex != -1) {
             updatePlayerOnCollisionWithPowerUp(player, powerUpsEntities[powerUpIndex]);
         }
     }
 
-    if (hasDoorBeenAdded)
-    {
-        if (checkCollisionDoor(player))
-        {
+    if (hasDoorBeenAdded) {
+        if (checkCollisionDoor(player)) {
             updatePlayerOnCollisionWithDoor(player);
         }
     }
 
-    if (hasDeadZoneBeenAdded)
-    {
-        if(!hasDeadZoneIndex)
-        {
+    if (hasDeadZoneBeenAdded) {
+        if (!hasDeadZoneIndex) {
             deadZoneIndex = checkCollisionDeadZone(player);
             hasDeadZoneIndex = true;
         }
-       
-        if (checkCollisionDeadZone(player) != -1)
-        {
+
+        if (deadZoneIndex != -1) {
             updatePlayerOnCollisionWithDeadZone(player, deadZoneEntities[deadZoneIndex]);
         }
     }
 
-    if (hasStaticWorldBeenAdded)
-    {
-        if(hasStaticWorldIndex)
-        {
+    if (hasStaticWorldBeenAdded) {
+        if (!hasStaticWorldIndex) {
             staticWorldIndex = checkCollisionStaticWorld(player);
             hasStaticWorldIndex = true;
         }
-        
-        if (staticWorldIndex != -1)
-        {
-            updatePlayerOnCollisionWithWorld(player, staticWorldEntities[staticWorldIndex]);
+
+        if (staticWorldIndex != -1) {
+          //  updatePlayerOnCollisionWithWorld(player, staticWorldEntities[staticWorldIndex]);
         }
     }
+
+    // Check collisions with cells stored in collisionCells
+    int cellIndex = checkCollisionWithCells(player, collisionCells);
+    if (cellIndex != -1) {
+        // You could implement logic here for handling the collision, such as updating the player position
+        // For example:
+        
+    }
+
+    for (size_t i = 0; i < collisionCells.size(); ++i) {
+        TileCell* cell = collisionCells[i];
+        if (HelperFunctions::checkCollisionAABB(player.shape, cell->shape)) {
+            updatePlayerOnCollisionWithWorld(player, cell);  // Pass the colliding cell to handle collision
+        }
+    }
+
+}
+
+
+
+int GameEntityManager::checkCollisionWithCells(Player& player, const std::vector<TileCell*>& collisionCells) {
+    for (size_t i = 0; i < collisionCells.size(); ++i) {
+        if (HelperFunctions::checkCollisionAABB(player.shape, collisionCells[i]->shape)) {
+            return i;  // Return the index of the cell in collision
+        }
+    }
+    return -1;  // No collision found
 }

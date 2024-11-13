@@ -25,18 +25,37 @@ void NexusEngine::update(float deltaTime)
     else {
         
         game.update(deltaTime, resourceManager.newGamePlayer);
-        /*
         
         // Apply gravity to the player when not on the ground
         if (!resourceManager.newGamePlayer.isOnGround)
         {
             resourceManager.newGamePlayer.velocity.y += resourceManager.newGamePlayer.gravity * deltaTime;
         }
-        // Update player position based on velocity (horizontal and vertical)
+        
+        // Update player position based on velocity
         resourceManager.newGamePlayer.shape.move(
             resourceManager.newGamePlayer.velocity.x * deltaTime, 
             resourceManager.newGamePlayer.velocity.y * deltaTime
-        ); */
+        );
+
+        // Check if the player has landed on the ground or a platform
+        float playerBottom = resourceManager.newGamePlayer.shape.getPosition().y + resourceManager.newGamePlayer.shape.getSize().y;
+        if (playerBottom >= resourceManager.windowHeight) // Replace with platform collision detection
+        {
+            // Player hits the ground
+            resourceManager.newGamePlayer.shape.setPosition(
+                resourceManager.newGamePlayer.shape.getPosition().x,
+                resourceManager.windowHeight - resourceManager.newGamePlayer.shape.getSize().y
+            );
+            resourceManager.newGamePlayer.velocity.y = 0; // Stop vertical movement
+            resourceManager.newGamePlayer.isOnGround = true;
+        }
+        else
+        {
+            resourceManager.newGamePlayer.isOnGround = false; // Player is airborne
+        }
+        
+        resourceManager.newGamePlayer.updateAnimation(deltaTime);
 
         
         // ----------------------------------------------------------- Animation Switch

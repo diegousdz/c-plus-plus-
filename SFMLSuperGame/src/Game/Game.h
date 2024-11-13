@@ -46,7 +46,7 @@ public:
     
     GameMap* loadGameMap(const std::string& basePath, int playerLevel);
 
-    
+    std::vector<TileCell*> collisionCells;
     
     
 private:
