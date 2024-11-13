@@ -125,7 +125,7 @@ void Player::handleMovement(float deltaTime)
     
     if (movingLeft)
     {
-        onInverseDirection = true;
+
         velocity.x = -speed;
         currentAction = Run;
         isMoving = true;
@@ -133,7 +133,6 @@ void Player::handleMovement(float deltaTime)
     }
     else if (movingRight)
     {
-        onInverseDirection = false;
         
         velocity.x = speed;
         currentAction = Run;
@@ -187,9 +186,6 @@ void Player::handleMovement(float deltaTime)
 // Update the player's animation based on the current action
 void Player::updateAnimation(float deltaTime)
 {
-    float horizontalPositionSprite = currentSprite.getPosition().x;
-    float correctedPositionIfInverse = horizontalPositionSprite - shape.getPosition().x;
-    
     if (animationClock.getElapsedTime().asSeconds() >= animationInterval)
     {
         animationClock.restart();
@@ -202,25 +198,20 @@ void Player::updateAnimation(float deltaTime)
 
         // Get the current sprite based on the current action
         currentSprite = animSequencer.getCurrentSprite(currentAction, currentFrame);
-        currentSprite.setPosition(shape.getPosition().x + shape.getGlobalBounds().width, shape.getPosition().y);
 
-        // Set position
-        //currentSprite.setPosition(shape.getPosition());
-        // Handle flipping based on movement direction
-        // Flip the sprite if moving left and adjust position
-        float frameWidth = currentSprite.getLocalBounds().width;
-        const sf::IntRect& frameRect = animSequencer.getCurrentFrameRect(currentAction, currentFrame);
-
-        
-        if (onInverseDirection)
+        // Set the correct texture rect based on direction
+        if (onInverseDirection) 
         {
             currentSprite.setScale(-1.f, 1.f);
-            currentSprite.setOrigin(static_cast<float>(animSequencer.frameRect.width), 0.f);
-        }
-        else
+            currentSprite.setOrigin(static_cast<float>(currentSprite.getLocalBounds().width), 0.f);
+        } 
+        else 
         {
             currentSprite.setScale(1.f, 1.f);
-            currentSprite.setPosition(shape.getPosition());
+            currentSprite.setOrigin(0.f, 0.f);
         }
+
+        // Set the sprite position once, aligned with the shape
+        currentSprite.setPosition(shape.getPosition());
     }
 }

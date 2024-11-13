@@ -96,6 +96,8 @@ void GameEntityManager::updatePlayerOnCollisionWithDeadZone(Player& player, sf::
 void GameEntityManager::updatePlayerOnCollisionWithWorld(Player& player, TileCell* cell) {
     if (!cell) return;  // Safety check if cell is null
 
+    const float Y_OFFSET = 0.1f;  // Small offset to avoid overlap
+
     // Store the player's previous position for reset on collision
     sf::Vector2f previousPosition = player.getPosition();
 
@@ -112,28 +114,31 @@ void GameEntityManager::updatePlayerOnCollisionWithWorld(Player& player, TileCel
     float minOverlap = std::min({overlapLeft, overlapRight, overlapTop, overlapBottom});
 
     // Resolve collision based on the smallest overlap
-
     if (minOverlap == overlapTop) {
-        player.setPosition({player.getPosition().x, entityBounds.top - playerBounds.height});
+        // Collision from above
+        player.setPosition({player.getPosition().x, entityBounds.top - playerBounds.height - Y_OFFSET});
         player.velocity.y = 0;
-      //  std::cout << player.getPosition().x << "hey " << player.getPosition().y << std::endl;
         player.isOnGround = true;
     } else if (minOverlap == overlapBottom) {
-        player.setPosition({player.getPosition().x, entityBounds.top + entityBounds.height});
+        // Collision from below
+        player.setPosition({player.getPosition().x, entityBounds.top + entityBounds.height + Y_OFFSET});
         player.velocity.y = 0;
     } else if (minOverlap == overlapLeft) {
+        // Collision from the left
         player.setPosition({entityBounds.left - playerBounds.width, player.getPosition().y});
         player.velocity.x = 0;
     } else if (minOverlap == overlapRight) {
+        // Collision from the right
         player.setPosition({entityBounds.left + entityBounds.width, player.getPosition().y});
         player.velocity.x = 0;
     }
 
-    // If collision results in overlap, revert to previous position
-  //  if (HelperFunctions::checkCollisionAABB(player.shape, cell->shape)) {
-    //    player.setPosition(previousPosition);
-   // }
+    // If collision still results in overlap, revert to the previous position (optional)
+    // if (HelperFunctions::checkCollisionAABB(player.shape, cell->shape)) {
+    //     player.setPosition(previousPosition);
+    // }
 }
+
 
 void GameEntityManager::updatePlayerOnCollisionWithWorld(Player& player, sf::RectangleShape& entity)
 {
@@ -256,7 +261,8 @@ void GameEntityManager::gemUpdate(Player& player, const std::vector<TileCell*>& 
     for (size_t i = 0; i < collisionCells.size(); ++i) {
         TileCell* cell = collisionCells[i];
         if (HelperFunctions::checkCollisionAABB(player.shape, cell->shape)) {
-            updatePlayerOnCollisionWithWorld(player, cell);  // Pass the colliding cell to handle collision
+            updatePlayerOnCollisionWithWorld(player, cell);
+            std::cout << "update " << std::endl;
         }
     }
 

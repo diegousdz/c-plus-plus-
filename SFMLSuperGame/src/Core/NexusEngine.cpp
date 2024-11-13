@@ -35,13 +35,11 @@ void NexusEngine::update(float deltaTime)
             if (!resourceManager.newGamePlayer.isOnGround)
             {
                 resourceManager.newGamePlayer.velocity.y += resourceManager.newGamePlayer.gravity * deltaTime;
-            } else {
-                resourceManager.newGamePlayer.velocity.y = 0;
             }
 
         
             // ----------------------------------------------------------- Animation Switch
-        
+        /*
             switch (resourceManager.getPlayerTypeOfAnimationLastSet()) {
             case 0:
                 resourceManager.newGamePlayer.currentSprite.setTexture(resourceManager.playerIdleTexture);
@@ -63,33 +61,8 @@ void NexusEngine::update(float deltaTime)
             default:  resourceManager.newGamePlayer.currentSprite.setTexture(resourceManager.playerIdleTexture);;
                 resourceManager.newGamePlayer.loadAnimations();
             }
+*/
 
-          
-        
-            /*
-            // Check if the player is on the ground
-            float playerBottom = resourceManager.newGamePlayer.shape.getPosition().y + resourceManager.newGamePlayer.shape.getSize().y;
-            if (playerBottom >= static_cast<float>(resourceManager.windowHeight))
-            {
-                // Player hits the ground
-                resourceManager.newGamePlayer.shape.setPosition(
-                    resourceManager.newGamePlayer.shape.getPosition().x, 
-                    static_cast<float>(resourceManager.windowHeight) - resourceManager.newGamePlayer.shape.getSize().y); // Remove extra semicolon
-                resourceManager.newGamePlayer.velocity.y = 0;  // Stop vertical movement
-                resourceManager.newGamePlayer.isOnGround = true;
-                // Player is now on the ground
-                if(resourceManager.isFirstFall)
-                    resourceManager.isFirstFall = false;
-                
-                resourceManager.newGamePlayer.currentSprite.setPosition(
-                    resourceManager.newGamePlayer.shape.getPosition()
-                ); 
-            } else
-            {
-                resourceManager.newGamePlayer.isOnGround = false;  // Player is airborne
-            } */
-
-    
             resourceManager.newGamePlayer.updateAnimation(deltaTime);
         }
     }
