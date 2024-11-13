@@ -19,7 +19,8 @@ public:
     void inputHandle();
     void update(float deltaTime, Player& player);
     void draw(sf::RenderWindow& window, ResourceManager& resourceManager);
-    
+    void restartGame(Player& player, ResourceManager& resourceManager);
+
     GameEntityManager entityManager;
     bool  isGameMapLoaded = false;
 

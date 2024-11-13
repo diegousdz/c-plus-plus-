@@ -351,3 +351,44 @@ void Game::draw(sf::RenderWindow& window, ResourceManager& resourceManager) {
     
     window.draw(resourceManager.newGamePlayer.currentSprite);
 }
+
+void Game::restartGame(Player& player, ResourceManager& resourceManager)
+{
+    // Reset player position to the initial spawn position
+    player.setPlayerPosition(resourceManager.initalSpawnPositionLevelOne);
+
+    // Reset player's velocity and movement flags
+    player.velocity = sf::Vector2f(0.0f, 0.0f);
+    player.isOnGround = false;
+    player.isMoving = false;
+    player.onInverseDirection = false;
+
+    // Reset the player's sprite and shape positions
+    player.currentSprite.setPosition(resourceManager.initalSpawnPositionLevelOne);
+    player.shape.setPosition(resourceManager.initalSpawnPositionLevelOne);
+
+    // Reset the camera to the player's position
+    camera.setCenter(player.shape.getPosition().x, player.shape.getPosition().y - 100);
+
+    // Reset the player's animation state to idle
+    resourceManager.setPlayerTypeOfAnimationLastSet(0);
+    player.updateAnimation(0.0f); // Reset animation frame
+
+    // Clear collision cells if needed
+    collisionCells.clear();
+
+    resourceManager.gameOver = false;
+    resourceManager.gameOverInitialized = false;
+    resourceManager.isMainMenuActive = true;
+
+    // Reload the game map if necessary
+    // If your game map can change during gameplay, you might need to reload it here
+    // For simplicity, we assume the map remains the same
+
+    // Reset any other game-specific variables
+    // For example, reset score, enemy positions, etc.
+    // Since your game is simple for now, this might not be necessary
+
+    // Debug message
+    std::cout << "Game has been restarted." << std::endl;
+}

@@ -95,11 +95,14 @@ void GameEntityManager::updatePlayerOnCollisionWithDeadZone(Player& player, sf::
 
 void GameEntityManager::updatePlayerOnCollisionWithWorld(Player& player, TileCell* cell) {
     if (!cell) return;  // Safety check if cell is null
-    
+
+    // Store the player's previous position for reset on collision
+    sf::Vector2f previousPosition = player.getPosition();
+
     sf::FloatRect playerBounds = player.shape.getGlobalBounds();
-    sf::FloatRect entityBounds = cell->shape.getGlobalBounds();  // Access the shape within TileCell
-    
-    // Calculate overlap
+    sf::FloatRect entityBounds = cell->shape.getGlobalBounds();
+
+    // Calculate overlaps on each side
     float overlapLeft = (playerBounds.left + playerBounds.width) - entityBounds.left;
     float overlapRight = (entityBounds.left + entityBounds.width) - playerBounds.left;
     float overlapTop = (playerBounds.top + playerBounds.height) - entityBounds.top;
@@ -109,27 +112,27 @@ void GameEntityManager::updatePlayerOnCollisionWithWorld(Player& player, TileCel
     float minOverlap = std::min({overlapLeft, overlapRight, overlapTop, overlapBottom});
 
     // Resolve collision based on the smallest overlap
-    if (minOverlap == overlapLeft) {
-        // Collision from the left
+
+    if (minOverlap == overlapTop) {
+        player.setPosition({player.getPosition().x, entityBounds.top - playerBounds.height});
+        player.velocity.y = 0;
+      //  std::cout << player.getPosition().x << "hey " << player.getPosition().y << std::endl;
+        player.isOnGround = true;
+    } else if (minOverlap == overlapBottom) {
+        player.setPosition({player.getPosition().x, entityBounds.top + entityBounds.height});
+        player.velocity.y = 0;
+    } else if (minOverlap == overlapLeft) {
         player.setPosition({entityBounds.left - playerBounds.width, player.getPosition().y});
         player.velocity.x = 0;
-    }
-    else if (minOverlap == overlapRight) {
-        // Collision from the right
+    } else if (minOverlap == overlapRight) {
         player.setPosition({entityBounds.left + entityBounds.width, player.getPosition().y});
         player.velocity.x = 0;
     }
-    else if (minOverlap == overlapTop) {
-        // Collision from above
-        player.setPosition({player.getPosition().x, entityBounds.top - playerBounds.height});
-        player.velocity.y = 0;
-        player.isOnGround = true;
-    }
-    else if (minOverlap == overlapBottom) {
-        // Collision from below
-        player.setPosition({player.getPosition().x, entityBounds.top + entityBounds.height});
-        player.velocity.y = 0;
-    }
+
+    // If collision results in overlap, revert to previous position
+  //  if (HelperFunctions::checkCollisionAABB(player.shape, cell->shape)) {
+    //    player.setPosition(previousPosition);
+   // }
 }
 
 void GameEntityManager::updatePlayerOnCollisionWithWorld(Player& player, sf::RectangleShape& entity)
@@ -162,6 +165,8 @@ void GameEntityManager::updatePlayerOnCollisionWithWorld(Player& player, sf::Rec
         player.setPosition({player.getPosition().x, entityBounds.top - playerBounds.height});
         player.velocity.y = 0;
         player.isOnGround = true;
+        std::cout << player.getPosition().x << " " << player.getPosition().y << std::endl;\
+        
     }
     else if (minOverlap == overlapBottom) {
         // Collision from below

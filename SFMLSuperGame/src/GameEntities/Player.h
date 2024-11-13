@@ -46,6 +46,7 @@ public:
     Player(std::string playerName, Inventory inventory);
 
     sf::RectangleShape shape;
+    sf::RectangleShape collisionShape;
     sf::Texture texturePlayer;
     sf::Vector2f velocity;
     
