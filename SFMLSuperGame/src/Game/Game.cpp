@@ -23,8 +23,8 @@ void Game::init(sf::RenderWindow& window, ResourceManager& resourceManager, Play
        
     }
     sf::View view = window.getDefaultView();
-    camera.setSize(static_cast<float>(window.getSize().x) , static_cast<float>(window.getSize().y));
-    camera.setCenter(player.shape.getPosition().x + static_cast<float>(window.getSize().x) /2, 0.0f);
+    camera.setSize(1280.0f, 720.0f);
+    camera.setCenter(player.shape.getPosition().x - static_cast<float>(window.getSize().x) /2, -500.0f);
     camera.zoom(0.6);
 
  //   std::cout << "Finished initializing: " << std::endl;
@@ -40,7 +40,8 @@ void Game::update(float deltaTime, Player& player)
  //   player.setPlayerPosition(sf::Vector2f(100.0f, 512.0f));
   //  std::cout << "Camera Center: " << camera.getCenter().x << ", " << camera.getCenter().y << std::endl;
  //   std::cout << "Player Position: " << player.shape.getPosition().x << ", " << player.shape.getPosition().y << std::endl;
-    camera.setCenter(player.shape.getPosition());
+   // camera.setCenter(player.shape.getPosition());
+ camera.setCenter( player.shape.getPosition().x, player.shape.getPosition().y - 180);
    // calculate position
     // Update player movement first
    // player.onInverseDirection;
