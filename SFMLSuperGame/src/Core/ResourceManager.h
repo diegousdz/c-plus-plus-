@@ -35,7 +35,7 @@ public:
     bool hasPlayerMoved = false;
     static constexpr  int NUMBER_OF_ENEMY_LEVEL_ONE = 10;
     Orc* orcWarriorsPoolShapes[NUMBER_OF_ENEMY_LEVEL_ONE];
-    void createEnemiesLevelOne();
+    void createEnemiesLevelOne(float initialPositionX, float initialPositionY);
 
     int getPlayerTypeOfAnimationLastSet() const;
     void setPlayerTypeOfAnimationLastSet(int type);

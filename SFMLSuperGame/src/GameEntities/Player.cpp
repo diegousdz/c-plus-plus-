@@ -138,11 +138,6 @@ void Player::setSize(float sizeX, float sizeY)
     shape.setSize(sf::Vector2f(sizeX, sizeY));
 }
 
-void Player::configureSprite(sf::Texture playerTexture)
-{
-    shape.setTexture(&playerTexture, false);
-}
-
 void Player::handleMovement(float deltaTime)
 {
     

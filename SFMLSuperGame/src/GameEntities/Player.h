@@ -66,7 +66,6 @@ public:
     
     void setTexture(sf::Texture* texture);
     void setSize(float sizeX, float sizeY);
-    void configureSprite(sf::Texture playerTexture);
 
     void handleMovement(float deltaTime);
     void updateAnimation(float deltaTime);

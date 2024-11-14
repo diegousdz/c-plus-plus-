@@ -73,18 +73,25 @@ float ResourceManager::getDeltaTime() const
 }
 
 
-void ResourceManager::createEnemiesLevelOne()
+void ResourceManager::createEnemiesLevelOne(float initialPositionX, float initialPositionY)
 {
-        for (int i = 0; i < NUMBER_OF_ENEMY_LEVEL_ONE; i++)
+    float spacing = orcWarriorsPoolShapes[0]->shape.getGlobalBounds().width + 20.0f; 
+
+    for (int i = 0; i < NUMBER_OF_ENEMY_LEVEL_ONE; i++)
+    {
+        orcWarriorsPoolShapes[i] = new Orc();
+
+        if (!orcWarriorsPoolShapes[i]->animationsLoaded)
         {
-            orcWarriorsPoolShapes[i] = new Orc();
-            if(!orcWarriorsPoolShapes[i]->animationsLoaded)
-                orcWarriorsPoolShapes[i]->loadAnimationsOrc();
-            
-            orcWarriorsPoolShapes[i]->shape.setPosition(50.0f + (i * 60), 0);
-            orcWarriorsPoolShapes[i]->shape.setFillColor(sf::Color::Red);            
+            orcWarriorsPoolShapes[i]->loadAnimationsOrc();
+        } else
+        {
+            orcWarriorsPoolShapes[i]->shape.setPosition(initialPositionX + (i * spacing), initialPositionY);
+            orcWarriorsPoolShapes[i]->shape.setFillColor(sf::Color::Red);
         }
+    }
 }
+
 
 int ResourceManager::getPlayerTypeOfAnimationLastSet() const {
     return playerTypeOfAnimationLastSet;
