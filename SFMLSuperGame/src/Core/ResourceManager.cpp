@@ -33,7 +33,7 @@ void ResourceManager::loadResources()
     newGamePlayer.setTexture(&playerIdleTexture);
 
     // Load animations
-    newGamePlayer.loadAnimations();
+    newGamePlayer.loadAnimationsPlayer();
 
     // You can also load other textures here (like for Orc, enemies, etc.)
     loadGameBackgrounds();
@@ -91,7 +91,7 @@ void ResourceManager::createEnemiesLevelOne()
             Orc newOrc = createOrc();
             orcWarriorsPoolShapes[i] = newOrc;
             float xPosition = 50.0f + (i * 70); 
-            float yPosition = windowHeight - newOrc.enemySize;            
+            float yPosition = windowHeight - newOrc.currentSpriteOrc.getGlobalBounds().height;            
 
             orcWarriorsPoolShapes[i].shape.setPosition(xPosition, yPosition);
         
