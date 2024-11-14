@@ -1,15 +1,21 @@
 ﻿#include "Warrior.h"
-#include <iostream>
 
-// ----------------------------------------- constructors
 Warrior::Warrior()
 {
+    id = 'o';
     health = 100;
     damage = 20;
 }
-
+Warrior::Warrior(char id, int damage, int health)
+{
+    this->id = id;
+    this->damage = damage;
+    this->health = health;
+}
+// warrior type orc
 Warrior::Warrior(int health, int damage)
 {
+    id = 'o';
     this->health = health;
     this->damage = damage;
 }
@@ -28,26 +34,18 @@ Warrior::Warrior(char id, int damage)
     this->health = 100;
 }
 
-Warrior::Warrior(char id, int damage, int health)
-{
-    this->id = id;
-    this->damage = damage;
-    this->health = health;
-}
-
-// ----------------------------------------- functions
-void Warrior::Attack(Warrior* warrior) {
+void Warrior::attack(Warrior* warrior) {
     if (warrior) {
-        warrior->ReceivedDamage(damage);
+        warrior->receivedDamage(damage);
     }
 }
 
-void Warrior::ReceivedDamage()
+void Warrior::receivedDamage()
 {
     health -= 10;
 }
 
-void Warrior::ReceivedDamage(int damageFromWarrior) {
+void Warrior::receivedDamage(int damageFromWarrior) {
     health -= damageFromWarrior;
     if (health < 0)
         health = 0; 

@@ -16,6 +16,8 @@ public:
         Run,
     };
 
+    Orc();
+
     int spriteFramesPerTypeOfAnimationOrc[5] = {7, 9, 3, 4, 6}; 
     
     sf::Sprite currentSpriteOrc;
@@ -39,20 +41,19 @@ public:
     bool movingLeft = false;
     bool movingRight = false;
 
-    int life;
-  
-    float energy;
+    bool isAttacking = false;
+    bool isDead = false;
+    bool isHurted = false;
+    bool isIdle = false;
+    bool isRunning = false;
 
-    Orc();
+    bool animationsLoaded = false;
     
-    void attack() override;
     
+    // functiones from base class
+    void attack(Warrior* warrior) override;
     void takeDamage(int damage);
-    void loadAnimationsOrc();
-
-    int rage = 50;  
-    int armor = 30;
     
-private:
-   
+    void loadAnimationsOrc();
+    
 };

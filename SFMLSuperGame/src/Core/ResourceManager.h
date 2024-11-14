@@ -33,7 +33,8 @@ public:
     sf::Texture playerTexture;
     Player newGamePlayer;
     bool hasPlayerMoved = false;
-    Orc orcWarriorsPoolShapes[5];
+    static constexpr  int NUMBER_OF_ENEMY_LEVEL_ONE = 10;
+    Orc* orcWarriorsPoolShapes[NUMBER_OF_ENEMY_LEVEL_ONE];
     void createEnemiesLevelOne();
 
     int getPlayerTypeOfAnimationLastSet() const;

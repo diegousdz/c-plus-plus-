@@ -1,45 +1,5 @@
 ﻿#include "Orc.h"
 
-Orc::Orc() {
-    life = 1;
-    health = 100.0f;
-    energy = 100.0f;
-    shape.setSize(sf::Vector2f(58.0f, 42.0f));
-    shape.setPosition(100, 100);
-    shape.setTexture(&textureOrc);
-    collisionShape.setSize(sf::Vector2f(58.0f, 42.0f));
-    collisionShape.setFillColor(sf::Color(255, 0, 0, 128));
-    isOnGround = false;
-    velocity = sf::Vector2f(0.0f, 0.0f);
-    currentSpriteOrc = sf::Sprite();
-    loadAnimationsOrc();
-    isMoving = false;
-    onInverseDirection = false;
-}
-
-void Orc::attack()
-{
-    if (rage >= 30) {
-        std::cout << "Orc unleashes a furious attack with power: " << attackPower + 10 << std::endl;
-        rage -= 30;  
-    } else {
-        std::cout << "Orc attacks with power: " << attackPower << std::endl;
-    }
-}
-
-void Orc::takeDamage(int damage) {
-    int damageTaken = damage - defense;
-    if (damageTaken > 0) {
-        health -= damageTaken;
-        std::cout << "Orc takes " << damageTaken << " damage. Health now: " << health << std::endl;
-        if (health <= 0) {
-            isDead = true;
-            std::cout << "The Orc has died." << std::endl;
-        }
-    } else {
-        std::cout << "The Orc's armor absorbed the attack!" << std::endl;
-    }
-}
 
 void Orc::loadAnimationsOrc()
 {
@@ -86,5 +46,52 @@ void Orc::loadAnimationsOrc()
         frameWidth,
         frameHeight
     );
-    
+
+    animationsLoaded = true;
 }
+
+Orc::Orc() : Warrior('o', 30, 130) {
+    SetId('o');
+    SetDamage(30);
+    SetHealth(120);
+    
+    shape.setSize(sf::Vector2f(58.0f, 42.0f));
+    shape.setPosition(100, 100);
+    shape.setTexture(&textureOrc);
+    collisionShape.setSize(sf::Vector2f(58.0f, 42.0f));
+    collisionShape.setFillColor(sf::Color(255, 0, 0, 128));
+    isOnGround = false;
+    velocity = sf::Vector2f(0.0f, 0.0f);
+    currentSpriteOrc = sf::Sprite();
+    loadAnimationsOrc();
+    isMoving = false;
+    onInverseDirection = false;
+    animationsLoaded = false;
+}
+
+void Orc::attack(Warrior* warrior)
+{
+    if (dis(gen) < 0.25) { 
+        int criticalDamage = GetDamage() * 2;
+        std::cout << "Orc " << "lands a critical hit!" << '\n';
+        warrior->receivedDamage(criticalDamage);
+    } else {
+        std::cout << "Orc " << GetName() << " swing his a weapon" << '\n';
+        warrior->receivedDamage(GetDamage());
+    }
+}
+
+void Orc::takeDamage(int damage) {
+    int damageTaken = damage;
+    if (damageTaken > 0) {
+        int currentHealth = GetHealth();
+        SetHealth(currentHealth -= damageTaken);
+       // std::cout << "Orc takes " << damageTaken << " damage. Health now: " << GetHealth << std::endl;
+       // reflect change into the orc stats
+        if (GetHealth() <= 0) {
+            isDead = true;
+           std::cout << "The Orc has died." << std::endl;
+        }
+    } 
+}
+

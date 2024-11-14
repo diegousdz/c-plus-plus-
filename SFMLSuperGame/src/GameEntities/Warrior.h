@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include <random>
 
 class Warrior
 {
@@ -18,11 +19,15 @@ public:
     int GetDamage() const { return damage; }
     void SetDamage(int value) { damage = value; }
 
-    virtual void Attack(Warrior* target);
-    virtual void ReceivedDamage();         
-    virtual void ReceivedDamage(int damage);      
+    virtual void attack(Warrior* target);
+    virtual void receivedDamage();         
+    virtual void receivedDamage(int damage);      
     
     bool IsAlive() const { return health > 0; }
+    
+    std::random_device rd;
+    std::mt19937 gen;
+    std::uniform_real_distribution<> dis;
 
 private:
     int health;            

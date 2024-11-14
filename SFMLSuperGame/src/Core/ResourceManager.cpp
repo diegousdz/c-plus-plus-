@@ -72,32 +72,18 @@ float ResourceManager::getDeltaTime() const
     return deltaTime;
 }
 
-Orc createOrc()
-{
-    Orc orcWarrior;
-    
-    orcWarrior.shape.setPosition(100, 0);
-    
-    orcWarrior.shape.setFillColor(sf::Color::Red);  // Orcs are red by default
-
-    return orcWarrior;  // Return the created Orc
-}
 
 void ResourceManager::createEnemiesLevelOne()
 {
-
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < NUMBER_OF_ENEMY_LEVEL_ONE; i++)
         {
-            Orc newOrc = createOrc();
-            orcWarriorsPoolShapes[i] = newOrc;
-            float xPosition = 50.0f + (i * 70); 
-            float yPosition = windowHeight - newOrc.currentSpriteOrc.getGlobalBounds().height;            
-
-            orcWarriorsPoolShapes[i].shape.setPosition(xPosition, yPosition);
-        
-            // TODD:  gameWindow.draw(orcWarriorsPoolShapes[i].shape);
+            orcWarriorsPoolShapes[i] = new Orc();
+            if(!orcWarriorsPoolShapes[i]->animationsLoaded)
+                orcWarriorsPoolShapes[i]->loadAnimationsOrc();
+            
+            orcWarriorsPoolShapes[i]->shape.setPosition(50.0f + (i * 60), 0);
+            orcWarriorsPoolShapes[i]->shape.setFillColor(sf::Color::Red);            
         }
-    
 }
 
 int ResourceManager::getPlayerTypeOfAnimationLastSet() const {
