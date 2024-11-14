@@ -22,6 +22,12 @@ void ResourceManager::loadResources()
     if (!playerJumpTexture.loadFromFile("res/textures/Player/Tilemap/Jump/spritesheetJump.png")) {
         std::cout << "Failed to load player jump texture!" << std::endl;
     }
+    
+    if (!playerAttack.loadFromFile("res/textures/Player/Tilemap/Attack/spritesheetAttack.png")) {
+        std::cout << "Failed to load player jump texture!" << std::endl;
+    }
+
+    
 
     // Initialize the player with the loaded texture
     newGamePlayer.setTexture(&playerIdleTexture);

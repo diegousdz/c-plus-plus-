@@ -58,6 +58,12 @@ void NexusEngine::update(float deltaTime)
                 //    resourceManager.newGamePlayer.loadAnimations();
                 //    std::cout << "Switched to Jump Texture" << std::endl;
                 break;
+
+            case 3:
+                resourceManager.newGamePlayer.currentSprite.setTexture(resourceManager.playerAttack);
+                //    resourceManager.newGamePlayer.loadAnimations();
+                //    std::cout << "Switched to Jump Texture" << std::endl;
+                break;
             default:  resourceManager.newGamePlayer.currentSprite.setTexture(resourceManager.playerIdleTexture);;
                 resourceManager.newGamePlayer.loadAnimations();
             }

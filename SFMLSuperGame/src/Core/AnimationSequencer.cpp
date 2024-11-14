@@ -44,24 +44,35 @@ sf::Sprite& AnimationSequencer::getCurrentSprite(int animationType, int currentF
 }
 
 void AnimationSequencer::updateOrientation(int animationType, bool isFlipped)
-{
+{/*
     int frameWidth = 50;   // Adjust as needed
     int frameHeight = 37;  // Adjust as needed
     int totalFrames = static_cast<int>(animationFrames[animationType].size());
 
     for (int i = 0; i < totalFrames; ++i)
     {
-        // Adjust frameRect to flip or unflip the texture
-        sf::IntRect frameRect = isFlipped
-            ? sf::IntRect((i + 1) * frameWidth, 0, -frameWidth, frameHeight)  // Flipped frame
-            : sf::IntRect(i * frameWidth, 0, frameWidth, frameHeight);        // Default frame
-        
+        // Set texture rectangle without flipping
+        sf::IntRect frameRect(i * frameWidth, 0, frameWidth, frameHeight);
         animationFrames[animationType][i].setTextureRect(frameRect);
+        
+        // Adjust the origin and scale based on the flip state
+        if (isFlipped) {
+            // Flip the sprite horizontally by setting scale to -1 on x-axis
+            animationFrames[animationType][i].setScale(-1.f, 1.f);
+            animationFrames[animationType][i].setOrigin(0, 0.f);  // Move origin to the right side
+        } else {
+            // Reset to default scale and origin
+            animationFrames[animationType][i].setScale(1.f, 1.f);
+            animationFrames[animationType][i].setOrigin(0.f, 0.f);  // Origin at the left
+
+        }
     }
 
     std::cout << "Updated orientation for animation type " << animationType 
-              << " (flipped: " << isFlipped << ")" << std::endl;
+              << " (flipped: " << isFlipped << ")" << std::endl;*/
 }
+
+
 
  sf::IntRect& AnimationSequencer::getCurrentFrameRect(int animationType, int currentFrame)
 {

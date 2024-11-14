@@ -42,6 +42,7 @@ public:
     sf::Texture playerIdleTexture;    
     sf::Texture playerRunTexture;     
     sf::Texture playerJumpTexture;
+    sf::Texture playerAttack;
 
     bool isFirstFall = true;
     GUIHandler guiHandler;
