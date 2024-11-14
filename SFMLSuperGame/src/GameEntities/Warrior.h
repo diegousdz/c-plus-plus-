@@ -5,6 +5,7 @@ class Warrior
 public:
     
     bool IsAttacking = false;
+    
     bool isDead = false;
     bool isHurt = false;
 

@@ -349,7 +349,7 @@ void Game::draw(sf::RenderWindow& window, ResourceManager& resourceManager) {
         }
     }
     
-    window.draw(resourceManager.newGamePlayer.currentSprite);
+    window.draw(resourceManager.newGamePlayer.currentSpritePlayer);
 }
 
 void Game::restartGame(Player& player, ResourceManager& resourceManager)
@@ -364,7 +364,7 @@ void Game::restartGame(Player& player, ResourceManager& resourceManager)
     player.onInverseDirection = false;
 
     // Reset the player's sprite and shape positions
-    player.currentSprite.setPosition(resourceManager.initalSpawnPositionLevelOne);
+    player.currentSpritePlayer.setPosition(resourceManager.initalSpawnPositionLevelOne);
     player.shape.setPosition(resourceManager.initalSpawnPositionLevelOne);
 
     // Reset the camera to the player's position

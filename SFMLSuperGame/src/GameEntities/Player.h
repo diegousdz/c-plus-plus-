@@ -28,21 +28,21 @@ public:
         Die
     };
 
-    int spriteFramesPerTypeOfAnimation[6] = {4, 6, 4, 2, 5, 7};  // Frames for each animation
+    int spriteFramesPerTypeOfAnimationPlayer[6] = {4, 6, 4, 2, 5, 7}; 
 
-    sf::Sprite currentSprite;
-    AnimationSequencer animSequencer;
+    sf::Sprite currentSpritePlayer;
+    AnimationSequencer animSequencerPlayer;
     float speed = 100.0f;
     int currentFrame = 0;
-    float animationInterval = 0.1f;
+    float animationInterval = 0.2f;
     AnimationType currentAction = Idle;  // Default action
-    sf::Clock animationClock;
+    sf::Clock animationClockPlayer;
     
     std::string name;
 
     Player();
     void setPlayerPosition(sf::Vector2f incomingPosition);
-    void loadAnimations();
+    void loadAnimationsPlayer();
     Player(std::string playerName, Inventory inventory);
 
     sf::RectangleShape shape;
@@ -63,9 +63,7 @@ public:
     bool movingLeft = false;
     bool movingRight = false;
     bool isJumping = false;
-
-    enum PlayerState { alive, recovering, hurt, dying, died };
-
+    
     void setTexture(sf::Texture* texture);
     void setSize(float sizeX, float sizeY);
     void configureSprite(sf::Texture playerTexture);

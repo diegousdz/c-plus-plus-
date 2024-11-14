@@ -42,33 +42,32 @@ void NexusEngine::update(float deltaTime)
         
             switch (resourceManager.getPlayerTypeOfAnimationLastSet()) {
             case 0:
-                resourceManager.newGamePlayer.currentSprite.setTexture(resourceManager.playerIdleTexture);
+                resourceManager.newGamePlayer.currentSpritePlayer.setTexture(resourceManager.playerIdleTexture);
                 //     resourceManager.newGamePlayer.loadAnimations();
                 // std::cout << "Switched to Idle Texture" << std::endl;
                 break;
             case 1:
-                resourceManager.newGamePlayer.currentSprite.setTexture(resourceManager.playerRunTexture);
+                resourceManager.newGamePlayer.currentSpritePlayer.setTexture(resourceManager.playerRunTexture);
                 
                 //    resourceManager.newGamePlayer.loadAnimations();
                 //   std::cout << "Switched to Run Texture" << std::endl;
                 break;
             case 2:
 
-                resourceManager.newGamePlayer.currentSprite.setTexture(resourceManager.playerJumpTexture);
+                resourceManager.newGamePlayer.currentSpritePlayer.setTexture(resourceManager.playerJumpTexture);
                 //    resourceManager.newGamePlayer.loadAnimations();
                 //    std::cout << "Switched to Jump Texture" << std::endl;
                 break;
 
             case 3:
-                resourceManager.newGamePlayer.currentSprite.setTexture(resourceManager.playerAttack);
+                resourceManager.newGamePlayer.currentSpritePlayer.setTexture(resourceManager.playerAttack);
                 //    resourceManager.newGamePlayer.loadAnimations();
                 //    std::cout << "Switched to Jump Texture" << std::endl;
                 break;
-            default:  resourceManager.newGamePlayer.currentSprite.setTexture(resourceManager.playerIdleTexture);;
-                resourceManager.newGamePlayer.loadAnimations();
+            default:  resourceManager.newGamePlayer.currentSpritePlayer.setTexture(resourceManager.playerIdleTexture);;
+                resourceManager.newGamePlayer.loadAnimationsPlayer();
             }
-
-
+            
             resourceManager.newGamePlayer.updateAnimation(deltaTime);
         }
     }

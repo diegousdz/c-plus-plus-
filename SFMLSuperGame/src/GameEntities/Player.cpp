@@ -3,31 +3,60 @@
 #include "../Core/ResourceManager.h"
 
 // New function to load animations
-void Player::loadAnimations()
+void Player::loadAnimationsPlayer()
 {
     // Frame dimensions (assuming all frames are the same size)
     int frameWidth = 50;  // Adjust based on your spritesheet
     int frameHeight = 37; // Adjust based on your spritesheet
+    
+    animSequencerPlayer.loadAnimationFrames(
+        Attack,
+        "res/textures/Player/Tilemap/Attack/spritesheetAttack.png",
+        spriteFramesPerTypeOfAnimationPlayer[Attack],
+        frameWidth,
+        frameHeight
+    );
 
-    // Load Idle animation frames
-    animSequencer.loadAnimationFrames(
+    animSequencerPlayer.loadAnimationFrames(
+        Die,
+        "res/textures/Player/Tilemap/Die/spritesheetDie.png",
+        spriteFramesPerTypeOfAnimationPlayer[Die],
+        frameWidth,
+        frameHeight
+    );
+
+    animSequencerPlayer.loadAnimationFrames(
+        Fall,
+        "res/textures/Player/Tilemap/Fall/spritesheetFall.png",
+        spriteFramesPerTypeOfAnimationPlayer[Fall],
+        frameWidth,
+        frameHeight
+    );
+    
+    animSequencerPlayer.loadAnimationFrames(
         Idle,
         "res/textures/Player/Tilemap/Idle/spritesheetIdle.png",
-        spriteFramesPerTypeOfAnimation[Idle],
+        spriteFramesPerTypeOfAnimationPlayer[Idle],
         frameWidth,
         frameHeight
     );
 
-    // Load Run animation frames
-    animSequencer.loadAnimationFrames(
+    animSequencerPlayer.loadAnimationFrames(
+        Jump,
+        "res/textures/Player/Tilemap/Fall/spritesheetFall.png",
+        spriteFramesPerTypeOfAnimationPlayer[Fall],
+        frameWidth,
+        frameHeight
+    );
+    
+    animSequencerPlayer.loadAnimationFrames(
         Run,
         "res/textures/Player/Tilemap/Run/spritesheetRun.png",
-        spriteFramesPerTypeOfAnimation[Run],
+        spriteFramesPerTypeOfAnimationPlayer[Run],
         frameWidth,
         frameHeight
     );
 
-    // Repeat for other animations (Jump, Fall, Attack, Die)
 }
 
 // Initialize variables using the class constructor
@@ -49,15 +78,15 @@ Player::Player(std::string playerName, Inventory inventory)
 
     isOnGround = false;
     velocity = sf::Vector2f(0.0f, 0.0f);
-    currentSprite = sf::Sprite();
-    loadAnimations();
+    currentSpritePlayer = sf::Sprite();
+    loadAnimationsPlayer();
     isMoving = false;
     onInverseDirection = false;
 }
 
 Player::Player()
 {
-    name = "Unnamed";  // Default name
+    name = "Kael";  // Default name
     life = 1;
     health = 100.0f;
     energy = 100.0f;
@@ -71,8 +100,8 @@ Player::Player()
     collisionShape.setFillColor(sf::Color(255, 0, 0, 128));
     isOnGround = false;
     velocity = sf::Vector2f(0.0f, 0.0f);
-    currentSprite = sf::Sprite();
-    loadAnimations();
+    currentSpritePlayer = sf::Sprite();
+    loadAnimationsPlayer();
     isMoving = false;
     onInverseDirection = false;
 }
@@ -90,10 +119,9 @@ void Player::setPlayerPosition(sf::Vector2f incomingPosition)
     );
 
     // Set the sprite to match shape's position
-    currentSprite.setPosition(incomingPosition);
+    currentSpritePlayer.setPosition(incomingPosition);
 }
 
-// Set texture for the player
 void Player::setTexture(sf::Texture* texture)
 {
     sf::Vector2u textureSize = texture->getSize();
@@ -107,19 +135,16 @@ void Player::setTexture(sf::Texture* texture)
     }
 }
 
-// Set size of the player shape
 void Player::setSize(float sizeX, float sizeY)
 {
     shape.setSize(sf::Vector2f(sizeX, sizeY));
 }
 
-// Configure the player sprite with a texture
 void Player::configureSprite(sf::Texture playerTexture)
 {
     shape.setTexture(&playerTexture, false);
 }
- 
-// Handle player movement and update action (run, jump, idle, etc.)
+
 void Player::handleMovement(float deltaTime)
 {
     
@@ -142,7 +167,7 @@ void Player::handleMovement(float deltaTime)
     
   
     shape.move(velocity * deltaTime);
-    currentSprite.setPosition(shape.getPosition());
+    currentSpritePlayer.setPosition(shape.getPosition());
     /*else if (isOnGround) {  // Only set Idle if on the ground and not moving
         currentAction = Idle;
     }
@@ -186,32 +211,32 @@ void Player::handleMovement(float deltaTime)
 // Update the player's animation based on the current action
 void Player::updateAnimation(float deltaTime)
 {
-    if (animationClock.getElapsedTime().asSeconds() >= animationInterval)
+    if (animationClockPlayer.getElapsedTime().asSeconds() >= animationInterval)
     {
-        animationClock.restart();
+        animationClockPlayer.restart();
 
         // Get the total number of frames for the current action
-        int totalFrames = spriteFramesPerTypeOfAnimation[currentAction];
+        int totalFrames = spriteFramesPerTypeOfAnimationPlayer[currentAction];
 
         // Move to the next frame
         currentFrame = (currentFrame + 1) % totalFrames;
 
         // Get the current sprite based on the current action
-        currentSprite = animSequencer.getCurrentSprite(currentAction, currentFrame);
+        currentSpritePlayer = animSequencerPlayer.getCurrentSpritePlayer(currentAction, currentFrame);
 
         // Set the correct texture rect based on direction
         if (onInverseDirection) 
         {
-            currentSprite.setScale(-1.f, 1.f);
-            currentSprite.setOrigin(static_cast<float>(currentSprite.getLocalBounds().width), 0.f);
+            currentSpritePlayer.setScale(-1.f, 1.f);
+            currentSpritePlayer.setOrigin(static_cast<float>(currentSpritePlayer.getLocalBounds().width), 0.f);
         } 
         else 
         {
-            currentSprite.setScale(1.f, 1.f);
-            currentSprite.setOrigin(0.f, 0.f);
+            currentSpritePlayer.setScale(1.f, 1.f);
+            currentSpritePlayer.setOrigin(0.f, 0.f);
         }
 
         // Set the sprite position once, aligned with the shape
-        currentSprite.setPosition(shape.getPosition());
+        currentSpritePlayer.setPosition(shape.getPosition());
     }
 }
