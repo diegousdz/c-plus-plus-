@@ -1,29 +1,54 @@
 ﻿#include "Warrior.h"
-
 #include <iostream>
 
-Warrior::Warrior(int life, int dmg)
-    : health(life), damage(dmg) {
-    id = nextId;         // Assign the next available ID
-    nextId++;            // Move to the next character ID
-    if (nextId > 'Z') {  // Wrap around if we exceed 'Z'
-        nextId = 'A';
-    }
+// ----------------------------------------- constructors
+Warrior::Warrior()
+{
+    health = 100;
+    damage = 20;
 }
-void Warrior::Attack(Warrior* target) {
-    if (target) {
-        target->TakeDamage(damage);
+
+Warrior::Warrior(int health, int damage)
+{
+    this->health = health;
+    this->damage = damage;
+}
+
+Warrior::Warrior(char id)
+{
+    this->id = id;
+    this->damage = 20;
+    this->health = 100;
+}
+
+Warrior::Warrior(char id, int damage)
+{
+    this->id = id;
+    this->damage = damage;
+    this->health = 100;
+}
+
+Warrior::Warrior(char id, int damage, int health)
+{
+    this->id = id;
+    this->damage = damage;
+    this->health = health;
+}
+
+// ----------------------------------------- functions
+void Warrior::Attack(Warrior* warrior) {
+    if (warrior) {
+        warrior->ReceivedDamage(damage);
     }
 }
 
-void Warrior::TakeDamage(int damage) {
-    health -= damage;
+void Warrior::ReceivedDamage()
+{
+    health -= 10;
+}
+
+void Warrior::ReceivedDamage(int damageFromWarrior) {
+    health -= damageFromWarrior;
     if (health < 0)
         health = 0; 
-}
-
-void Warrior::ShowStats() const {
-    std::cout << (HasId() ? "NPC " : "Player ") 
-              << (HasId() ? id : '-') << " - Health: " 
-              << health << ", Damage: " << damage << "\n";
 }
