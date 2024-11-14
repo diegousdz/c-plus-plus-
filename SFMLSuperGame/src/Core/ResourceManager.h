@@ -49,6 +49,7 @@ public:
 
     // ----------------------------------- GUI
 
+    bool savedGameAvailable;
     sf::Font font;
     sf::Text title;
     static constexpr int maxItemsMenu = 3;

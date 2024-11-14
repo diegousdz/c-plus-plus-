@@ -16,7 +16,6 @@ public:
     void initializeTileTexturesLevelOne();
 
     void init(sf::RenderWindow& window, ResourceManager& resourceManager, Player& player);
-    void inputHandle();
     void update(float deltaTime, Player& player);
     void draw(sf::RenderWindow& window, ResourceManager& resourceManager);
     void restartGame(Player& player, ResourceManager& resourceManager);

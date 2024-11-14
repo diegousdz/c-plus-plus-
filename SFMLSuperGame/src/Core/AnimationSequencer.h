@@ -12,6 +12,8 @@ public:
 
     // Generic function to load a spritesheet and extract frames for any animation
     int loadAnimationFrames(int animationType, const std::string& filePath, int totalFrames, int frameWidth, int frameHeightt);
+    int loadAnimationFramesOrc(int animationType, const std::string& filePath, int totalFrames, int frameWidth,
+                               int frameHeight);
 
     // Function to return the current sprite for any animation type
     sf::Sprite& getCurrentSpritePlayer(int animationType, int currentFrame);

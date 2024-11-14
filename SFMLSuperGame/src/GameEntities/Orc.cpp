@@ -44,8 +44,8 @@ void Orc::takeDamage(int damage) {
 void Orc::loadAnimationsOrc()
 {
     // Frame dimensions (assuming all frames are the same size)
-    int frameWidth = 50;  // Adjust based on your spritesheet
-    int frameHeight = 37; // Adjust based on your spritesheet
+    int frameWidth = 58;  // Adjust based on your spritesheet
+    int frameHeight = 42; // Adjust based on your spritesheet
 
     animSequencerOrc.loadAnimationFrames(
         Attack,

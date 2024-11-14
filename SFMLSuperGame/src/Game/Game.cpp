@@ -145,7 +145,7 @@ bool Game::loadMapSection(GameMap* gameMap, const std::string& basePath, int sec
             
             std::istringstream iss(line);
             std::string temp;
-            iss >> temp; // Skip the TileCell[x][y] part
+            iss >> temp; 
             
             TileCell& cell = gameMap->sections[sectionIndex]->tilecellArray[row][col];
             float xPos = 0.0f;
@@ -197,8 +197,7 @@ bool Game::loadMapSection(GameMap* gameMap, const std::string& basePath, int sec
                     cell.isReadyToRender = isReady;
                 }
             }
-
-            // After parsing all keys, set positions
+            
             if (xPos != 0.0f || yPos != 0.0f) {
                 // Use the loaded positions
                 cell.xPos = xPos;
@@ -254,51 +253,13 @@ void Game::init(sf::RenderWindow& window, ResourceManager& resourceManager, Play
     camera.setSize(1280.0f, 720.0f);
     camera.setCenter(player.shape.getPosition().x - static_cast<float>(window.getSize().x) /2, 0);
     camera.zoom(static_cast<float>(0.6));
-
- //   std::cout << "Finished initializing: " << std::endl;
-}
-
-void Game::inputHandle()
-{
-     
 }
 
 void Game::update(float deltaTime, Player& player)
 {
- //   player.setPlayerPosition(sf::Vector2f(100.0f, 512.0f));
-  //  std::cout << "Camera Center: " << camera.getCenter().x << ", " << camera.getCenter().y << std::endl;
- //   std::cout << "Player Position: " << player.shape.getPosition().x << ", " << player.shape.getPosition().y << std::endl;
-   // camera.setCenter(player.shape.getPosition());
-   // camera.setCenter( player.shape.getPosition().x, player.shape.getPosition().y - 180);
     camera.setCenter( player.shape.getPosition().x, player.shape.getPosition().y - 100);
-    
-   // calculate position
-    // Update player movement first
-   // player.onInverseDirection;
-    //isFlipedPlayer = false;
     player.handleMovement(deltaTime);
     entityManager.gemUpdate(player, collisionCells);
-    
-    // Let GEM handle all collisions
- //   entityManager.gemUpdate(player);
-    
-    // Update camera after final player position is determined
-  //  updateCamera(deltaTime, player);
-    /*
-    const float cameraSmoothing = 0.001f;
-
-    // Get the current camera center and player position
-    sf::Vector2f cameraCenter = camera.getCenter();
-    sf::Vector2f playerPosition = player.shape.getPosition();
-
-    // Interpolate between the camera center and player position
-    cameraCenter.x += (playerPosition.x - cameraCenter.x) * cameraSmoothing;
-    cameraCenter.y += (playerPosition.y - cameraCenter.y) * cameraSmoothing;
-    
-
-   // camera.setCenter(cameraCenter);
-    camera.setCenter(player.shape.getPosition());
-    updateBackgroundPosition();*/
 }
 
 void Game::draw(sf::RenderWindow& window, ResourceManager& resourceManager) {
@@ -307,28 +268,22 @@ void Game::draw(sf::RenderWindow& window, ResourceManager& resourceManager) {
 
     window.draw(resourceManager.backgroundSpriteOne);
     
-    // Draw map tiles
     if(gameMap) {
         for(int i = 0; i < gameMap->mapSections; i++) {
             if(gameMap->sections[i]) {
                 MapSection* section = gameMap->sections[i];
-                int sectionOffsetX = section->mapSectionPositionX;  // Base X position for this section
+                int sectionOffsetX = section->mapSectionPositionX; 
                 
                 for(int y = 0; y < section->numberOfCellsPerRow; y++) {
                     for(int x = 0; x < section->numberOfCellsPerRow; x++) {
                         TileCell& cell = section->tilecellArray[y][x];
-
-                        // Calculate the cell position based on section's base position
+                        
                         float cellXPos = cell.xPos + sectionOffsetX;
                         float cellYPos = cell.yPos;
-
-                    //    std::cout << y << std::endl;
-                        // Update cell positions with the offset
+                        
                         cell.shape.setPosition(cellXPos, cellYPos);
                         cell.sprite.setPosition(cellXPos, cellYPos);
                         
-                        // Make all shapes visible with red fill
-                         // Semi-transparent red
                         if(cell.cellType == 'C') {
                             collisionCells.push_back(&cell);
                             window.draw(cell.sprite);
@@ -339,10 +294,6 @@ void Game::draw(sf::RenderWindow& window, ResourceManager& resourceManager) {
                          
                              window.draw(cell.shape);
                         }
-                        /*
-                        cell.shape.setFillColor(sf::Color(255, 0, 0, 128));
-                        window.draw(cell.shape);*/
-                        
                     }
                 }
             }
@@ -354,27 +305,21 @@ void Game::draw(sf::RenderWindow& window, ResourceManager& resourceManager) {
 
 void Game::restartGame(Player& player, ResourceManager& resourceManager)
 {
-    // Reset player position to the initial spawn position
     player.setPlayerPosition(resourceManager.initalSpawnPositionLevelOne);
 
-    // Reset player's velocity and movement flags
     player.velocity = sf::Vector2f(0.0f, 0.0f);
     player.isOnGround = false;
     player.isMoving = false;
     player.onInverseDirection = false;
-
-    // Reset the player's sprite and shape positions
+  
     player.currentSpritePlayer.setPosition(resourceManager.initalSpawnPositionLevelOne);
     player.shape.setPosition(resourceManager.initalSpawnPositionLevelOne);
-
-    // Reset the camera to the player's position
+    
     camera.setCenter(player.shape.getPosition().x, player.shape.getPosition().y - 100);
-
-    // Reset the player's animation state to idle
+    
     resourceManager.setPlayerTypeOfAnimationLastSet(0);
     player.updateAnimation(0.0f); // Reset animation frame
-
-    // Clear collision cells if needed
+    
     collisionCells.clear();
 
     resourceManager.gameOver = false;

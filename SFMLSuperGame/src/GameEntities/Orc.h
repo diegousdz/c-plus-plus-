@@ -4,7 +4,7 @@
 #include "./../Core/AnimationSequencer.h"
 #include <iostream>
 
-class Orc : public Warrior
+class Orc : Warrior
 {
 
 public:

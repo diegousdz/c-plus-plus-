@@ -2,12 +2,57 @@
 
 #include "../Core/ResourceManager.h"
 
-// New function to load animations
+// Initialize variables using the class constructor
+Player::Player(std::string playerName, Inventory inventory)
+{
+    name = playerName;
+    playerInventory = inventory;
+    
+    life = 1;
+    health = 100.0f;
+    energy = 100.0f;
+    isMagicBeltEquipped = false;
+    hasKingdomCrownInInventory = false;
+
+    // Initialize player shape (16x16 pixels)
+    shape.setSize(sf::Vector2f(32.0f, 32.0f));
+    shape.setTexture(&texturePlayer);
+    shape.setPosition(100, 100);
+
+    isOnGround = false;
+    velocity = sf::Vector2f(0.0f, 0.0f);
+    currentSpritePlayer = sf::Sprite();
+    loadAnimationsPlayer();
+    isMoving = false;
+    onInverseDirection = false;
+}
+
+Player::Player()
+{
+    name = "Kael";  // Default name
+    life = 1;
+    health = 100.0f;
+    energy = 100.0f;
+    isMagicBeltEquipped = false;
+    hasKingdomCrownInInventory = false;
+    
+    shape.setSize(sf::Vector2f(32.0f, 32.0f));
+    shape.setPosition(100, 100);
+    shape.setTexture(&texturePlayer);
+    collisionShape.setSize(sf::Vector2f(50.0f, 32.0f));
+    collisionShape.setFillColor(sf::Color(255, 0, 0, 128));
+    isOnGround = false;
+    velocity = sf::Vector2f(0.0f, 0.0f);
+    currentSpritePlayer = sf::Sprite();
+    loadAnimationsPlayer();
+    isMoving = false;
+    onInverseDirection = false;
+}
+
 void Player::loadAnimationsPlayer()
 {
-    // Frame dimensions (assuming all frames are the same size)
-    int frameWidth = 50;  // Adjust based on your spritesheet
-    int frameHeight = 37; // Adjust based on your spritesheet
+    int frameWidth = 50;  
+    int frameHeight = 37;
     
     animSequencerPlayer.loadAnimationFrames(
         Attack,
@@ -59,60 +104,13 @@ void Player::loadAnimationsPlayer()
 
 }
 
-// Initialize variables using the class constructor
-Player::Player(std::string playerName, Inventory inventory)
-{
-    name = playerName;
-    playerInventory = inventory;
-    
-    life = 1;
-    health = 100.0f;
-    energy = 100.0f;
-    isMagicBeltEquipped = false;
-    hasKingdomCrownInInventory = false;
-
-    // Initialize player shape (16x16 pixels)
-    shape.setSize(sf::Vector2f(32.0f, 32.0f));
-    shape.setTexture(&texturePlayer);
-    shape.setPosition(100, 100);
-
-    isOnGround = false;
-    velocity = sf::Vector2f(0.0f, 0.0f);
-    currentSpritePlayer = sf::Sprite();
-    loadAnimationsPlayer();
-    isMoving = false;
-    onInverseDirection = false;
-}
-
-Player::Player()
-{
-    name = "Kael";  // Default name
-    life = 1;
-    health = 100.0f;
-    energy = 100.0f;
-    isMagicBeltEquipped = false;
-    hasKingdomCrownInInventory = false;
-    
-    shape.setSize(sf::Vector2f(32.0f, 32.0f));
-    shape.setPosition(100, 100);
-    shape.setTexture(&texturePlayer);
-    collisionShape.setSize(sf::Vector2f(50.0f, 32.0f));
-    collisionShape.setFillColor(sf::Color(255, 0, 0, 128));
-    isOnGround = false;
-    velocity = sf::Vector2f(0.0f, 0.0f);
-    currentSpritePlayer = sf::Sprite();
-    loadAnimationsPlayer();
-    isMoving = false;
-    onInverseDirection = false;
-}
 
 void Player::setPlayerPosition(sf::Vector2f incomingPosition)
 {
     shape.setPosition(incomingPosition);
     sf::Vector2f shapeSize = shape.getSize();
     sf::Vector2f collisionSize = collisionShape.getSize();
-
-    // Center collision shape based on player shape
+    
     collisionShape.setPosition(
         incomingPosition.x + (shapeSize.x - collisionSize.x) / 2.0f,
         incomingPosition.y + (shapeSize.y - collisionSize.y) / 2.0f

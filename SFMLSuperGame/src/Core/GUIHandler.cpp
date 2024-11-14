@@ -134,8 +134,7 @@ void GUIHandler::drawGameOver(sf::RenderWindow& window, ResourceManager& resourc
         std::cout << "Drawing game INITIALIZED over screen" << std::endl;
     }
     
-    // Draw the black background
-    sf::RectangleShape overlay(sf::Vector2f(resourceManager.windowWidth, resourceManager.windowHeight));
+    sf::RectangleShape overlay(sf::Vector2f(static_cast<float>(resourceManager.windowWidth), resourceManager.windowHeight));
     overlay.setFillColor(sf::Color(0, 0, 0, 50));
     window.draw(overlay);
 
@@ -144,10 +143,6 @@ void GUIHandler::drawGameOver(sf::RenderWindow& window, ResourceManager& resourc
         gameOverInit(resourceManager);
         resourceManager.gameOverInitialized = true;
     }
-    
-    // Debug prints to verify text positions
-    std::cout << "Game Over Text Position: " << resourceManager.gameOverText.getPosition().x << ", " 
-              << resourceManager.gameOverText.getPosition().y << std::endl;
     
     window.draw(resourceManager.gameOverText);
     window.draw(resourceManager.restartPrompt);

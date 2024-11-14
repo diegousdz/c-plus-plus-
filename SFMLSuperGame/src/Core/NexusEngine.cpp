@@ -1,5 +1,9 @@
 ﻿#include "NexusEngine.h"
 
+void NexusEngine::initializeWindow(sf::RenderWindow& gameWindow, int width, int height, std::string windowName)
+{
+    gameWindow.create(sf::VideoMode(width, height), windowName);
+}
 
 void NexusEngine::init()
 {
@@ -8,94 +12,6 @@ void NexusEngine::init()
     game = Game();
     resourceManager.guiHandler.gameOverInit(resourceManager);
     game.init(resourceManager.gameWindow, resourceManager, resourceManager.newGamePlayer);
-}
-
-void NexusEngine::update(float deltaTime)
-{
-
-    if(resourceManager.newGamePlayer.shape.getPosition().y >= resourceManager.deadZoneYPosition)
-    {
-        resourceManager.gameOver = true;
-    }
-    
-    if (resourceManager.isMainMenuActive)
-    {
-        if(!resourceManager.hasTexturesForGameLoaded)
-        {
-            resourceManager.loadGameBackgrounds();
-        }
-    }
-    else
-    {
-        if (!resourceManager.gameOver) {
-
-            game.update(deltaTime, resourceManager.newGamePlayer);
-        
-            // Apply gravity to the player when not on the ground
-            if (!resourceManager.newGamePlayer.isOnGround)
-            {
-                resourceManager.newGamePlayer.velocity.y += resourceManager.newGamePlayer.gravity * deltaTime;
-            }
-
-        
-            // ----------------------------------------------------------- Animation Switch
-        
-            switch (resourceManager.getPlayerTypeOfAnimationLastSet()) {
-            case 0:
-                resourceManager.newGamePlayer.currentSpritePlayer.setTexture(resourceManager.playerIdleTexture);
-                //     resourceManager.newGamePlayer.loadAnimations();
-                // std::cout << "Switched to Idle Texture" << std::endl;
-                break;
-            case 1:
-                resourceManager.newGamePlayer.currentSpritePlayer.setTexture(resourceManager.playerRunTexture);
-                
-                //    resourceManager.newGamePlayer.loadAnimations();
-                //   std::cout << "Switched to Run Texture" << std::endl;
-                break;
-            case 2:
-
-                resourceManager.newGamePlayer.currentSpritePlayer.setTexture(resourceManager.playerJumpTexture);
-                //    resourceManager.newGamePlayer.loadAnimations();
-                //    std::cout << "Switched to Jump Texture" << std::endl;
-                break;
-
-            case 3:
-                resourceManager.newGamePlayer.currentSpritePlayer.setTexture(resourceManager.playerAttack);
-                //    resourceManager.newGamePlayer.loadAnimations();
-                //    std::cout << "Switched to Jump Texture" << std::endl;
-                break;
-            default:  resourceManager.newGamePlayer.currentSpritePlayer.setTexture(resourceManager.playerIdleTexture);;
-                resourceManager.newGamePlayer.loadAnimationsPlayer();
-            }
-            
-            resourceManager.newGamePlayer.updateAnimation(deltaTime);
-        }
-    }
-}
-void NexusEngine::draw(sf::RenderWindow &gameWindow) {
-    gameWindow.clear();
-
-    if (resourceManager.isMainMenuActive) {
-        resourceManager.guiHandler.setIsInGame(resourceManager, false);
-        resourceManager.guiHandler.draw(gameWindow, resourceManager);
-    } else {
-        if (!resourceManager.gameOver) {
-            resourceManager.guiHandler.setIsInGame(resourceManager, true);
-            game.draw(gameWindow, resourceManager);
-
-            // Draw the debug bounding box around the player for collision detection
-            sf::RectangleShape debugShape(sf::Vector2f(50.0f, 37.0f));  // Adjust size as needed
-            debugShape.setFillColor(sf::Color(0, 255, 0, 128)); // Semi-transparent green
-            debugShape.setPosition(resourceManager.newGamePlayer.shape.getPosition());
-            gameWindow.draw(debugShape);
-        } else {
-            if (resourceManager.gameOver) {
-                resourceManager.guiHandler.drawGameOver(gameWindow, resourceManager);
-            }
-        }
-    }
-
-    gameWindow.display();
 }
 
 void NexusEngine::handleInput()
@@ -116,8 +32,6 @@ void NexusEngine::handleInput()
             {
                 if (event.key.code == sf::Keyboard::Space)
                 {
-                    // Player pressed Spacebar to restart the game
-                   // restartGame();
                     resourceManager.gameOver = false;
                     resourceManager.gameOverInitialized = false;
                     game.restartGame(resourceManager.newGamePlayer, resourceManager);
@@ -132,25 +46,28 @@ void NexusEngine::handleInput()
         // Handle main menu navigation
         if (resourceManager.isMainMenuActive)
         {
-            if (event.type == sf::Event::KeyPressed)  // Only trigger on key press
+            if (event.type == sf::Event::KeyPressed) 
             {
                 if (event.key.code == sf::Keyboard::W)  // Up
                 {
-                    resourceManager.currentOptionSelected--;
-                    if (resourceManager.currentOptionSelected < 0)
-                    {
-                        resourceManager.currentOptionSelected = 2;
-                    // Wrap to last item
-                    }
+                    do {
+                        resourceManager.currentOptionSelected--;
+                        if (resourceManager.currentOptionSelected < 0)
+                        {
+                            resourceManager.currentOptionSelected = ResourceManager::maxItemsMenu - 1;
+                        }
+                    } while (!resourceManager.savedGameAvailable && resourceManager.currentOptionSelected == 1);
                 }
 
                 if (event.key.code == sf::Keyboard::S)  // Down
                 {
-                    resourceManager.currentOptionSelected++;
-                    if (resourceManager.currentOptionSelected > 2)
-                    {
-                        resourceManager.currentOptionSelected = 0;  // Wrap to first item
-                    }
+                    do {
+                        resourceManager.currentOptionSelected++;
+                        if (resourceManager.currentOptionSelected >= ResourceManager::maxItemsMenu)
+                        {
+                            resourceManager.currentOptionSelected = 0;  
+                        }
+                    } while (!resourceManager.savedGameAvailable && resourceManager.currentOptionSelected == 1);
                 }
 
                 // Handle selecting the current option
@@ -219,9 +136,92 @@ void NexusEngine::handleInput()
     }
 }
 
-
-void NexusEngine::initializeWindow(sf::RenderWindow& gameWindow, int width, int height, std::string windowName)
+void NexusEngine::update(float deltaTime)
 {
-        gameWindow.create(sf::VideoMode(width, height), windowName);
+
+    if(resourceManager.newGamePlayer.shape.getPosition().y >= resourceManager.deadZoneYPosition)
+    {
+        resourceManager.gameOver = true;
+    }
+    
+    if (resourceManager.isMainMenuActive)
+    {
+        if(!resourceManager.hasTexturesForGameLoaded)
+        {
+            resourceManager.loadGameBackgrounds();
+        }
+    }
+    else
+    {
+        if (!resourceManager.gameOver) {
+
+            game.update(deltaTime, resourceManager.newGamePlayer);
+        
+            // Apply gravity to the player when not on the ground
+            if (!resourceManager.newGamePlayer.isOnGround)
+            {
+                resourceManager.newGamePlayer.velocity.y += resourceManager.newGamePlayer.gravity * deltaTime;
+            }
+
+        
+            // ----------------------------------------------------------- Animation Switch
+        
+            switch (resourceManager.getPlayerTypeOfAnimationLastSet()) {
+            case 0:
+                resourceManager.newGamePlayer.currentSpritePlayer.setTexture(resourceManager.playerIdleTexture);
+                //     resourceManager.newGamePlayer.loadAnimations();
+                // std::cout << "Switched to Idle Texture" << std::endl;
+                break;
+            case 1:
+                resourceManager.newGamePlayer.currentSpritePlayer.setTexture(resourceManager.playerRunTexture);
+                
+                //    resourceManager.newGamePlayer.loadAnimations();
+                //   std::cout << "Switched to Run Texture" << std::endl;
+                break;
+            case 2:
+
+                resourceManager.newGamePlayer.currentSpritePlayer.setTexture(resourceManager.playerJumpTexture);
+                //    resourceManager.newGamePlayer.loadAnimations();
+                //    std::cout << "Switched to Jump Texture" << std::endl;
+                break;
+
+            case 3:
+                resourceManager.newGamePlayer.currentSpritePlayer.setTexture(resourceManager.playerAttack);
+                //    resourceManager.newGamePlayer.loadAnimations();
+                //    std::cout << "Switched to Jump Texture" << std::endl;
+                break;
+            default:  resourceManager.newGamePlayer.currentSpritePlayer.setTexture(resourceManager.playerIdleTexture);;
+                resourceManager.newGamePlayer.loadAnimationsPlayer();
+            }
+            
+            resourceManager.newGamePlayer.updateAnimation(deltaTime);
+        }
+    }
+}
+
+void NexusEngine::draw(sf::RenderWindow &gameWindow) {
+    gameWindow.clear();
+
+    if (resourceManager.isMainMenuActive) {
+        resourceManager.guiHandler.setIsInGame(resourceManager, false);
+        resourceManager.guiHandler.draw(gameWindow, resourceManager);
+    } else {
+        if (!resourceManager.gameOver) {
+            resourceManager.guiHandler.setIsInGame(resourceManager, true);
+            game.draw(gameWindow, resourceManager);
+
+            // Draw the debug bounding box around the player for collision detection
+            sf::RectangleShape debugShape(sf::Vector2f(50.0f, 37.0f));  // Adjust size as needed
+            debugShape.setFillColor(sf::Color(0, 255, 0, 128)); // Semi-transparent green
+            debugShape.setPosition(resourceManager.newGamePlayer.shape.getPosition());
+            gameWindow.draw(debugShape);
+        } else {
+            if (resourceManager.gameOver) {
+                resourceManager.guiHandler.drawGameOver(gameWindow, resourceManager);
+            }
+        }
+    }
+
+    gameWindow.display();
 }
 

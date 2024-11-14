@@ -4,31 +4,27 @@
 // Generic function to load frames from a spritesheet
 int AnimationSequencer::loadAnimationFrames(int animationType, const std::string& filePath, int totalFrames, int frameWidth, int frameHeight)
 {
-    // Load the entire spritesheet
     sf::Texture* texture = new sf::Texture();
     if (!texture->loadFromFile(filePath))
     {
         std::cout << "Failed to load spritesheet: " << filePath << std::endl;
-        return -1;  // Return error if loading fails
+        return -1; 
     }
-
-    // Resize the vector in the map to store the number of frames
+    
     animationFramesPlayer[animationType].resize(totalFrames);
 
 
     for (int i = 0; i < totalFrames; ++i)
     {
         frameRect = sf::IntRect (i * frameWidth, 0, frameWidth, frameHeight);  
-        // Set the texture and texture rectangle for each sprite
         animationFramesPlayer[animationType][i].setTexture(*texture);
         animationFramesPlayer[animationType][i].setTextureRect(frameRect);
         std::cout << "Loaded frame " << i << " for animation type " << animationType << std::endl;
     }
     
-
-    return totalFrames;  // Return the number of frames loaded
+    return totalFrames;  
 }
-/*
+
 int AnimationSequencer::loadAnimationFramesOrc(int animationType, const std::string& filePath, int totalFrames, int frameWidth, int frameHeight)
 {
     // Load the entire spritesheet
@@ -51,12 +47,10 @@ int AnimationSequencer::loadAnimationFramesOrc(int animationType, const std::str
         animationFramesPlayer[animationType][i].setTextureRect(frameRect);
         std::cout << "Loaded frame " << i << " for animation type " << animationType << std::endl;
     }
-    
 
     return totalFrames;  // Return the number of frames loaded
 }
-*/
-// Get the current sprite for the specified animation type and frame index
+
 sf::Sprite& AnimationSequencer::getCurrentSpritePlayer(int animationType, int currentFrame)
 {
     int totalFrames;  // Get the total number of frames
@@ -95,9 +89,7 @@ void AnimationSequencer::updateOrientation(int animationType, bool isFlipped)
               << " (flipped: " << isFlipped << ")" << std::endl;*/
 }
 
-
-
- sf::IntRect& AnimationSequencer::getCurrentFrameRect(int animationType, int currentFrame)
+sf::IntRect& AnimationSequencer::getCurrentFrameRect(int animationType, int currentFrame)
 {
     int totalFrames = static_cast<int>(animationFramesPlayer[animationType].size());
     int frameIndex = currentFrame % totalFrames;
