@@ -327,8 +327,7 @@ void Game::restartGame(Player& player, ResourceManager& resourceManager)
     
     camera.setCenter(player.shape.getPosition().x, player.shape.getPosition().y - 100);
     
-    resourceManager.setPlayerTypeOfAnimationLastSet(0);
-    player.updateAnimation(0.0f); // Reset animation frame
+    player.updateAnimation(0); // Reset animation frame
     
     collisionCells.clear();
 

@@ -42,8 +42,11 @@ public:
     std::string name;
 
     Player() ;
+    
     void setPlayerPosition(sf::Vector2f incomingPosition);
     void loadAnimationsPlayer();
+    void setCurrentAction(AnimationType newAction);
+    
     Player(std::string playerName, Inventory inventory);
 
     sf::RectangleShape shape;

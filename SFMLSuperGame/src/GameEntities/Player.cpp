@@ -58,18 +58,35 @@ void Player::loadAnimationsPlayer()
     int frameWidth = 50;  
     int frameHeight = 37;
     
+    
     animSequencerPlayer.loadAnimationFrames(
-        Attack,
-        "res/textures/Player/Tilemap/Attack/spritesheetAttack.png",
-        spriteFramesPerTypeOfAnimationPlayer[Attack],
+        Idle,
+        "res/textures/Player/Tilemap/Idle/spritesheetIdle.png",
+        spriteFramesPerTypeOfAnimationPlayer[Idle],
+        frameWidth,
+        frameHeight
+    );
+    
+    animSequencerPlayer.loadAnimationFrames(
+        Run,
+        "res/textures/Player/Tilemap/Run/spritesheetRun.png",
+        spriteFramesPerTypeOfAnimationPlayer[Run],
         frameWidth,
         frameHeight
     );
 
     animSequencerPlayer.loadAnimationFrames(
-        Die,
-        "res/textures/Player/Tilemap/Die/spritesheetDie.png",
-        spriteFramesPerTypeOfAnimationPlayer[Die],
+        Jump,
+        "res/textures/Player/Tilemap/Fall/spritesheetFall.png",
+        spriteFramesPerTypeOfAnimationPlayer[Jump],
+        frameWidth,
+        frameHeight
+    );
+    
+    animSequencerPlayer.loadAnimationFrames(
+        Attack,
+        "res/textures/Player/Tilemap/Attack/spritesheetAttack.png",
+        spriteFramesPerTypeOfAnimationPlayer[Attack],
         frameWidth,
         frameHeight
     );
@@ -83,25 +100,9 @@ void Player::loadAnimationsPlayer()
     );
     
     animSequencerPlayer.loadAnimationFrames(
-        Idle,
-        "res/textures/Player/Tilemap/Idle/spritesheetIdle.png",
-        spriteFramesPerTypeOfAnimationPlayer[Idle],
-        frameWidth,
-        frameHeight
-    );
-
-    animSequencerPlayer.loadAnimationFrames(
-        Jump,
-        "res/textures/Player/Tilemap/Fall/spritesheetFall.png",
-        spriteFramesPerTypeOfAnimationPlayer[Fall],
-        frameWidth,
-        frameHeight
-    );
-    
-    animSequencerPlayer.loadAnimationFrames(
-        Run,
-        "res/textures/Player/Tilemap/Run/spritesheetRun.png",
-        spriteFramesPerTypeOfAnimationPlayer[Run],
+        Die,
+        "res/textures/Player/Tilemap/Die/spritesheetDie.png",
+        spriteFramesPerTypeOfAnimationPlayer[Die],
         frameWidth,
         frameHeight
     );
@@ -221,11 +222,11 @@ void Player::updateAnimation(float deltaTime)
         // Get the current sprite based on the current action
         currentSpritePlayer = animSequencerPlayer.getCurrentSpritePlayer(currentAction, currentFrame);
 
-        // Set the correct texture rect based on direction
+        // Set the correct scale and origin based on direction
         if (onInverseDirection) 
         {
             currentSpritePlayer.setScale(-1.f, 1.f);
-            currentSpritePlayer.setOrigin(static_cast<float>(currentSpritePlayer.getLocalBounds().width), 0.f);
+            currentSpritePlayer.setOrigin(currentSpritePlayer.getLocalBounds().width, 0.f);
         } 
         else 
         {
@@ -233,9 +234,13 @@ void Player::updateAnimation(float deltaTime)
             currentSpritePlayer.setOrigin(0.f, 0.f);
         }
 
-        // Set the sprite position once, aligned with the shape
+        // Update position
         currentSpritePlayer.setPosition(shape.getPosition());
     }
+}
+
+void Player::setCurrentAction(AnimationType newAction){
+    currentAction = newAction;
 }
 
 void Player::takeDamage(int damage) {

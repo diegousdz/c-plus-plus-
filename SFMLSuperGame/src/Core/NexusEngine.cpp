@@ -124,27 +124,27 @@ void NexusEngine::handleInput()
                         resourceManager.newGamePlayer.velocity.x = 0;
                         resourceManager.newGamePlayer.onInverseDirection = false;  
                         resourceManager.newGamePlayer.isMoving = false;
-                        resourceManager.setPlayerTypeOfAnimationLastSet(3);
+                        resourceManager.setPlayerTypeOfAnimationLastSet(4);
                     } else { 
                         resourceManager.newGamePlayer.velocity.x = 0;
                         resourceManager.newGamePlayer.onInverseDirection = true; 
                         resourceManager.newGamePlayer.isMoving = false;
-                        resourceManager.setPlayerTypeOfAnimationLastSet(3);
+                        resourceManager.setPlayerTypeOfAnimationLastSet(4);
                     }
                 }
             }
 
             if (event.type == sf::Event::KeyReleased)  // Stop movement on key release
             {
-                if (event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::D)
+                if (event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::D || event.key.code == sf::Keyboard::K)
                 {
                     resourceManager.newGamePlayer.velocity.x = 0;
                     resourceManager.newGamePlayer.isMoving = false;
                     resourceManager.setPlayerTypeOfAnimationLastSet(0);
                 }
 
-                if(resourceManager.newGamePlayer.isOnGround)
-                {
+            if(resourceManager.newGamePlayer.isOnGround)
+            {
                     std::cout << "can jump is on ground" << std::endl;
                     if (event.key.code == sf::Keyboard::Space)
                     {
@@ -152,7 +152,11 @@ void NexusEngine::handleInput()
                         resourceManager.newGamePlayer.isOnGround = false;   // Mark player as airborne
                         resourceManager.setPlayerTypeOfAnimationLastSet(2);
                     }
-                }
+                }else if (!resourceManager.newGamePlayer.isOnGround && resourceManager.newGamePlayer.velocity.y > 0)
+                 {
+                     // If we're falling, transition to fall animation
+                     resourceManager.setPlayerTypeOfAnimationLastSet(3);  // Fall
+                 }
                 
 
                 // Toggle main menu with 'P'
@@ -186,14 +190,15 @@ void NexusEngine::update(float deltaTime)
 
             game.update(deltaTime, resourceManager.newGamePlayer);
         
-            // Apply gravity to the player when not on the ground
             if (!resourceManager.newGamePlayer.isOnGround)
             {
                 resourceManager.newGamePlayer.velocity.y += resourceManager.newGamePlayer.gravity * deltaTime;
             }
+            
+            resourceManager.newGamePlayer.setCurrentAction(static_cast<Player::AnimationType>(resourceManager.getPlayerTypeOfAnimationLastSet()));
         
             // ----------------------------------------------------------- Animation Switch
-        
+            /*
             switch (resourceManager.getPlayerTypeOfAnimationLastSet()) {
             case 0:
                 resourceManager.newGamePlayer.currentSpritePlayer.setTexture(resourceManager.playerIdleTexture);
@@ -221,7 +226,7 @@ void NexusEngine::update(float deltaTime)
             default:  resourceManager.newGamePlayer.currentSpritePlayer.setTexture(resourceManager.playerIdleTexture);;
                 resourceManager.newGamePlayer.loadAnimationsPlayer();
             }
-            
+            */
             resourceManager.newGamePlayer.updateAnimation(deltaTime);
         }
     }

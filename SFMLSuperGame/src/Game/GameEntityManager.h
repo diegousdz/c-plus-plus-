@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "../GameEntities/Player.h"
 #include "../Core/HelperFunctions.h"
-
+#include "../GameEntities/Orc.h"
 
 struct TileCell;
 
