@@ -118,6 +118,19 @@ void NexusEngine::handleInput()
                     resourceManager.newGamePlayer.onInverseDirection = false;  // Set facing direction
                     resourceManager.newGamePlayer.isMoving = true;
                     resourceManager.setPlayerTypeOfAnimationLastSet(1);
+                } else if  (event.key.code == sf::Keyboard::K)  // Attack
+                {
+                    if(!resourceManager.newGamePlayer.onInverseDirection){
+                        resourceManager.newGamePlayer.velocity.x = 0;
+                        resourceManager.newGamePlayer.onInverseDirection = false;  
+                        resourceManager.newGamePlayer.isMoving = false;
+                        resourceManager.setPlayerTypeOfAnimationLastSet(3);
+                    } else { 
+                        resourceManager.newGamePlayer.velocity.x = 0;
+                        resourceManager.newGamePlayer.onInverseDirection = true; 
+                        resourceManager.newGamePlayer.isMoving = false;
+                        resourceManager.setPlayerTypeOfAnimationLastSet(3);
+                    }
                 }
             }
 

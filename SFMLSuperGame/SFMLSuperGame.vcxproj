@@ -180,16 +180,18 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <!-- Use Program Database for release -->
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <AdditionalOptions></AdditionalOptions>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
       <!-- Set to MultiThreadedDLL for release -->
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <!-- Disable debug information for release -->
       <AdditionalLibraryDirectories>$(ProjectDir)\libs\SFML\lib\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-graphics.lib;sfml-window.lib;sfml-system.lib</AdditionalDependencies>
+      <AdditionalDependencies>sfml-graphics.lib;sfml-window.lib;sfml-system.lib;sfml-main.lib</AdditionalDependencies>
       <WholeProgramOptimization>true</WholeProgramOptimization>
       <!-- Enable whole program optimization for the linker as well -->
     </Link>
