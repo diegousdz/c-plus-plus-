@@ -20,7 +20,7 @@ This is a game was developed by a student from <a href="https://www.imagecampus.
 *Thanks to the following for their support and guidance:*
 
 - **My Family**
-- **My loved one - Carolina Lizarralde**
+- **My loved One - Carolina Lizarralde**
 - **Image Campus**
 
 ## Acknowledgements
@@ -43,6 +43,7 @@ any doubts and apply it to my game. I appreciate the help and encouragement from
 
 This game was also possible thanks to the support of these professors:
 
+- **Franco Fioretti**
 - **Federico Olive**
 
 ## Special Thanks
