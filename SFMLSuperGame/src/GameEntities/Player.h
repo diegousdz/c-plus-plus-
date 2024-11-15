@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include "Warrior.h"
 #include "./../Core/AnimationSequencer.h"
 
 struct Inventory
@@ -16,7 +17,7 @@ struct Inventory
     int crowdIndex = 0;
 };
 
-class Player
+class Player : public Warrior
 {
 public:
     enum AnimationType {
@@ -40,7 +41,7 @@ public:
     
     std::string name;
 
-    Player();
+    Player() ;
     void setPlayerPosition(sf::Vector2f incomingPosition);
     void loadAnimationsPlayer();
     Player(std::string playerName, Inventory inventory);
@@ -75,6 +76,9 @@ public:
     sf::Vector2f getPosition() const { return shape.getPosition(); }
     void setPosition(const sf::Vector2f& pos) { shape.setPosition(pos); }
 private:
+    static std::mt19937 gen;
+    static std::uniform_real_distribution<> dis;
+    
     bool isMagicBeltEquipped;
     bool hasKingdomCrownInInventory;
 };

@@ -1,5 +1,8 @@
 ﻿#include "Orc.h"
-
+#include <SFML/Graphics.hpp>
+#include <iostream>
+using namespace std;
+#include <random>
 
 void Orc::loadAnimationsOrc()
 {
@@ -50,6 +53,42 @@ void Orc::loadAnimationsOrc()
     animationsLoaded = true;
 }
 
+void Orc::initializeDetectionZones()
+{
+    // Sight range
+    detectionZone.sightRange.setSize(sf::Vector2f(200.0f, 60.0f));
+    detectionZone.sightRange.setFillColor(sf::Color(0, 0, 255, 64));
+        
+    // Attack range
+    detectionZone.attackRange.setSize(sf::Vector2f(60.0f, 60.0f));
+    detectionZone.attackRange.setFillColor(sf::Color(255, 0, 0, 64));
+}
+
+void Orc::initializeHealthBar()
+{
+    healthBar.container.setSize(sf::Vector2f(healthBar.WIDTH + 4, healthBar.HEIGHT + 4));
+    healthBar.container.setFillColor(sf::Color(60, 60, 60));
+        
+    healthBar.bar.setSize(sf::Vector2f(healthBar.WIDTH, healthBar.HEIGHT));
+    healthBar.bar.setFillColor(sf::Color(255, 0, 0));
+}
+
+void Orc::updateDetectionZones()
+{
+    sf::Vector2f pos = shape.getPosition();
+    float offset = onInverseDirection ? -detectionZone.sightRange.getSize().x : shape.getSize().x;
+        
+    detectionZone.sightRange.setPosition(
+        pos.x + (onInverseDirection ? -detectionZone.sightRange.getSize().x : shape.getSize().x),
+        pos.y
+    );
+        
+    detectionZone.attackRange.setPosition(
+        pos.x + (onInverseDirection ? -detectionZone.attackRange.getSize().x : shape.getSize().x),
+        pos.y
+    );
+}
+
 Orc::Orc() : Warrior('o', 30, 130) {
     SetId('o');
     SetDamage(30);
@@ -67,6 +106,86 @@ Orc::Orc() : Warrior('o', 30, 130) {
     isMoving = false;
     onInverseDirection = false;
     animationsLoaded = false;
+}
+
+void Orc::handleIdleState(const Player& player) {
+    if (detectPlayer(player)) {
+        currentState = OrcState::CHASING;
+        return;
+    }
+        
+    if (idleTimer.getElapsedTime().asSeconds() > 2.0f) {
+        currentState = OrcState::PATROLLING;
+        patrolStartX = shape.getPosition().x;
+        velocity.x = speed * (onInverseDirection ? -1.0f : 1.0f);
+        idleTimer.restart();
+    }
+}
+
+
+void Orc::handlePatrolState(const Player& player) {
+    if (detectPlayer(player)) {
+        currentState = OrcState::CHASING;
+        return;
+    }
+
+    float distanceMoved = std::abs(shape.getPosition().x - patrolStartX);
+    if (distanceMoved >= patrolDistance) {
+        onInverseDirection = !onInverseDirection;
+        patrolStartX = shape.getPosition().x;
+        velocity.x = speed * (onInverseDirection ? -1.0f : 1.0f);
+    }
+}
+
+void Orc::handleChaseState(const Player& player) {
+    if (!detectPlayer(player)) {
+        currentState = OrcState::IDLE;
+        velocity.x = 0;
+        return;
+    }
+
+    if (inAttackRange(player)) {
+        currentState = OrcState::ATTACKING;
+        velocity.x = 0;
+        return;
+    }
+
+    // Move towards player
+    onInverseDirection = player.getPosition().x < shape.getPosition().x;
+    velocity.x = speed * (onInverseDirection ? -1.0f : 1.0f);
+}
+
+void Orc::handleAttackState(const Player& player) {
+    if (!inAttackRange(player)) {
+        currentState = OrcState::CHASING;
+        return;
+    }
+
+    if (attackTimer.getElapsedTime().asSeconds() > 1.0f) {
+        attack(static_cast<Warrior*>(&const_cast<Player&>(player)));
+        attackTimer.restart();
+    }
+}
+
+void Orc::handleDyingState() {
+    if (currentFrame >= spriteFramesPerTypeOfAnimationOrc[Die] - 1) {
+        isActive = false;
+        currentState = OrcState::INACTIVE;
+        shape.setPosition(spawnPoint);
+    }
+}
+
+bool Orc::detectPlayer(const Player& player) {
+    return detectionZone.sightRange.getGlobalBounds().intersects(
+        player.shape.getGlobalBounds()
+    );
+}
+
+bool Orc::inAttackRange(const Player& player) const
+{
+    return detectionZone.attackRange.getGlobalBounds().intersects(
+        player.shape.getGlobalBounds()
+    );
 }
 
 void Orc::attack(Warrior* warrior)

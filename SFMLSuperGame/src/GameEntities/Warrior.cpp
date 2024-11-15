@@ -1,10 +1,15 @@
 ﻿#include "Warrior.h"
+#include <random>
+
+// Define the static member variables
+std::mt19937 Warrior::gen = std::mt19937(std::random_device{}());  // Mersenne Twister engine
+std::uniform_real_distribution<> Warrior::dis = std::uniform_real_distribution<>(0.0, 1.0);  // Uniform distribution
 
 Warrior::Warrior()
 {
-    id = 'o';
-    health = 100;
-    damage = 20;
+    this->id = 'o';
+    this->health = 100;
+    this->damage = 20;
 }
 Warrior::Warrior(char id, int damage, int health)
 {

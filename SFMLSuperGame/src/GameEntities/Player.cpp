@@ -3,7 +3,7 @@
 #include "../Core/ResourceManager.h"
 
 // Initialize variables using the class constructor
-Player::Player(std::string playerName, Inventory inventory)
+Player::Player(std::string playerName, Inventory inventory) : Warrior(100, 20)
 {
     name = playerName;
     playerInventory = inventory;
@@ -27,9 +27,13 @@ Player::Player(std::string playerName, Inventory inventory)
     onInverseDirection = false;
 }
 
-Player::Player()
+Player::Player() : Warrior(100, 20)
 {
-    name = "Kael";  // Default name
+    name = "Kael";
+
+    playerInventory = Inventory();
+    
+    hasKingdomCrownInInventory = false;;
     life = 1;
     health = 48.0f;
     energy = 100.0f;
