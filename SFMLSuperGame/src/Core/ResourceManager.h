@@ -47,6 +47,7 @@ public:
 
     bool isFirstFall = true;
     GUIHandler guiHandler;
+    
 
     // ----------------------------------- GUI
 
@@ -112,6 +113,10 @@ public:
     bool gameOverInitialized = false;
     sf::Text gameOverText;
     sf::Text restartPrompt;
+
+    // ----------------------------- Win Condition
+
+
     
 private:
     int playerTypeOfAnimationLastSet; 

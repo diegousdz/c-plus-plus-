@@ -31,6 +31,15 @@ void ResourceManager::loadResources()
         std::cout << "Failed to load heart texture!" << std::endl;
     }
 
+    if (!heartTexture.loadFromFile("res/textures/UI/heart.png")) {
+        std::cout << "Failed to load heart texture!" << std::endl;
+    }
+    
+    if (!heartTexture.loadFromFile("res/textures/World/gameplay/crown.png")) {
+        std::cout << "Failed to load heart texture!" << std::endl;
+    }
+
+
     // Initialize the player with the loaded texture
     newGamePlayer.setTexture(&playerIdleTexture);
 
