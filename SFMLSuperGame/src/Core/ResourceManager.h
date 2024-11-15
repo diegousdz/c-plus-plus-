@@ -16,6 +16,8 @@ public:
     void setWindowWidth(int width) { windowWidth = width; }
     void setWindowHeight(int height) { windowHeight = height; }
 
+    void allocateEnemies();
+    void repositionEnemiesLevelOne(float initialPositionX, float initialPositionY);
     void loadResources();
     void loadGameBackgrounds();
     void setDeltaTime();
@@ -39,6 +41,7 @@ public:
 
     int getPlayerTypeOfAnimationLastSet() const;
     void setPlayerTypeOfAnimationLastSet(int type);
+    ~ResourceManager();
 
     sf::Texture playerIdleTexture;    
     sf::Texture playerRunTexture;     
@@ -86,7 +89,36 @@ public:
     sf::RectangleShape footer;
 
     // ----------------------------- Game class
+    
+    void setSpawnPointOne(int index, Orc* orc) {
+        if (index >= 0 && index < 5) {
+            orcSpawnManagerOne[index] = orc;
+        }
+    }
 
+    Orc* getSpawnPointOne(int index) const {
+        if (index >= 0 && index < 5) {
+            return orcSpawnManagerOne[index];
+        }
+        return nullptr; 
+    }
+
+    
+    Orc* orcSpawnManagerOne[5];
+    float spawnPointOnePosX = 300.0f;
+    float spawnPointOnePosY = 200.0f;
+    bool hasSpawnOneInitialized = false;
+    
+    Orc* orcSpawnManagerOTwo[5];
+
+    bool hasSpawnTwoInitialized = false;
+
+    Orc* orcSpawnManagerThree[5];
+    bool hasSpawnThreeInitialized = false;
+
+    Orc* orcSpawnManagerFour[5];
+    bool hasSpawnFourInitialized = false;
+    
     sf::Texture backgroundOne;
     sf::Texture backgroundTwo;
     sf::Texture backgroundThree;
@@ -114,6 +146,8 @@ public:
     sf::Text restartPrompt;
     
 private:
+
+    
     int playerTypeOfAnimationLastSet; 
     
     float deltaTime = 0.0f;

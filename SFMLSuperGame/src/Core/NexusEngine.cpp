@@ -85,6 +85,9 @@ void NexusEngine::handleInput()
 
                         // Reinitialize necessary components
                         resourceManager.newGamePlayer.loadAnimationsPlayer();
+                        
+                  //      resourceManager.enemyLevelManager.loadAnimationsOrc();
+                        
                         resourceManager.newGamePlayer.setTexture(&resourceManager.playerTexture);
 
                         resourceManager.isMainMenuActive = false;

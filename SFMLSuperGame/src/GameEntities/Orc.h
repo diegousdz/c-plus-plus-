@@ -81,6 +81,8 @@ public:
     void loadAnimationsOrc();
     void initializeDetectionZones();
     void initializeHealthBar();
+    void createEnemies();
+
 private:
     OrcState currentState = OrcState::IDLE;
     DetectionZone detectionZone;

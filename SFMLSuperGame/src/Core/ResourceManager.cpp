@@ -1,5 +1,42 @@
 ﻿#include "ResourceManager.h"
 
+void ResourceManager::allocateEnemies()
+{
+    // Allocate orcs for spawn manager one
+    if(!hasSpawnOneInitialized)
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            orcSpawnManagerOne[i] = new Orc();
+            
+            if (!orcSpawnManagerOne[i]->animationsLoaded)
+            {
+                orcSpawnManagerOne[i]->loadAnimationsOrc();
+            }
+            
+            orcSpawnManagerOne[i]->shape.setSize(sf::Vector2f(58.0f, 42.0f));
+            orcSpawnManagerOne[i]->shape.setFillColor(sf::Color::Red);
+            
+        }
+        hasSpawnOneInitialized = true;
+    }
+
+}
+
+void ResourceManager::repositionEnemiesLevelOne(float initialPositionX, float initialPositionY)
+{
+    if(hasSpawnOneInitialized)
+    {
+        float spacing = orcSpawnManagerOne[0]->shape.getGlobalBounds().width + 20.0f;
+        for (int i = 0; i < 5; i++)
+        {
+            if (orcSpawnManagerOne[i])
+            {
+                orcSpawnManagerOne[i]->shape.setPosition(initialPositionX + (i * spacing), initialPositionY);
+            }
+        }
+    }
+}
 void ResourceManager::loadResources()
 {
     
@@ -78,25 +115,22 @@ float ResourceManager::getDeltaTime() const
 }
 
 
+
 void ResourceManager::createEnemiesLevelOne(float initialPositionX, float initialPositionY)
 {
-    float spacing = orcWarriorsPoolShapes[0]->shape.getGlobalBounds().width + 20.0f; 
+    float spacing = orcSpawnManagerOne[0]->shape.getGlobalBounds().width + 20.0f; 
 
-    for (int i = 0; i < NUMBER_OF_ENEMY_LEVEL_ONE; i++)
+    // Position and initialize attributes for each Orc in the pool
+    for (int i = 0; i < 5; i++)
     {
-        orcWarriorsPoolShapes[i] = new Orc();
-
-        if (!orcWarriorsPoolShapes[i]->animationsLoaded)
+        if (orcSpawnManagerOne[i]) // Check if the orc exists
         {
-            orcWarriorsPoolShapes[i]->loadAnimationsOrc();
-        } else
-        {
-            orcWarriorsPoolShapes[i]->shape.setPosition(initialPositionX + (i * spacing), initialPositionY);
-            orcWarriorsPoolShapes[i]->shape.setFillColor(sf::Color::Red);
+            // Set initial position and attributes
+            orcSpawnManagerOne[i]->shape.setPosition(initialPositionX + (i * spacing), initialPositionY);
+            orcSpawnManagerOne[i]->shape.setFillColor(sf::Color::Red);  // Set color for the Orc
         }
     }
 }
-
 
 int ResourceManager::getPlayerTypeOfAnimationLastSet() const {
     return playerTypeOfAnimationLastSet;
@@ -104,4 +138,19 @@ int ResourceManager::getPlayerTypeOfAnimationLastSet() const {
 
 void ResourceManager::setPlayerTypeOfAnimationLastSet(int type) {
     playerTypeOfAnimationLastSet = type;
+}
+
+ResourceManager::~ResourceManager()
+{
+    // Clean up spawn manager orcs
+    for (int i = 0; i < 5; i++)
+    {
+        delete orcSpawnManagerOne[i];
+    }
+    
+    // Clean up level one pool orcs
+    for (int i = 0; i < NUMBER_OF_ENEMY_LEVEL_ONE; i++)
+    {
+        delete orcWarriorsPoolShapes[i];
+    }
 }

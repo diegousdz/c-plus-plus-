@@ -10,7 +10,7 @@ void Orc::loadAnimationsOrc()
     int frameWidth = 58;  // Adjust based on your spritesheet
     int frameHeight = 42; // Adjust based on your spritesheet
 
-    animSequencerOrc.loadAnimationFrames(
+    animSequencerOrc.loadAnimationFramesOrc(
         Attack,
         "res/textures/Orc/Tilemap/Attack/spritesheetAttack.png",
         spriteFramesPerTypeOfAnimationOrc[Attack],
@@ -18,7 +18,7 @@ void Orc::loadAnimationsOrc()
         frameHeight
     );
     
-    animSequencerOrc.loadAnimationFrames(
+    animSequencerOrc.loadAnimationFramesOrc(
         Die,
         "res/textures/Orc/Tilemap/Die/spritesheetDie.png",
         spriteFramesPerTypeOfAnimationOrc[Die],
@@ -26,7 +26,7 @@ void Orc::loadAnimationsOrc()
         frameHeight
     );
 
-    animSequencerOrc.loadAnimationFrames(
+    animSequencerOrc.loadAnimationFramesOrc(
         Hurt,
         "res/textures/Orc/Tilemap/Fall/spritesheetHurt.png",
         spriteFramesPerTypeOfAnimationOrc[Hurt],
@@ -34,7 +34,7 @@ void Orc::loadAnimationsOrc()
         frameHeight
     );
     
-    animSequencerOrc.loadAnimationFrames(
+    animSequencerOrc.loadAnimationFramesOrc(
         Idle,
         "res/textures/Orc/Tilemap/Idle/spritesheetIdle.png",
         spriteFramesPerTypeOfAnimationOrc[Idle],
@@ -42,7 +42,7 @@ void Orc::loadAnimationsOrc()
         frameHeight
     );
 
-    animSequencerOrc.loadAnimationFrames(
+    animSequencerOrc.loadAnimationFramesOrc(
         Run,
         "res/textures/Orc/Tilemap/Fall/spritesheetRun.png",
         spriteFramesPerTypeOfAnimationOrc[Run],

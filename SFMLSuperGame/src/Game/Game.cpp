@@ -230,6 +230,8 @@ bool Game::loadMapSection(GameMap* gameMap, const std::string& basePath, int sec
 void Game::init(sf::RenderWindow& window, ResourceManager& resourceManager, Player& player)
 {
     player.setPlayerPosition(resourceManager.initalSpawnPositionLevelOne);
+    resourceManager.allocateEnemies();
+    resourceManager.repositionEnemiesLevelOne(64.0f, 356.0f);
 
     if(!isGameMapLoaded)
     {
@@ -269,6 +271,14 @@ void Game::draw(sf::RenderWindow& window, ResourceManager& resourceManager) {
     window.draw(resourceManager.backgroundSpriteOne);
     
     if(gameMap) {
+        if(resourceManager.hasSpawnOneInitialized)
+        {
+            for(int i = 0; i < 5; i++)
+            {
+                window.draw(resourceManager.orcSpawnManagerOne[i]->shape);
+            }
+            
+        }
         for(int i = 0; i < gameMap->mapSections; i++) {
             if(gameMap->sections[i]) {
                 MapSection* section = gameMap->sections[i];
