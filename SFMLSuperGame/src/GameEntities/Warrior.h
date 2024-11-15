@@ -1,16 +1,36 @@
 ﻿#pragma once
+#include <random>
 
 class Warrior
 {
 public:
-    bool IsAttacking = false;
-    bool isDead = false;
-    bool isHurt = false;
+    Warrior();
+    Warrior(int health = 100, int damage = 20);
+    explicit Warrior(char type);
+    Warrior(char id, int damage);
+    Warrior(char id, int damage, int health);
 
-    int health = 100;
-    int attackPower = 20;
-    int defense = 10;
-
-    virtual void attack();
+    char GetName() const { return id; }
+    void SetId(const char value) {id = value; }
     
+    int GetHealth() const { return health; }
+    void SetHealth(const int value) { health = value; }
+
+    int GetDamage() const { return damage; }
+    void SetDamage(int value) { damage = value; }
+
+    virtual void attack(Warrior* target);
+    virtual void receivedDamage();         
+    virtual void receivedDamage(int damage);      
+    
+    bool IsAlive() const { return health > 0; }
+    
+    std::random_device rd;
+    std::mt19937 gen;
+    std::uniform_real_distribution<> dis;
+
+private:
+    int health;            
+    int damage;
+    char id;
 };

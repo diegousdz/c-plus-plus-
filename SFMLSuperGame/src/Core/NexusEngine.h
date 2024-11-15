@@ -4,32 +4,35 @@
 #include "FileManager.h"
 #include "ResourceManager.h"
 #include "AnimationSequencer.h"
-#include "SoundSequencer.h"
-#include "RenderAndFXManager.h"
-
-using namespace sf;
-using namespace std;
+#include "../Game/Game.h"
+#include "../Tools/WorldEditor.h"
 
 class NexusEngine
 {
 public:
     // Singleton access
-    static NexusEngine& getInstance() {
+    
+    static NexusEngine& getInstance()
+    {
         static NexusEngine instance;
         return instance;
     }
+
+    ResourceManager& getResourceManager() { return resourceManager; }
     
-    void init();  
+    void init();
     void update(float deltaTime);
-    void draw(RenderWindow &gameWindow);
+    void draw(sf::RenderWindow& gameWindow);
     void handleInput();
-    void initializeWindow(RenderWindow gameWindow, int width, int height, string windowName);
+    void initializeWindow(sf::RenderWindow& gameWindow, int width, int height, std::string windowName);
 
 private:
-    NexusEngine() {}  // Singleton pattern
+    NexusEngine()
+    {
+    } // Singleton pattern
 
-    ResourceManager resourceManager;  // The central resource manager
+    ResourceManager resourceManager; // The central resource manager
+        
+    Game game;
 
-public:
-    ResourceManager& getResourceManager() { return resourceManager; }
 };

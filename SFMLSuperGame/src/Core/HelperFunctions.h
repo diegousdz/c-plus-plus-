@@ -1,16 +1,10 @@
 ﻿#pragma once
 #include <SFML/Graphics/Rect.hpp>
-
-struct AABB {
-    float positionX;
-    float positionY;
-    float width;
-    float height;
-};
+#include <SFML/Graphics/RectangleShape.hpp>
 
 class HelperFunctions
 {
     
 public:
-    bool checkCollisionAABB(const AABB& box1, const  AABB& box2);
+    static bool checkCollisionAABB(const sf::RectangleShape& shape1, const sf::RectangleShape& shape2);
 };

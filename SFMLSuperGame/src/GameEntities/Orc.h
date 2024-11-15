@@ -1,34 +1,59 @@
 ﻿#pragma once
 #include "Warrior.h"
 #include <SFML/Graphics.hpp>
+#include "./../Core/AnimationSequencer.h"
 #include <iostream>
 
-class Orc : public Warrior
+class Orc : Warrior
 {
-private:
-   
-public:
 
-    int rage = 50;  
-    int armor = 30;
+public:
+    enum AnimationType {
+        Attack,
+        Die,
+        Hurt,
+        Idle,
+        Run,
+    };
+
+    Orc();
+
+    int spriteFramesPerTypeOfAnimationOrc[5] = {7, 9, 3, 4, 6}; 
+    
+    sf::Sprite currentSpriteOrc;
+    AnimationSequencer animSequencerOrc;
+    float speed = 100.0f;
+    int currentFrame = 0;
+    float animationInterval = 0.1f;
+    AnimationType currentAction = Idle;
+    sf::Clock animationClockOrc;
     
     sf::RectangleShape shape;
+    sf::RectangleShape collisionShape;
+    sf::Texture textureOrc;
     sf::Vector2f velocity;
+
     float gravity = 300.0f;
     bool isOnGround = false;
-    float enemySize = 64;
+    bool isMoving = false;
+    bool onInverseDirection = false;
+
+    bool movingLeft = false;
+    bool movingRight = false;
+
+    bool isAttacking = false;
+    bool isDead = false;
+    bool isHurted = false;
+    bool isIdle = false;
+    bool isRunning = false;
+
+    bool animationsLoaded = false;
     
-    Orc() {
-        health = 120;       
-        attackPower = 25;   
-        defense = 15;
-        enemySize = 64;
-        shape.setSize(sf::Vector2f(enemySize, enemySize));
-        shape.setFillColor(sf::Color::Red);
-        velocity = sf::Vector2f(0.0f, 0.0f);
-    }
     
-    void attack() override;
-    
+    // functiones from base class
+    void attack(Warrior* warrior) override;
     void takeDamage(int damage);
+    
+    void loadAnimationsOrc();
+    
 };
