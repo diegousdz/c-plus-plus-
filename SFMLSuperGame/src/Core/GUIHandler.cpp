@@ -51,7 +51,7 @@ void GUIHandler::gameHeaderInit(ResourceManager& resourceManager) {
     tempHeart.setTexture(resourceManager.heartTexture);
     
     float heartWidth = tempHeart.getGlobalBounds().width;
-    float heartHeight = tempHeart.getGlobalBounds().height; q
+    float heartHeight = tempHeart.getGlobalBounds().height;
 
     float heartSpacing = 8.0f; 
     float totalHeartsWidth = numberOfHearts * heartWidth + (numberOfHearts - 1) * heartSpacing;
