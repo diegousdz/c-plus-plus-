@@ -27,8 +27,11 @@ void ResourceManager::loadResources()
         std::cout << "Failed to load player jump texture!" << std::endl;
     }
 
-    if (!heartTexture.loadFromFile("res/textures/UI/heart.png")) {
+    if (!heartTexture.loadFromFile("res/textures/gameplay/heart.png")) {
         std::cout << "Failed to load heart texture!" << std::endl;
+    } else
+    {
+        std::cout << "Load heart texture!" << std::endl;
     }
 
     // Initialize the player with the loaded texture
