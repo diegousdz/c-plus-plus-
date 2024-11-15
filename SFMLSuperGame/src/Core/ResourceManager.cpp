@@ -31,7 +31,7 @@ void ResourceManager::loadResources()
         std::cout << "Failed to load heart texture!" << std::endl;
     }
 
-    if (!heartTexture.loadFromFile("res/textures//World/gameplay/heart.png")) {
+    if (!heartTexture.loadFromFile("res/textures/UI/heart.png")) {
         std::cout << "Failed to load heart texture!" << std::endl;
     }
     
