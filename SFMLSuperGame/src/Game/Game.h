@@ -48,7 +48,7 @@ public:
 
     std::vector<TileCell*> collisionCells;
     
-    
+    std::vector<Orc> orcs;
 private:
     sf::View camera;
     sf::Sprite backgroundLevelOne;
