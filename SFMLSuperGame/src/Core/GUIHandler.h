@@ -10,8 +10,11 @@ public:
     void mainMenuInit(ResourceManager& resourceManager);
     void drawMainMenu(sf::RenderWindow& window, ResourceManager& resourceManager);
     void drawGameHeader(sf::RenderWindow& window, ResourceManager& resourceManager);
+    void drawGameFooter(sf::RenderWindow& window, ResourceManager& resourceManager);
     void gameHeaderInit(ResourceManager& resourceManager);
+    void gameFooterInit(ResourceManager& resourceManager);
     void setWindowBounds(ResourceManager& resourceManager);
+    void setGameViewport(sf::RenderWindow& window, sf::View& gameView);
     void setIsInGame(ResourceManager& resourceManager, bool value);
     void drawGameOver(sf::RenderWindow& window, ResourceManager& resourceManager); // New
     void gameOverInit(ResourceManager& resourceManager); // New

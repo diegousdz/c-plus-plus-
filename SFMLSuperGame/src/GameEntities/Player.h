@@ -34,7 +34,7 @@ public:
     AnimationSequencer animSequencerPlayer;
     float speed = 100.0f;
     int currentFrame = 0;
-    float animationInterval = 0.2f;
+    float animationInterval = 0.1f;
     AnimationType currentAction = Idle;  // Default action
     sf::Clock animationClockPlayer;
     

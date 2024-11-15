@@ -55,14 +55,33 @@ public:
     sf::Text title;
     static constexpr int maxItemsMenu = 3;
     sf::Text menu[maxItemsMenu];
+    sf::View uiView;
+    
+    sf::Vector2<float> windowBounds = sf::Vector2<float>(0, 0);
 
     // ----------------------------- top part
     sf::RectangleShape header;
-
-    sf::Vector2<float> windowBounds = sf::Vector2<float>(0, 0);
+    
+    sf::RectangleShape healthBar;
+    sf::RectangleShape energyBar;
+    
     bool variablesDrawInitializedMainMenu = false;
     bool variablesDrawInitializedGame = false;
     bool isInGame;
+    
+    sf::Text lifeText, healthText, energyText;
+    std::vector<sf::Sprite> hearts;
+    sf::Texture heartTexture;
+
+    std::vector<sf::RectangleShape> inventorySlots;
+    std::vector<sf::Sprite> inventoryIcons;
+    std::vector<sf::Text> inventoryCounts;
+    std::vector<sf::Texture> itemTextures;
+    
+
+    // -------------------------------- bottom part
+
+    sf::RectangleShape footer;
 
     // ----------------------------- Game class
 

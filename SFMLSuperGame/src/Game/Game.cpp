@@ -245,7 +245,7 @@ void Game::init(sf::RenderWindow& window, ResourceManager& resourceManager, Play
                       << "Number of sections: " << gameMap->mapSections << std::endl;
             isGameMapLoaded = true;
         } else {
-            std::cerr << "Failed to load map!" << std::endl;
+            std::cerr << "Load game!" << std::endl;
         }
     }
     

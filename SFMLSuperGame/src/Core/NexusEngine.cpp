@@ -73,13 +73,13 @@ void NexusEngine::handleInput()
                 // Handle selecting the current option
                 if (event.key.code == sf::Keyboard::Space)
                 {
-                    if (resourceManager.currentOptionSelected == 0)  // Start Game
+                    if (resourceManager.currentOptionSelected == 0)  
                     {
-                        resourceManager.isMainMenuActive = false;  // Exit the menu
+                        resourceManager.isMainMenuActive = false;  
                     }
-                    else if (resourceManager.currentOptionSelected == 2)  // Exit
+                    else if (resourceManager.currentOptionSelected == 2)  
                     {
-                        resourceManager.gameWindow.close();  // Close the game
+                        resourceManager.gameWindow.close();  
                     }
                 }
             }
@@ -162,7 +162,6 @@ void NexusEngine::update(float deltaTime)
             {
                 resourceManager.newGamePlayer.velocity.y += resourceManager.newGamePlayer.gravity * deltaTime;
             }
-
         
             // ----------------------------------------------------------- Animation Switch
         
@@ -202,6 +201,7 @@ void NexusEngine::update(float deltaTime)
 void NexusEngine::draw(sf::RenderWindow &gameWindow) {
     gameWindow.clear();
 
+
     if (resourceManager.isMainMenuActive) {
         resourceManager.guiHandler.setIsInGame(resourceManager, false);
         resourceManager.guiHandler.draw(gameWindow, resourceManager);
@@ -209,7 +209,7 @@ void NexusEngine::draw(sf::RenderWindow &gameWindow) {
         if (!resourceManager.gameOver) {
             resourceManager.guiHandler.setIsInGame(resourceManager, true);
             game.draw(gameWindow, resourceManager);
-
+           // resourceManager.guiHandler.draw(gameWindow, resourceManager);
             // Draw the debug bounding box around the player for collision detection
             sf::RectangleShape debugShape(sf::Vector2f(50.0f, 37.0f));  // Adjust size as needed
             debugShape.setFillColor(sf::Color(0, 255, 0, 128)); // Semi-transparent green
@@ -221,6 +221,7 @@ void NexusEngine::draw(sf::RenderWindow &gameWindow) {
             }
         }
     }
+    resourceManager.guiHandler.draw(gameWindow, resourceManager);
 
     gameWindow.display();
 }
