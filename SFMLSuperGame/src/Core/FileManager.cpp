@@ -25,7 +25,6 @@ void FileManager::createNewInputFile(string basePath, string nameFile)
 }
 */
 
-
 Player FileManager::loadPlayerProgress(const std::string& basePath, const std::string& fileName)
 {
     std::string filePath = basePath + "/" + fileName + ".dat";
@@ -33,13 +32,16 @@ Player FileManager::loadPlayerProgress(const std::string& basePath, const std::s
     Player loadedPlayer;
 
     if (inFile.is_open()) {
-        // Read player details
+
         std::getline(inFile, loadedPlayer.name);
         inFile >> loadedPlayer.life;
         inFile >> loadedPlayer.health;
         inFile >> loadedPlayer.energy;
+        
+        float posX, posY;
+        inFile >> posX >> posY;
+        loadedPlayer.setPlayerPosition(sf::Vector2f(posX, posY));
 
-        // Read inventory details
         inFile >> loadedPlayer.playerInventory.potionRedIndex
                >> loadedPlayer.playerInventory.potionGreenIndex
                >> loadedPlayer.playerInventory.potionBlueIndex
@@ -55,19 +57,21 @@ Player FileManager::loadPlayerProgress(const std::string& basePath, const std::s
     return loadedPlayer;
 }
 
+
 bool FileManager::savePlayerProgress(const std::string& basePath, const std::string& fileName, const Player& player)
 {
     std::string filePath = basePath + "/" + fileName + ".dat";
     std::ofstream outFile(filePath);
 
     if (outFile.is_open()) {
-        // Write player details
+
         outFile << player.name << "\n";
         outFile << player.life << "\n";
         outFile << player.health << "\n";
         outFile << player.energy << "\n";
         
-        // Write inventory details
+        outFile << player.shape.getPosition().x << " " << player.shape.getPosition().y << "\n";
+        
         outFile << player.playerInventory.potionRedIndex << " "
                 << player.playerInventory.potionGreenIndex << " "
                 << player.playerInventory.potionBlueIndex << " "
@@ -82,4 +86,5 @@ bool FileManager::savePlayerProgress(const std::string& basePath, const std::str
         return false;
     }
 }
+
 

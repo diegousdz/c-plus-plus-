@@ -31,7 +31,7 @@ Player::Player()
 {
     name = "Kael";  // Default name
     life = 1;
-    health = 100.0f;
+    health = 48.0f;
     energy = 100.0f;
     isMagicBeltEquipped = false;
     hasKingdomCrownInInventory = false;
@@ -231,5 +231,25 @@ void Player::updateAnimation(float deltaTime)
 
         // Set the sprite position once, aligned with the shape
         currentSpritePlayer.setPosition(shape.getPosition());
+    }
+}
+
+void Player::takeDamage(int damage) {
+    health -= damage;
+
+    if (health <= 0) {
+        health = 0;
+        life--;
+
+        if (life < 0) life = 0;
+
+        if (life > 0) {
+     
+            health = 100.0f;
+
+        } else {
+            // Handle game over scenario
+            // Set a game over flag in ResourceManager
+        }
     }
 }

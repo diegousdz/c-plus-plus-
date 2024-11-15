@@ -3,7 +3,7 @@
 #include <SFML/Window/Window.hpp>
 #include "./../GameEntities/Player.h"
 #include "./../GameEntities/Orc.h"
-
+#include "FileManager.h"
 #include "GUIHandler.h"
 
 class ResourceManager
@@ -26,7 +26,7 @@ public:
     bool isGameInitialized = false;
     int currentOptionSelected = 0;
     
-
+    FileManager fileManager;
     sf::RenderWindow gameWindow;
     sf::Clock clock;
 
@@ -61,8 +61,10 @@ public:
 
     // ----------------------------- top part
     sf::RectangleShape header;
+
+    sf::RectangleShape healthBarBorder;
+    sf::RectangleShape healthBarFill;
     
-    sf::RectangleShape healthBar;
     sf::RectangleShape energyBar;
     
     bool variablesDrawInitializedMainMenu = false;

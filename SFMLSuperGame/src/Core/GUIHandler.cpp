@@ -24,17 +24,43 @@ void GUIHandler::mainMenuInit(ResourceManager& resourceManager)
     resourceManager.title.setPosition(50, 50);
 }
 
-void GUIHandler::gameHeaderInit(ResourceManager& resourceManager) {
+void GUIHandler::updateHealthBar(ResourceManager& resourceManager) {
+    float healthPercentage = resourceManager.newGamePlayer.health / 100.0f;
 
-    resourceManager.header.setSize(sf::Vector2f(resourceManager.windowBounds.x, 128.0f + 12.0f));
+    // Ensure healthPercentage is within [0, 1]
+    if (healthPercentage < 0.0f) healthPercentage = 0.0f;
+    if (healthPercentage > 1.0f) healthPercentage = 1.0f;
+
+    float healthBarWidth = resourceManager.healthBarBorder.getSize().x;
+    float healthBarHeight = resourceManager.healthBarBorder.getSize().y;
+
+    // Update the width of the health bar fill
+    resourceManager.healthBarFill.setSize(sf::Vector2f(healthBarWidth * healthPercentage, healthBarHeight));
+
+    // Update the color of the health bar fill based on health percentage
+    if (healthPercentage > 0.75f) {
+        resourceManager.healthBarFill.setFillColor(sf::Color::Green);
+    } else if (healthPercentage > 0.5f) {
+        resourceManager.healthBarFill.setFillColor(sf::Color::Yellow);
+    } else if (healthPercentage > 0.25f) {
+        resourceManager.healthBarFill.setFillColor(sf::Color(255, 165, 0)); // Orange
+    } else {
+        resourceManager.healthBarFill.setFillColor(sf::Color::Red);
+    }
+}
+
+void GUIHandler::gameHeaderInit(ResourceManager& resourceManager) {
+    resourceManager.header.setSize(sf::Vector2f(resourceManager.windowBounds.x, 140.0f));
     resourceManager.header.setPosition(0.0f, 0.0f); 
     resourceManager.header.setFillColor(sf::Color(0, 0, 0, 64));
 
     float topMargin = 32.0f;
     float rightPadding = 32.0f;
-    int numberOfHearts = 3;
 
+
+    int numberOfHearts = resourceManager.newGamePlayer.life;
     resourceManager.hearts.clear();
+
 
     resourceManager.lifeText.setFont(resourceManager.font);
     resourceManager.lifeText.setString("LIFE");
@@ -43,54 +69,67 @@ void GUIHandler::gameHeaderInit(ResourceManager& resourceManager) {
     float lifeTextX = resourceManager.windowBounds.x - rightPadding - lifeBounds.width;
     resourceManager.lifeText.setPosition(lifeTextX, topMargin);
 
-
+    // Set up hearts
     float lifeHeartSpacing = 10.0f;
-
-
     sf::Sprite tempHeart;
     tempHeart.setTexture(resourceManager.heartTexture);
-    
     float heartWidth = tempHeart.getGlobalBounds().width;
     float heartHeight = tempHeart.getGlobalBounds().height;
-
     float heartSpacing = 8.0f; 
     float totalHeartsWidth = numberOfHearts * heartWidth + (numberOfHearts - 1) * heartSpacing;
-
-
     float heartStartX = lifeTextX - lifeHeartSpacing - totalHeartsWidth;
-    
     for (int i = 0; i < numberOfHearts; ++i) {
         sf::Sprite heart;
         heart.setTexture(resourceManager.heartTexture);
-        
         float heartX = heartStartX + i * (heartWidth + heartSpacing);
         float heartY = topMargin;
         heart.setPosition(heartX, heartY);
-
         resourceManager.hearts.push_back(heart);
     }
-    
 
+    // --- HEALTH Text and Bar ---
+    // Set up "HEALTH" text 
     resourceManager.healthText.setFont(resourceManager.font);
     resourceManager.healthText.setString("HEALTH");
     resourceManager.healthText.setCharacterSize(16);
     sf::FloatRect healthBounds = resourceManager.healthText.getLocalBounds();
-    resourceManager.healthText.setPosition(
-        resourceManager.windowBounds.x - rightPadding - healthBounds.width,
-        topMargin + 32.0f // 32 pixels below "LIFE" (topMargin + 32)
-    );
 
+    // Dimensions for health bar
+    float healthBarWidth = 100.0f;
+    float healthBarHeight = 20.0f;
+    float healthBarSpacing = 10.0f;
 
+    // Calculate total width needed
+    float totalHealthWidth = healthBarWidth + healthBarSpacing + healthBounds.width;
+
+    // Adjust healthTextX to ensure the combined width fits within the window
+    float healthBarX = resourceManager.windowBounds.x - rightPadding - totalHealthWidth;
+    float healthTextX = healthBarX + healthBarWidth + healthBarSpacing;
+    float healthTextY = topMargin + 32.0f;
+    resourceManager.healthText.setPosition(healthTextX, healthTextY);
+
+    // Position health bar
+    float healthBarY = healthTextY + (healthBounds.height - healthBarHeight) / 2.0f;
+    resourceManager.healthBarBorder.setSize(sf::Vector2f(healthBarWidth, healthBarHeight));
+    resourceManager.healthBarBorder.setPosition(healthBarX, healthBarY);
+    resourceManager.healthBarBorder.setFillColor(sf::Color::Transparent);
+    resourceManager.healthBarBorder.setOutlineColor(sf::Color::White);
+    resourceManager.healthBarBorder.setOutlineThickness(2.0f);
+
+    resourceManager.healthBarFill.setSize(sf::Vector2f(healthBarWidth, healthBarHeight));
+    resourceManager.healthBarFill.setPosition(healthBarX, healthBarY);
+    resourceManager.healthBarFill.setFillColor(sf::Color::Green);
+
+    // --- ENERGY Text ---
     resourceManager.energyText.setFont(resourceManager.font);
     resourceManager.energyText.setString("ENERGY");
     resourceManager.energyText.setCharacterSize(16);
     sf::FloatRect energyBounds = resourceManager.energyText.getLocalBounds();
-    resourceManager.energyText.setPosition(
-        resourceManager.windowBounds.x - rightPadding - energyBounds.width,
-        topMargin + 64.0f
-    );
-
+    float energyTextX = resourceManager.windowBounds.x - rightPadding - energyBounds.width;
+    float energyTextY = topMargin + 64.0f;
+    resourceManager.energyText.setPosition(energyTextX, energyTextY);
 }
+
 
 void GUIHandler::gameFooterInit(ResourceManager& resourceManager) {
     
@@ -160,7 +199,8 @@ void GUIHandler::drawGameHeader(sf::RenderWindow& window, ResourceManager& resou
         window.draw(heart);
     }
     
-    window.draw(resourceManager.healthBar);
+    window.draw(resourceManager.healthBarBorder);
+    window.draw(resourceManager.healthBarFill);
     window.draw(resourceManager.energyBar);
     
     window.draw(resourceManager.lifeText);
@@ -214,6 +254,7 @@ void GUIHandler::draw(sf::RenderWindow& window, ResourceManager& resourceManager
 
     // Paso 4: Dibujar los elementos del juego
     if (resourceManager.isInGame) {
+        updateHealthBar(resourceManager);
         drawGameHeader(window, resourceManager); // Dibujar encabezado del juego
         drawGameFooter(window, resourceManager); // Dibujar pie de página del juego
     } else {

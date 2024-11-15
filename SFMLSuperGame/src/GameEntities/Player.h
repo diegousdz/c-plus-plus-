@@ -55,7 +55,7 @@ public:
     bool isMoving = false;
     bool onInverseDirection = false;
 
-    int life;
+    int life = 0;
     float health;
     float energy;
     Inventory playerInventory;
@@ -69,7 +69,8 @@ public:
 
     void handleMovement(float deltaTime);
     void updateAnimation(float deltaTime);
-    
+    void takeDamage(int damage);
+
     sf::Vector2f previousPosition;
     sf::Vector2f getPosition() const { return shape.getPosition(); }
     void setPosition(const sf::Vector2f& pos) { shape.setPosition(pos); }

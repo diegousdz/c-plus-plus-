@@ -75,7 +75,20 @@ void NexusEngine::handleInput()
                 {
                     if (resourceManager.currentOptionSelected == 0)  
                     {
-                        resourceManager.isMainMenuActive = false;  
+                        resourceManager.isMainMenuActive = false;
+                        resourceManager.isInGame = true;
+                    }else if (resourceManager.currentOptionSelected == 1)  
+                    {
+                        // Load Gamer
+                        Player loadedPlayer = FileManager::loadPlayerProgress("saves", "player_save");
+                        resourceManager.newGamePlayer = loadedPlayer;
+
+                        // Reinitialize necessary components
+                        resourceManager.newGamePlayer.loadAnimationsPlayer();
+                        resourceManager.newGamePlayer.setTexture(&resourceManager.playerTexture);
+
+                        resourceManager.isMainMenuActive = false;
+                        resourceManager.isInGame = true;
                     }
                     else if (resourceManager.currentOptionSelected == 2)  
                     {
@@ -139,7 +152,7 @@ void NexusEngine::handleInput()
 void NexusEngine::update(float deltaTime)
 {
 
-    if(resourceManager.newGamePlayer.shape.getPosition().y >= resourceManager.deadZoneYPosition)
+    if(resourceManager.newGamePlayer.shape.getPosition().y >= resourceManager.deadZoneYPosition || resourceManager.newGamePlayer.life == 0)
     {
         resourceManager.gameOver = true;
     }
@@ -211,10 +224,10 @@ void NexusEngine::draw(sf::RenderWindow &gameWindow) {
             game.draw(gameWindow, resourceManager);
            // resourceManager.guiHandler.draw(gameWindow, resourceManager);
             // Draw the debug bounding box around the player for collision detection
-            sf::RectangleShape debugShape(sf::Vector2f(50.0f, 37.0f));  // Adjust size as needed
+        /*    sf::RectangleShape debugShape(sf::Vector2f(50.0f, 37.0f));  // Adjust size as needed
             debugShape.setFillColor(sf::Color(0, 255, 0, 128)); // Semi-transparent green
             debugShape.setPosition(resourceManager.newGamePlayer.shape.getPosition());
-            gameWindow.draw(debugShape);
+            gameWindow.draw(debugShape);*/
         } else {
             if (resourceManager.gameOver) {
                 resourceManager.guiHandler.drawGameOver(gameWindow, resourceManager);
