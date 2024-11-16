@@ -107,17 +107,37 @@ void NexusEngine::handleInput()
             {
                 if (event.key.code == sf::Keyboard::A)  // Move left
                 {
-                    resourceManager.newGamePlayer.velocity.x = -resourceManager.newGamePlayer.speed;
-                    resourceManager.newGamePlayer.onInverseDirection = true;  // Set facing direction
-                    resourceManager.newGamePlayer.isMoving = true;
-                    resourceManager.setPlayerTypeOfAnimationLastSet(1);
+                    if(!resourceManager.newGamePlayer.isJumping)
+                    {
+                        resourceManager.newGamePlayer.velocity.y = resourceManager.newGamePlayer.gravity;
+                        resourceManager.newGamePlayer.velocity.x = -resourceManager.newGamePlayer.speed;
+                        resourceManager.newGamePlayer.onInverseDirection = true;  // Set facing direction
+                        resourceManager.newGamePlayer.isMoving = true;
+                        resourceManager.setPlayerTypeOfAnimationLastSet(1);
+                    } else
+                    {
+                        resourceManager.newGamePlayer.velocity.x = -resourceManager.newGamePlayer.speed;
+                        resourceManager.newGamePlayer.onInverseDirection = true;  // Set facing direction
+                        resourceManager.newGamePlayer.isMoving = true;
+                        resourceManager.setPlayerTypeOfAnimationLastSet(1);
+                    }
                 }
                 else if (event.key.code == sf::Keyboard::D)  // Move right
                 {
-                    resourceManager.newGamePlayer.velocity.x = resourceManager.newGamePlayer.speed;
-                    resourceManager.newGamePlayer.onInverseDirection = false;  // Set facing direction
-                    resourceManager.newGamePlayer.isMoving = true;
-                    resourceManager.setPlayerTypeOfAnimationLastSet(1);
+                    if(!resourceManager.newGamePlayer.isJumping)
+                    {
+                        resourceManager.newGamePlayer.velocity.y = resourceManager.newGamePlayer.gravity;
+                        resourceManager.newGamePlayer.velocity.x = resourceManager.newGamePlayer.speed;
+                        resourceManager.newGamePlayer.onInverseDirection = false;  // Set facing direction
+                        resourceManager.newGamePlayer.isMoving = true;
+                        resourceManager.setPlayerTypeOfAnimationLastSet(1);
+                    } else
+                    {
+                        resourceManager.newGamePlayer.velocity.x = resourceManager.newGamePlayer.speed;
+                        resourceManager.newGamePlayer.onInverseDirection = false;  // Set facing direction
+                        resourceManager.newGamePlayer.isMoving = true;
+                        resourceManager.setPlayerTypeOfAnimationLastSet(1);
+                    }
                 } else if  (event.key.code == sf::Keyboard::K)  // Attack
                 {
                     if(!resourceManager.newGamePlayer.onInverseDirection){
@@ -149,15 +169,17 @@ void NexusEngine::handleInput()
                     if (event.key.code == sf::Keyboard::Space)
                     {
                         resourceManager.newGamePlayer.velocity.y = -400.0f;  // Adjust jump strength as needed
-                        resourceManager.newGamePlayer.isOnGround = false;   // Mark player as airborne
-                        resourceManager.setPlayerTypeOfAnimationLastSet(2);
+                        resourceManager.newGamePlayer.isOnGround = false;   // Mark player as airborne.
+                        resourceManager.newGamePlayer.isJumping = true;
+                    //    resourceManager.setPlayerTypeOfAnimationLastSet(2);
                     }
-                }else if (!resourceManager.newGamePlayer.isOnGround && resourceManager.newGamePlayer.velocity.y > 0)
-                 {
-                     // If we're falling, transition to fall animation
-                     resourceManager.setPlayerTypeOfAnimationLastSet(3);  // Fall
-                 }
-                
+            }else if (!resourceManager.newGamePlayer.isOnGround && resourceManager.newGamePlayer.velocity.y > 0)
+             {
+                 // If we're falling, transition to fall animation
+              //   resourceManager.setPlayerTypeOfAnimationLastSet(3);  // Fall
+             }
+
+               // if (resourceManager.newGamePlayer.isOnGround && )
 
                 // Toggle main menu with 'P'
                 if (event.key.code == sf::Keyboard::P)
@@ -245,10 +267,10 @@ void NexusEngine::draw(sf::RenderWindow &gameWindow) {
             game.draw(gameWindow, resourceManager);
            // resourceManager.guiHandler.draw(gameWindow, resourceManager);
             // Draw the debug bounding box around the player for collision detection
-        /*    sf::RectangleShape debugShape(sf::Vector2f(50.0f, 37.0f));  // Adjust size as needed
+            sf::RectangleShape debugShape(sf::Vector2f(50.0f, 37.0f));  // Adjust size as needed
             debugShape.setFillColor(sf::Color(0, 255, 0, 128)); // Semi-transparent green
             debugShape.setPosition(resourceManager.newGamePlayer.shape.getPosition());
-            gameWindow.draw(debugShape);*/
+            gameWindow.draw(debugShape);
         } else {
             if (resourceManager.gameOver) {
                 resourceManager.guiHandler.drawGameOver(gameWindow, resourceManager);

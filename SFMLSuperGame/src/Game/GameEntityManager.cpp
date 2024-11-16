@@ -225,9 +225,8 @@ void GameEntityManager::createEnemiesLevelOne()
      } */
 }
 
-void GameEntityManager::gemUpdate(Player& player, const std::vector<TileCell*>& collisionCells) {
-
-    
+void GameEntityManager::gemUpdate(Player& player, const std::vector<TileCell*>& collisionCells)
+{
     if (hasEnemiesBeenAdded) {
         if (!hasEnemyIndex) {
             enemyIndex = checkCollisionEnemies(player);
@@ -273,7 +272,7 @@ void GameEntityManager::gemUpdate(Player& player, const std::vector<TileCell*>& 
         }
 
         if (staticWorldIndex != -1) {
-          //  updatePlayerOnCollisionWithWorld(player, staticWorldEntities[staticWorldIndex]);
+            //  updatePlayerOnCollisionWithWorld(player, staticWorldEntities[staticWorldIndex]);
         }
     }
 
@@ -312,98 +311,6 @@ void GameEntityManager::gemUpdate(Player& player, const std::vector<TileCell*>& 
             }
         }
     }
-
-/*
-    
-    // Update and handle collisions for orcs
-    const float ORC_GRAVITY = 981.0f;
-    const float ORC_MOVEMENT_SPEED = 100.0f;
-    const float ORC_PATROL_RANGE = 200.0f;
-    
-    for(int i = 0; i < 5; i++) // For each orc
-    {
-        Orc* orc = orcSpawnOne[i];
-        if(!orc) continue;
-
-        // Apply gravity
-        if (!orc->isOnGround)
-        {
-            orc->velocity.y += ORC_GRAVITY * dt;
-        }
-
-        // AI Movement
-        if(orc->isOnGround)
-        {
-            if(orc->movingRight)
-            {
-                orc->velocity.x = ORC_MOVEMENT_SPEED;
-                if(orc->patrolDistance >= ORC_PATROL_RANGE)
-                {
-                    orc->movingRight = false;
-                    orc->patrolDistance = 0.0f;
-                }
-            }
-            else
-            {
-                orc->velocity.x = -ORC_MOVEMENT_SPEED;
-                if(orc->patrolDistance >= ORC_PATROL_RANGE)
-                {
-                    orc->movingRight = true;
-                    orc->patrolDistance = 0.0f;
-                }
-            }
-            orc->patrolDistance += std::abs(orc->velocity.x) * dt;
-        }
-
-        // Update position
-        orc->shape.move(orc->velocity * dt);
-
-        // Reset ground state for new frame
-        orc->isOnGround = false;
-
-        // Check world collisions for each orc
-        for (TileCell* cell : collisionCells) {
-            if (HelperFunctions::checkCollisionAABB(orc->shape, cell->shape)) {
-                sf::FloatRect orcBounds = orc->shape.getGlobalBounds();
-                sf::FloatRect cellBounds = cell->shape.getGlobalBounds();
-
-                float overlapLeft = (orcBounds.left + orcBounds.width) - cellBounds.left;
-                float overlapRight = (cellBounds.left + cellBounds.width) - orcBounds.left;
-                float overlapTop = (orcBounds.top + orcBounds.height) - cellBounds.top;
-                float overlapBottom = (cellBounds.top + cellBounds.height) - orcBounds.top;
-
-                float minOverlap = std::min({overlapLeft, overlapRight, overlapTop, overlapBottom});
-
-                if (minOverlap == overlapTop) {
-                    // Collision from above
-                    orc->shape.setPosition(orc->shape.getPosition().x, 
-                                         cellBounds.top - orcBounds.height - GROUND_TOLERANCE);
-                    orc->velocity.y = 0;
-                    orc->isOnGround = true;
-                } else if (minOverlap == overlapBottom) {
-                    // Collision from below
-                    orc->shape.setPosition(orc->shape.getPosition().x,
-                                         cellBounds.top + cellBounds.height + GROUND_TOLERANCE);
-                    orc->velocity.y = 0;
-                } else if (minOverlap == overlapLeft) {
-                    // Collision from the left
-                    orc->shape.setPosition(cellBounds.left - orcBounds.width,
-                                         orc->shape.getPosition().y);
-                    orc->velocity.x = 0;
-                    orc->movingRight = false;
-                    orc->patrolDistance = 0.0f;
-                } else if (minOverlap == overlapRight) {
-                    // Collision from the right
-                    orc->shape.setPosition(cellBounds.left + cellBounds.width,
-                                         orc->shape.getPosition().y);
-                    orc->velocity.x = 0;
-                    orc->movingRight = true;
-                    orc->patrolDistance = 0.0f;
-                }
-            }
-        }
-    }
-*/
 }
 
 

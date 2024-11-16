@@ -13,9 +13,11 @@ class Game
 public:
     
     Game();
+    float recalculateYPositionOfDoor(int row);
     void initializeTileTexturesLevelOne();
 
     void init(sf::RenderWindow& window, ResourceManager& resourceManager, Player& player);
+    void checkForDoorsAndWinCondition(Player& player);
     void update(float deltaTime, Player& player);
     void draw(sf::RenderWindow& window, ResourceManager& resourceManager);
     void restartGame(Player& player, ResourceManager& resourceManager);
@@ -47,9 +49,24 @@ public:
     GameMap* loadGameMap(const std::string& basePath, int playerLevel);
 
     std::vector<TileCell*> collisionCells;
-    
 
 private:
+        
+    float doorLevelOnePosX  = 0.0f;
+    float doorLevelOnePosY  = 0.0f;
+    float mapSectionNumberWhereDoorIsAtLevelOne = 6;
+
+    float doorLevelTwoPosX = 0.0f;
+    float doorLevelTwoPosY = 0.0f;
+    float mapSectionNumberWhereDoorIsAtLevelTwo = 6;
+    
+    float doorLevelThreePosX = 0.0f;
+    float doorLevelThreePosY = 0.0f;
+    float mapSectionNumberWhereDoorIsAtLevelThree = 6;
+
+    int winLevel = 1;
+    int playerCurrentLevel = 1;
+    
     sf::View camera;
     sf::Sprite backgroundLevelOne;
     bool loadMapSection(GameMap* gameMap, const std::string& basePath, int sectionIndex, sf::Texture* textures, int playerLevel);
