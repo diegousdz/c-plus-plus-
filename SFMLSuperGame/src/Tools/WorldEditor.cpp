@@ -33,8 +33,7 @@ void WorldEditor::toggleMode() {
 
 // In WorldEditor.cpp
 void WorldEditor::initTileTextures() {
-    // Paths to texture files, adjust according to your project's structure
-
+  
     // Load each texture into the tileTextures array
     for (int i = 0; i < NUM_TEXTURES; ++i) {
         if (!tileTextures[i].loadFromFile(texturesPath[i])) {
@@ -671,7 +670,6 @@ void WorldEditor::drawRotationControls(sf::RenderWindow& window) const
     window.draw(titleRotationBottom);
 }
 
-
 // ------------------------------------------------------------------------------- Draw function 
 void WorldEditor::draw(sf::RenderWindow &window)
 {
@@ -683,7 +681,6 @@ void WorldEditor::draw(sf::RenderWindow &window)
     drawBrushesTexture(window);
     drawRotationControls(window);
     drawTileLoadTilemap(window);
-
     drawDebugConsole(window);
 }
 // ------------------------------------------------------------------------------- Update functions
@@ -865,7 +862,7 @@ void WorldEditor::createTilemap(int tileSizeType)
         }
     }
     
-   // tileViewPort.create(sf::VideoMode(512, 512), "Tilemap Viewport");
+    tileViewPort.create(sf::VideoMode(512, 512), "Tilemap Viewport");
     previousCellSize = getCellSize();
     cout << "Tile Size 2: " << previousCellSize << endl;
 }
@@ -1095,6 +1092,36 @@ void WorldEditor::changeColorButtonsGridSize()
         break;
     }
 }
+
+void WorldEditor::setBackgroundPosition(sf::Sprite& sprite, int sectionSelected)
+{
+    switch (sectionSelected)
+    {
+    case 1:
+        sprite.setPosition(0.0f, 0.0f);
+        break;
+    case 2:
+        sprite.setPosition(-512.0f, 0.0f);  // Move left for section 2
+        break;
+    case 3:
+        sprite.setPosition(-1024.0f, 0.0f); // Adjust for section 3
+        break;
+    case 4:
+        sprite.setPosition(-1536.0f, 0.0f);
+        break;
+    case 5:
+        sprite.setPosition(-2048.0f, 0.0f);
+        break;
+    case 6:
+        sprite.setPosition(-2560.0f, 0.0f);
+        break;
+    default:
+        std::cout << "Invalid section selected: " << sectionSelected << std::endl;
+        break;
+    }
+}
+
+
 void WorldEditor::changeColorButtonsSection()
 {
     switch (sectionSelected)
@@ -1259,6 +1286,7 @@ void WorldEditor::checkMousePositionAndClickOnSection(const sf::Vector2i &mouseP
                 std::cout << "Button Section Two Clicked!" << std::endl;
                 saveCurrentSectionState();
                 sectionSelected = 2;
+           
                 changeColorButtonsSection(); // Update colors based on selection
             }
             // Check if ButtonSectionTwo is released

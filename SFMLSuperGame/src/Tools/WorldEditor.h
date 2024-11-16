@@ -42,6 +42,7 @@ public:
     void drawSectionMap(sf::RenderWindow& window) const;
     void drawBrushesTexture(sf::RenderWindow& window);
     void drawRotationControls(sf::RenderWindow& window) const;
+    void drawBackground(sf::RenderWindow& window) const;
     void draw(sf::RenderWindow &window);
     void checkMousePOsitionAndClickOnVisibilityAndRotation(const sf::Vector2i& mousePosition, sf::Event event);
     void onLoadButtonClick();
@@ -52,6 +53,7 @@ public:
     void checkMousePositionAndClicksGridSize(const sf::Vector2i& mousePosition, sf::Event event);
     void changeColorButtonsTileSize();
     void changeColorButtonsGridSize();
+    void setBackgroundPosition(sf::Sprite& sprite, int sectionSelected);
     void changeColorButtonsSection();
     void checkMousePositionAndClickOnTileTextures(const sf::Vector2i& mousePosition, sf::Event event);
     void changeColorButtonsTextures();
@@ -79,6 +81,7 @@ public:
     int modules = 0;
     bool hasCreatedTilemap;
     sf::RenderWindow tileViewPort;
+
 
     // init
  //   void allocateSpritesArrayForMapSection(int screenWidth, int screenHeight, int cellSize);
@@ -111,7 +114,7 @@ public:
     int previousCellSize = 8;
 
     bool isTextureMode = false;
-
+    int sectionSelected = 1;
 private:
     Tilemap tilemap;
 
@@ -197,7 +200,7 @@ private:
     sf::RectangleShape ButtonSectionFour;
     sf::RectangleShape ButtonSectionFive;
     sf::RectangleShape ButtonSectionSix;
-    int sectionSelected = 1;
+
     
     // ------------------------------------------------- Brush Textures
     sf::Text titleBrushed;
@@ -245,6 +248,10 @@ private:
     sf::RectangleShape ButtonRotateThree;
     sf::Text titleRotationBottom;
     sf::RectangleShape ButtonRotateFour;
+
+    // -------------------------------------------------- Background Debug
+
+
 
 
 };
