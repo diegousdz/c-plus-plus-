@@ -15,9 +15,11 @@ Player::Player(std::string playerName, Inventory inventory) : Warrior(100, 20)
     hasKingdomCrownInInventory = false;
 
     // Initialize player shape (16x16 pixels)
-    shape.setSize(sf::Vector2f(32.0f, 32.0f));
+    shape.setSize(sf::Vector2f(50.0f, 37.0f));
     shape.setTexture(&texturePlayer);
     shape.setPosition(100, 100);
+
+    collisionShape.setSize(sf::Vector2f(50.0f, 37.0f));
 
     isOnGround = false;
     velocity = sf::Vector2f(0.0f, 0.0f);
@@ -145,10 +147,10 @@ void Player::setSize(float sizeX, float sizeY)
 
 void Player::handleMovement(float deltaTime)
 {
-    
+   // velocity.y += gravity * deltaTime;
+
     if (movingLeft)
     {
-
         velocity.x = -speed;
         currentAction = Run;
         isMoving = true;
@@ -156,15 +158,15 @@ void Player::handleMovement(float deltaTime)
     }
     else if (movingRight)
     {
-        
         velocity.x = speed;
         currentAction = Run;
         isMoving = true;
         std::cout << "Player is moving right. currentAction: " << currentAction << std::endl;
     }
     
-  
+
     shape.move(velocity * deltaTime);
+
     currentSpritePlayer.setPosition(shape.getPosition());
     /*else if (isOnGround) {  // Only set Idle if on the ground and not moving
         currentAction = Idle;

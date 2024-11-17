@@ -134,7 +134,7 @@ public:
 
     bool hasTexturesForGameLoaded = false;
 
-    sf::Vector2f initalSpawnPositionLevelOne = sf::Vector2f(64, 32);
+    sf::Vector2f initalSpawnPositionLevelOne = sf::Vector2f(91.5141, 32);
     sf::Vector2f initalSpawnPositionLevelTwo;
     sf::Vector2f initalSpawnPositionLevelThree;
 

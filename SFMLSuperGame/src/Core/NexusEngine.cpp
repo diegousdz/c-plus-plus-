@@ -113,13 +113,13 @@ void NexusEngine::handleInput()
                         resourceManager.newGamePlayer.velocity.x = -resourceManager.newGamePlayer.speed;
                         resourceManager.newGamePlayer.onInverseDirection = true;  // Set facing direction
                         resourceManager.newGamePlayer.isMoving = true;
-                        resourceManager.setPlayerTypeOfAnimationLastSet(1);
+                            resourceManager.setPlayerTypeOfAnimationLastSet(1);
                     } else
                     {
                         resourceManager.newGamePlayer.velocity.x = -resourceManager.newGamePlayer.speed;
                         resourceManager.newGamePlayer.onInverseDirection = true;  // Set facing direction
                         resourceManager.newGamePlayer.isMoving = true;
-                        resourceManager.setPlayerTypeOfAnimationLastSet(1);
+                            resourceManager.setPlayerTypeOfAnimationLastSet(3);
                     }
                 }
                 else if (event.key.code == sf::Keyboard::D)  // Move right
@@ -130,15 +130,19 @@ void NexusEngine::handleInput()
                         resourceManager.newGamePlayer.velocity.x = resourceManager.newGamePlayer.speed;
                         resourceManager.newGamePlayer.onInverseDirection = false;  // Set facing direction
                         resourceManager.newGamePlayer.isMoving = true;
-                        resourceManager.setPlayerTypeOfAnimationLastSet(1);
+                        
+              
+                            resourceManager.setPlayerTypeOfAnimationLastSet(1 );
+                        
                     } else
                     {
                         resourceManager.newGamePlayer.velocity.x = resourceManager.newGamePlayer.speed;
                         resourceManager.newGamePlayer.onInverseDirection = false;  // Set facing direction
                         resourceManager.newGamePlayer.isMoving = true;
-                        resourceManager.setPlayerTypeOfAnimationLastSet(1);
+                       
+                            resourceManager.setPlayerTypeOfAnimationLastSet(3);
                     }
-                } else if  (event.key.code == sf::Keyboard::K)  // Attack
+                } else if  (event.key.code == sf::Keyboard::K && !resourceManager.newGamePlayer.isJumping)  // Attack
                 {
                     if(!resourceManager.newGamePlayer.onInverseDirection){
                         resourceManager.newGamePlayer.velocity.x = 0;
@@ -171,12 +175,12 @@ void NexusEngine::handleInput()
                         resourceManager.newGamePlayer.velocity.y = -400.0f;  // Adjust jump strength as needed
                         resourceManager.newGamePlayer.isOnGround = false;   // Mark player as airborne.
                         resourceManager.newGamePlayer.isJumping = true;
-                    //    resourceManager.setPlayerTypeOfAnimationLastSet(2);
+                        resourceManager.setPlayerTypeOfAnimationLastSet(2);
                     }
             }else if (!resourceManager.newGamePlayer.isOnGround && resourceManager.newGamePlayer.velocity.y > 0)
              {
                  // If we're falling, transition to fall animation
-              //   resourceManager.setPlayerTypeOfAnimationLastSet(3);  // Fall
+                 resourceManager.setPlayerTypeOfAnimationLastSet(3);  // Fall
              }
 
                // if (resourceManager.newGamePlayer.isOnGround && )
@@ -265,12 +269,42 @@ void NexusEngine::draw(sf::RenderWindow &gameWindow) {
         if (!resourceManager.gameOver) {
             resourceManager.guiHandler.setIsInGame(resourceManager, true);
             game.draw(gameWindow, resourceManager);
-           // resourceManager.guiHandler.draw(gameWindow, resourceManager);
-            // Draw the debug bounding box around the player for collision detection
-            sf::RectangleShape debugShape(sf::Vector2f(50.0f, 37.0f));  // Adjust size as needed
-            debugShape.setFillColor(sf::Color(0, 255, 0, 128)); // Semi-transparent green
-            debugShape.setPosition(resourceManager.newGamePlayer.shape.getPosition());
-            gameWindow.draw(debugShape);
+              // Debug: Draw Player's Shape
+                resourceManager.newGamePlayer.shape.setFillColor(sf::Color(255, 0, 0, 128)); // Red with transparency
+                gameWindow.draw(resourceManager.newGamePlayer.shape);
+
+            resourceManager.newGamePlayer.shape.setFillColor(sf::Color(255, 0, 0, 128)); // Red with transparency
+            gameWindow.draw(resourceManager.newGamePlayer.shape);
+
+            // Debug: Draw Player's Sprite (Blue)
+            sf::RectangleShape spriteDebugBox;
+            spriteDebugBox.setSize(sf::Vector2f(
+                resourceManager.newGamePlayer.currentSpritePlayer.getGlobalBounds().width,
+                resourceManager.newGamePlayer.currentSpritePlayer.getGlobalBounds().height));
+            spriteDebugBox.setPosition(resourceManager.newGamePlayer.currentSpritePlayer.getPosition());
+            spriteDebugBox.setFillColor(sf::Color(0, 0, 255, 128)); // Blue with transparency
+            gameWindow.draw(spriteDebugBox);
+
+            // Debug: Draw Collision Shape (Green)
+            resourceManager.newGamePlayer.collisionShape.setFillColor(sf::Color(0, 255, 0, 128)); // Green with transparency
+            gameWindow.draw(resourceManager.newGamePlayer.collisionShape);
+
+                // Debug Output to Console
+                std::cout << "Player Shape - Position: (" << resourceManager.newGamePlayer.shape.getPosition().x
+                          << ", " << resourceManager.newGamePlayer.shape.getPosition().y
+                          << "), Size: (" << resourceManager.newGamePlayer.shape.getSize().x
+                          << ", " << resourceManager.newGamePlayer.shape.getSize().y << ")" << std::endl;
+
+                std::cout << "Player Sprite - Position: (" << resourceManager.newGamePlayer.currentSpritePlayer.getPosition().x
+                          << ", " << resourceManager.newGamePlayer.currentSpritePlayer.getPosition().y
+                          << "), Size: (" << spriteDebugBox.getSize().x
+                          << ", " << spriteDebugBox.getSize().y << ")" << std::endl;
+
+                std::cout << "Collision Shape - Position: (" << resourceManager.newGamePlayer.collisionShape.getPosition().x
+                          << ", " << resourceManager.newGamePlayer.collisionShape.getPosition().y
+                          << "), Size: (" << resourceManager.newGamePlayer.collisionShape.getSize().x
+                          << ", " << resourceManager.newGamePlayer.collisionShape.getSize().y << ")" << std::endl;
+
         } else {
             if (resourceManager.gameOver) {
                 resourceManager.guiHandler.drawGameOver(gameWindow, resourceManager);

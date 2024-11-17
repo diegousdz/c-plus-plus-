@@ -307,7 +307,8 @@ void Game::init(sf::RenderWindow& window, ResourceManager& resourceManager, Play
 {
     player.setPlayerPosition(resourceManager.initalSpawnPositionLevelOne);
     resourceManager.allocateEnemies();
-    resourceManager.repositionEnemiesLevelOne(64.0f, 356.0f);
+    //resourceManager.repositionEnemiesLevelOne(64.0f, 356.0f);
+    resourceManager.createEnemiesLevelOne(64.0f, 356.0f);
 
     if(!isGameMapLoaded)
     {
