@@ -16,6 +16,7 @@ public:
     void gameFooterInit(ResourceManager& resourceManager);
     void setWindowBounds(ResourceManager& resourceManager);
     void setGameViewport(sf::RenderWindow& window, sf::View& gameView);
+    void updateLifeDisplay(ResourceManager& resourceManager);
     void setIsInGame(ResourceManager& resourceManager, bool value);
     void drawGameOver(sf::RenderWindow& window, ResourceManager& resourceManager); 
     void gameOverInit(ResourceManager& resourceManager);

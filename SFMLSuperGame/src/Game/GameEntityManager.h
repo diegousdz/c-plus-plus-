@@ -4,6 +4,7 @@
 #include "../Core/HelperFunctions.h"
 #include "../GameEntities/Orc.h"
 
+class ResourceManager;
 struct TileCell;
 
 
@@ -98,6 +99,8 @@ public:
     void updatePlayerOnCollisionWithWorld(Player& player, sf::RectangleShape& entity);
     void updatePlayerOnCollisionWithDoor(Player& player);
     void createEnemiesLevelOne();
+    void calculateOrcAndPlayer(ResourceManager& resourceManager, Player& player);
+    void calculateOrcAndWorld( ResourceManager& resourceManager, const std::vector<TileCell*>& collisionCells);
 
     // Initialization and update methods
     void gemInit(int levelEnemiesCount, sf::RectangleShape* enemies, int levelPowerUpsCount, sf::RectangleShape* powerUps, int levelDeadZoneCount, sf::RectangleShape* deadZones, int levelStaticWorldEntitiesCount, sf::RectangleShape* staticWorld, const sf::RectangleShape& door);

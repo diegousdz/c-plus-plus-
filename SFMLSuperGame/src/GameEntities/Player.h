@@ -59,7 +59,7 @@ public:
     bool isMoving = false;
     bool onInverseDirection = false;
 
-    int life = 0;
+    int life = 3;
     float health;
     float energy;
     Inventory playerInventory;

@@ -5,30 +5,7 @@
 
 struct TileCell;
 #include "../Tools/Tilemap.h"
-/*
-void GameEntityManager::allocateEnemies()
-{
-    // Allocate orcs for spawn manager one
-    if(!hasSpawnOneInitialized)
-    {
-        for (int i = 0; i < 5; i++)
-        {
-           // orcSpawnManagerOne[i] = new Orc();
-            
-            if (!orcSpawnOne[i]->animationsLoaded)
-            {
-                orcSpawnOne[i]->loadAnimationsOrc();
-            }
-            
-            orcSpawnOne[i]->shape.setSize(sf::Vector2f(58.0f, 42.0f));
-            orcSpawnOne[i]->shape.setFillColor(sf::Color::Red);
-            
-        }
-        hasSpawnOneInitialized = true;
-    }
-
-}
-*/
+#include "../Core/ResourceManager.h"
 
 void GameEntityManager::gemInit(int levelEnemiesCount, sf::RectangleShape* enemies,
                                 int levelPowerUpsCount, sf::RectangleShape* powerUps,
@@ -225,6 +202,90 @@ void GameEntityManager::createEnemiesLevelOne()
      } */
 }
 
+void GameEntityManager::calculateOrcAndPlayer(ResourceManager& resourceManager, Player& player)
+{
+    for (int i = 0; i < 5; i++)
+    {
+        Orc* orc = resourceManager.orcSpawnManagerOne[i];
+
+        if (HelperFunctions::checkCollisionAABB(orc->shape, player.shape))
+        {
+            if (!orc->hasCollidedWithPlayer)
+            {
+                std::cout << "Player LIFE " << player.life << std::endl;
+                player.takeDamage(1);
+                std::cout << "Player LIFE " << player.life << std::endl;
+             //   player.life -= 1; // Reduce player's life by 1
+                orc->hasCollidedWithPlayer = true;
+
+                // Optional: Apply knockback to player
+                float knockbackStrength = 200.0f;
+                player.velocity.x = (player.shape.getPosition().x < orc->shape.getPosition().x) ? -knockbackStrength : knockbackStrength;
+                std::cout << "Player hit by orc! Remaining life: " << player.life << std::endl;
+            }
+        }
+        else
+        {
+            orc->hasCollidedWithPlayer = false;
+        }
+    }
+}
+void GameEntityManager::calculateOrcAndWorld(ResourceManager& resourceManager, const std::vector<TileCell*>& collisionCells)
+{
+    const float GROUND_TOLERANCE = 1.0f;
+
+    for (int i = 0; i < 5; i++)
+    {
+        Orc* orc = resourceManager.orcSpawnManagerOne[i];
+
+        for (TileCell* cell : collisionCells)
+        {
+            if (HelperFunctions::checkCollisionAABB(orc->shape, cell->shape))
+            {
+                sf::FloatRect orcBounds = orc->shape.getGlobalBounds();
+                sf::FloatRect cellBounds = cell->shape.getGlobalBounds();
+
+                // Calculate overlap distances
+                float overlapLeft = (orcBounds.left + orcBounds.width) - cellBounds.left;
+                float overlapRight = (cellBounds.left + cellBounds.width) - orcBounds.left;
+                float overlapTop = (orcBounds.top + orcBounds.height) - cellBounds.top;
+                float overlapBottom = (cellBounds.top + cellBounds.height) - orcBounds.top;
+
+                float minOverlap = std::min({overlapLeft, overlapRight, overlapTop, overlapBottom});
+
+                if (minOverlap == overlapTop)
+                {
+                    // Collision from above
+                    orc->shape.setPosition(orc->shape.getPosition().x, cellBounds.top - orcBounds.height - GROUND_TOLERANCE);
+                    orc->velocity.y = 0;
+                    orc->isOnGround = true;
+                }
+                else if (minOverlap == overlapBottom)
+                {
+                    // Collision from below
+                    orc->shape.setPosition(orc->shape.getPosition().x, cellBounds.top + cellBounds.height + GROUND_TOLERANCE);
+                    orc->velocity.y = 0;
+                }
+                else if (minOverlap == overlapLeft)
+                {
+                    // Collision from the left
+                    orc->shape.setPosition(cellBounds.left - orcBounds.width, orc->shape.getPosition().y);
+                    orc->velocity.x = -abs(orc->velocity.x); // Reverse direction
+                }
+                else if (minOverlap == overlapRight)
+                {
+                    // Collision from the right
+                    orc->shape.setPosition(cellBounds.left + cellBounds.width, orc->shape.getPosition().y);
+                    orc->velocity.x = abs(orc->velocity.x); // Reverse direction
+                }
+            }
+        }
+    }
+}
+
+
+
+
 void GameEntityManager::gemUpdate(Player& player, const std::vector<TileCell*>& collisionCells)
 {
     if (hasEnemiesBeenAdded) {
@@ -275,7 +336,7 @@ void GameEntityManager::gemUpdate(Player& player, const std::vector<TileCell*>& 
             //  updatePlayerOnCollisionWithWorld(player, staticWorldEntities[staticWorldIndex]);
         }
     }
-
+    
     // Check and resolve collisions with cells in collisionCells
     for (TileCell* cell : collisionCells) {
         if (HelperFunctions::checkCollisionAABB(player.shape, cell->shape)) {

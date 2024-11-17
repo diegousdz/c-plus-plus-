@@ -60,11 +60,11 @@ void GUIHandler::gameHeaderInit(ResourceManager& resourceManager) {
 
     int numberOfHearts = resourceManager.newGamePlayer.life;
     resourceManager.hearts.clear();
-
-
+    
     resourceManager.lifeText.setFont(resourceManager.font);
     resourceManager.lifeText.setString("LIFE");
     resourceManager.lifeText.setCharacterSize(16);
+    
     sf::FloatRect lifeBounds = resourceManager.lifeText.getLocalBounds();
     float lifeTextX = resourceManager.windowBounds.x - rightPadding - lifeBounds.width;
     resourceManager.lifeText.setPosition(lifeTextX, topMargin);
@@ -86,7 +86,8 @@ void GUIHandler::gameHeaderInit(ResourceManager& resourceManager) {
         heart.setPosition(heartX, heartY);
         resourceManager.hearts.push_back(heart);
     }
-
+    
+/* WAITING FOR PATCH AND FOR BATTLE 
     // --- HEALTH Text and Bar ---
     // Set up "HEALTH" text 
     resourceManager.healthText.setFont(resourceManager.font);
@@ -119,15 +120,8 @@ void GUIHandler::gameHeaderInit(ResourceManager& resourceManager) {
     resourceManager.healthBarFill.setSize(sf::Vector2f(healthBarWidth, healthBarHeight));
     resourceManager.healthBarFill.setPosition(healthBarX, healthBarY);
     resourceManager.healthBarFill.setFillColor(sf::Color::Green);
-
+    */
     // --- ENERGY Text ---
-    resourceManager.energyText.setFont(resourceManager.font);
-    resourceManager.energyText.setString("ENERGY");
-    resourceManager.energyText.setCharacterSize(16);
-    sf::FloatRect energyBounds = resourceManager.energyText.getLocalBounds();
-    float energyTextX = resourceManager.windowBounds.x - rightPadding - energyBounds.width;
-    float energyTextY = topMargin + 64.0f;
-    resourceManager.energyText.setPosition(energyTextX, energyTextY);
 }
 
 
@@ -198,14 +192,14 @@ void GUIHandler::drawGameHeader(sf::RenderWindow& window, ResourceManager& resou
     for (const auto& heart : resourceManager.hearts) {
         window.draw(heart);
     }
-    
-    window.draw(resourceManager.healthBarBorder);
-    window.draw(resourceManager.healthBarFill);
-    window.draw(resourceManager.energyBar);
-    
+
     window.draw(resourceManager.lifeText);
-    window.draw(resourceManager.healthText);
-    window.draw(resourceManager.energyText);
+    
+  //  window.draw(resourceManager.healthBarBorder);
+  //  window.draw(resourceManager.healthBarFill);
+    
+
+  //  window.draw(resourceManager.healthText);
 }
 
 
@@ -229,7 +223,41 @@ void GUIHandler::setGameViewport(sf::RenderWindow& window, sf::View& gameView) {
     gameView.setViewport(sf::FloatRect(0.0f, 0.0f, 1.0f, 1.0f)); // Fullscreen viewport
 }
 
+void GUIHandler::updateLifeDisplay(ResourceManager& resourceManager) {
+    int numberOfHearts = resourceManager.newGamePlayer.life;
 
+    // Clear the existing hearts
+    resourceManager.hearts.clear();
+
+    // Recalculate positions and add hearts based on the current life
+    float rightPadding = 32.0f;
+    float topMargin = 32.0f;
+    float lifeHeartSpacing = 10.0f;
+    float heartSpacing = 8.0f;
+
+    resourceManager.lifeText.setFont(resourceManager.font);
+    resourceManager.lifeText.setString("LIFE");
+    resourceManager.lifeText.setCharacterSize(16);
+    sf::FloatRect lifeBounds = resourceManager.lifeText.getLocalBounds();
+    float lifeTextX = resourceManager.windowBounds.x - rightPadding - lifeBounds.width;
+    resourceManager.lifeText.setPosition(lifeTextX, topMargin);
+
+    sf::Sprite tempHeart;
+    tempHeart.setTexture(resourceManager.heartTexture);
+    float heartWidth = tempHeart.getGlobalBounds().width;
+    float heartHeight = tempHeart.getGlobalBounds().height;
+    float totalHeartsWidth = numberOfHearts * heartWidth + (numberOfHearts - 1) * heartSpacing;
+    float heartStartX = lifeTextX - lifeHeartSpacing - totalHeartsWidth;
+
+    for (int i = 0; i < numberOfHearts; ++i) {
+        sf::Sprite heart;
+        heart.setTexture(resourceManager.heartTexture);
+        float heartX = heartStartX + i * (heartWidth + heartSpacing);
+        float heartY = topMargin;
+        heart.setPosition(heartX, heartY);
+        resourceManager.hearts.push_back(heart);
+    }
+}
 
 
 void GUIHandler::draw(sf::RenderWindow& window, ResourceManager& resourceManager) {
@@ -254,7 +282,8 @@ void GUIHandler::draw(sf::RenderWindow& window, ResourceManager& resourceManager
 
     // Paso 4: Dibujar los elementos del juego
     if (resourceManager.isInGame) {
-        updateHealthBar(resourceManager);
+       // updateHealthBar(resourceManager);
+        updateLifeDisplay(resourceManager);
         drawGameHeader(window, resourceManager); // Dibujar encabezado del juego
         drawGameFooter(window, resourceManager); // Dibujar pie de página del juego
     } else {

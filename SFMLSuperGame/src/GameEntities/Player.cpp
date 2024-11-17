@@ -8,7 +8,7 @@ Player::Player(std::string playerName, Inventory inventory) : Warrior(100, 20)
     name = playerName;
     playerInventory = inventory;
     
-    life = 1;
+    life = 3;
     health = 100.0f;
     energy = 100.0f;
     isMagicBeltEquipped = false;
@@ -36,7 +36,7 @@ Player::Player() : Warrior(100, 20)
     playerInventory = Inventory();
     
     hasKingdomCrownInInventory = false;;
-    life = 1;
+    life = 3;
     health = 48.0f;
     energy = 100.0f;
     isMagicBeltEquipped = false;
@@ -246,6 +246,7 @@ void Player::setCurrentAction(AnimationType newAction){
 }
 
 void Player::takeDamage(int damage) {
+    /*
     health -= damage;
 
     if (health <= 0) {
@@ -259,8 +260,9 @@ void Player::takeDamage(int damage) {
             health = 100.0f;
 
         } else {
-            // Handle game over scenario
-            // Set a game over flag in ResourceManager
+            
         }
-    }
+    } */
+    life = life - damage;
+    
 }

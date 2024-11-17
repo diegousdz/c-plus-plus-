@@ -71,6 +71,9 @@ public:
     bool isIdle = false;
     bool isRunning = false;
 
+    bool isInitialized = false;
+    bool hasCollidedWithPlayer = false;
+
     bool animationsLoaded = false;
     
     // functiones from base class
@@ -82,6 +85,7 @@ public:
     void initializeDetectionZones();
     void initializeHealthBar();
     void createEnemies();
+
 
 private:
     OrcState currentState = OrcState::IDLE;

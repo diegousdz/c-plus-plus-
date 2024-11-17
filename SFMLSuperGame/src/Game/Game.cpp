@@ -8,7 +8,7 @@ Game::Game()
     
 }
 
-float Game::recalculateYPositionOfDoor(int row)
+float Game::recalculateYPosition(int row)
 {
     if(row == 15)
     {
@@ -247,7 +247,7 @@ bool Game::loadMapSection(GameMap* gameMap, const std::string& basePath, int sec
                         float doorX = static_cast<float>(col * cellSize);
                         doorX = doorX + offsetMap;
                 
-                        float doorY = recalculateYPositionOfDoor(row);
+                        float doorY = recalculateYPosition(row);
 
 
                         // Print the position of the door tile
@@ -307,8 +307,7 @@ void Game::init(sf::RenderWindow& window, ResourceManager& resourceManager, Play
 {
     player.setPlayerPosition(resourceManager.initalSpawnPositionLevelOne);
     resourceManager.allocateEnemies();
-    //resourceManager.repositionEnemiesLevelOne(64.0f, 356.0f);
-    resourceManager.createEnemiesLevelOne(64.0f, 356.0f);
+
 
     if(!isGameMapLoaded)
     {
@@ -343,11 +342,11 @@ void Game::checkForDoorsAndWinCondition(Player& player)
         {
             if(winLevel == playerCurrentLevel)
             {
-                std::cout << "Player wins Level!" << std::endl;
-                std::cout << "Player X: " << player.shape.getPosition().x
+          //      std::cout << "Player wins Level!" << std::endl;
+            /*   std::cout << "Player X: " << player.shape.getPosition().x
                 << ", Door X: " << doorLevelOnePosX
                 << ", Player Level: " << playerCurrentLevel
-                << ", Win Level: " << winLevel << std::endl;
+                << ", Win Level: " << winLevel << std::endl; */
             } else
             {
                 if(playerCurrentLevel != 2)
@@ -394,14 +393,14 @@ void Game::checkForDoorsAndWinCondition(Player& player)
     }
 
 }
-void Game::update(float deltaTime, Player& player)
+void Game::update(float deltaTime, Player& player, ResourceManager& resourceManager)
 {
-
-
-
-
-
+    
     camera.setCenter( player.shape.getPosition().x, player.shape.getPosition().y - 100);
+    
+    resourceManager.updateAndMoveOrcs(deltaTime);
+    entityManager.calculateOrcAndWorld(resourceManager, collisionCells);  
+    entityManager.calculateOrcAndPlayer(resourceManager, player);
     player.handleMovement(deltaTime);
     entityManager.gemUpdate(player, collisionCells);
     checkForDoorsAndWinCondition(player);
@@ -414,14 +413,6 @@ void Game::draw(sf::RenderWindow& window, ResourceManager& resourceManager) {
     window.draw(resourceManager.backgroundSpriteOne);
     
     if(gameMap) {
-        if(resourceManager.hasSpawnOneInitialized)
-        {
-            for(int i = 0; i < 5; i++)
-            {
-                window.draw(resourceManager.orcSpawnManagerOne[i]->shape);
-            }
-            
-        }
         for(int i = 0; i < gameMap->mapSections; i++) {
             if(gameMap->sections[i]) {
                 MapSection* section = gameMap->sections[i];
@@ -455,6 +446,14 @@ void Game::draw(sf::RenderWindow& window, ResourceManager& resourceManager) {
                         }
                     }
                 }
+            }
+        }
+        if(resourceManager.hasSpawnOneInitialized)
+        {
+            for(int i = 0; i < 5; i++)
+            {
+                if (resourceManager.orcSpawnManagerOne[i]) 
+                    window.draw(resourceManager.orcSpawnManagerOne[i]->shape);
             }
         }
     }

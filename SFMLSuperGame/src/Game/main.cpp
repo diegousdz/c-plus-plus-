@@ -75,7 +75,7 @@ int main()
         NexusEngine& engine = NexusEngine::getInstance();
         engine.getResourceManager().setWindowWidth(1280);
         engine.getResourceManager().setWindowHeight(720);
-        engine.initializeWindow(engine.getResourceManager().gameWindow, engine.getResourceManager().windowWidth, engine.getResourceManager().windowHeight, "Stone & Frost");
+        engine.initializeWindow(engine.getResourceManager().gameWindow, engine.getResourceManager().windowWidth, engine.getResourceManager().windowHeight, "Frost & Stone");
         engine.init();
 
         while (engine.getResourceManager().gameWindow.isOpen())

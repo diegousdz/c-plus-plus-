@@ -13,12 +13,12 @@ class Game
 public:
     
     Game();
-    float recalculateYPositionOfDoor(int row);
+    float recalculateYPosition(int row);
     void initializeTileTexturesLevelOne();
 
     void init(sf::RenderWindow& window, ResourceManager& resourceManager, Player& player);
     void checkForDoorsAndWinCondition(Player& player);
-    void update(float deltaTime, Player& player);
+    void update(float deltaTime, Player& player, ResourceManager& resourceManager);
     void draw(sf::RenderWindow& window, ResourceManager& resourceManager);
     void restartGame(Player& player, ResourceManager& resourceManager);
 

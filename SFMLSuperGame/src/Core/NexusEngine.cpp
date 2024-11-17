@@ -214,7 +214,7 @@ void NexusEngine::update(float deltaTime)
     {
         if (!resourceManager.gameOver) {
 
-            game.update(deltaTime, resourceManager.newGamePlayer);
+            game.update(deltaTime, resourceManager.newGamePlayer, resourceManager);
         
             if (!resourceManager.newGamePlayer.isOnGround)
             {
@@ -253,6 +253,7 @@ void NexusEngine::update(float deltaTime)
                 resourceManager.newGamePlayer.loadAnimationsPlayer();
             }
             */
+            
             resourceManager.newGamePlayer.updateAnimation(deltaTime);
         }
     }
@@ -260,8 +261,7 @@ void NexusEngine::update(float deltaTime)
 
 void NexusEngine::draw(sf::RenderWindow &gameWindow) {
     gameWindow.clear();
-
-
+    
     if (resourceManager.isMainMenuActive) {
         resourceManager.guiHandler.setIsInGame(resourceManager, false);
         resourceManager.guiHandler.draw(gameWindow, resourceManager);
@@ -269,9 +269,9 @@ void NexusEngine::draw(sf::RenderWindow &gameWindow) {
         if (!resourceManager.gameOver) {
             resourceManager.guiHandler.setIsInGame(resourceManager, true);
             game.draw(gameWindow, resourceManager);
-              // Debug: Draw Player's Shape
-                resourceManager.newGamePlayer.shape.setFillColor(sf::Color(255, 0, 0, 128)); // Red with transparency
-                gameWindow.draw(resourceManager.newGamePlayer.shape);
+
+            resourceManager.newGamePlayer.shape.setFillColor(sf::Color(255, 0, 0, 128)); // Red with transparency
+            gameWindow.draw(resourceManager.newGamePlayer.shape);
 
             resourceManager.newGamePlayer.shape.setFillColor(sf::Color(255, 0, 0, 128)); // Red with transparency
             gameWindow.draw(resourceManager.newGamePlayer.shape);
@@ -288,9 +288,10 @@ void NexusEngine::draw(sf::RenderWindow &gameWindow) {
             // Debug: Draw Collision Shape (Green)
             resourceManager.newGamePlayer.collisionShape.setFillColor(sf::Color(0, 255, 0, 128)); // Green with transparency
             gameWindow.draw(resourceManager.newGamePlayer.collisionShape);
+            resourceManager.guiHandler.draw(gameWindow, resourceManager);
 
                 // Debug Output to Console
-                std::cout << "Player Shape - Position: (" << resourceManager.newGamePlayer.shape.getPosition().x
+            /*    std::cout << "Player Shape - Position: (" << resourceManager.newGamePlayer.shape.getPosition().x
                           << ", " << resourceManager.newGamePlayer.shape.getPosition().y
                           << "), Size: (" << resourceManager.newGamePlayer.shape.getSize().x
                           << ", " << resourceManager.newGamePlayer.shape.getSize().y << ")" << std::endl;
@@ -303,7 +304,7 @@ void NexusEngine::draw(sf::RenderWindow &gameWindow) {
                 std::cout << "Collision Shape - Position: (" << resourceManager.newGamePlayer.collisionShape.getPosition().x
                           << ", " << resourceManager.newGamePlayer.collisionShape.getPosition().y
                           << "), Size: (" << resourceManager.newGamePlayer.collisionShape.getSize().x
-                          << ", " << resourceManager.newGamePlayer.collisionShape.getSize().y << ")" << std::endl;
+                          << ", " << resourceManager.newGamePlayer.collisionShape.getSize().y << ")" << std::endl; */
 
         } else {
             if (resourceManager.gameOver) {
@@ -311,7 +312,7 @@ void NexusEngine::draw(sf::RenderWindow &gameWindow) {
             }
         }
     }
-    resourceManager.guiHandler.draw(gameWindow, resourceManager);
+
 
     gameWindow.display();
 }
