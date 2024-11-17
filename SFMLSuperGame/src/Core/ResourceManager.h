@@ -5,6 +5,9 @@
 #include "./../GameEntities/Orc.h"
 #include "FileManager.h"
 #include "GUIHandler.h"
+#include "HelperFunctions.h"
+
+struct TileCell;
 
 class ResourceManager
 {
@@ -22,7 +25,8 @@ public:
     void loadGameBackgrounds();
     void setDeltaTime();
     float getDeltaTime() const;
-    
+    void updateAndMoveOrcs(float deltaTime);
+
     // Game variables
     bool isMainMenuActive = true;
     bool isGameInitialized = false;
@@ -144,7 +148,8 @@ public:
     bool gameOverInitialized = false;
     sf::Text gameOverText;
     sf::Text restartPrompt;
-    
+
+    HelperFunctions helperFunctions;
 private:
 
     
