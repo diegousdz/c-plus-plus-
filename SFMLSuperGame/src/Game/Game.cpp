@@ -288,6 +288,10 @@ bool Game::loadMapSection(GameMap* gameMap, const std::string& basePath, int sec
             if (cell.cellType == 'C') {
                 cell.shape.setFillColor(sf::Color(0, 0, 255, 100)); // Collider color
             } else {
+                if(cell.cellType == 'V' && cell.textureID == 11 || cell.cellType == 'V' && cell.textureID == 2)
+                {
+                    cell.shape.setFillColor(sf::Color(0, 0, 255, 100));
+                }
                 cell.shape.setFillColor(sf::Color::Transparent);
             }
             cell.shape.setOutlineColor(sf::Color::Red);
@@ -433,7 +437,13 @@ void Game::draw(sf::RenderWindow& window, ResourceManager& resourceManager) {
                         cell.sprite.setPosition(cellXPos, cellYPos);
                         
                         if(cell.cellType == 'C') {
+                            
                             collisionCells.push_back(&cell);
+                            
+                            window.draw(cell.sprite);
+                        }
+                        if(cell.cellType == 'V' && cell.textureID == 11 || cell.cellType == 'V' && cell.textureID == 2)
+                        {
                             window.draw(cell.sprite);
                         }
 

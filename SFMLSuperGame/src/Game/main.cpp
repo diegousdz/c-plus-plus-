@@ -7,7 +7,7 @@
 #include "../Tools/WorldEditor.h"
 #include "./../Core/NexusEngine.h"
 
-bool inEditorMode = true;
+bool inEditorMode = false;
 
 int main()
 {
