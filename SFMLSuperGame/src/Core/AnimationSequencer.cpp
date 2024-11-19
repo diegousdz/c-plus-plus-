@@ -44,7 +44,6 @@ int AnimationSequencer::loadAnimationFramesOrc(int animationType, const std::str
         frameRect = sf::IntRect (i * frameWidth, 0, frameWidth, frameHeight);  
         // Set the texture and texture rectangle for each sprite
         animationFramesOrcs[animationType][i].setTexture(*texture);
-        animationFramesPlayer[animationType][i].setTextureRect(frameRect);
         std::cout << "Loaded frame " << i << " for animation type " << animationType << std::endl;
     }
 
