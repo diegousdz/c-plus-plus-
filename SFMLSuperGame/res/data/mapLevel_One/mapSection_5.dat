@@ -224,7 +224,7 @@ TileCell[13][11] cellSize 8 cellType C textureID 4 xPos 0 yPos 0 isDoor 0 isChec
 TileCell[13][12] cellSize 8 cellType C textureID 10 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
 TileCell[13][13] cellSize 8 cellType V textureID -1 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
 TileCell[13][14] cellSize 8 cellType V textureID -1 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
-TileCell[13][15] cellSize 8 cellType V textureID 11 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
+TileCell[13][15] cellSize 8 cellType V textureID 11 xPos 0 yPos 0 isDoor 1 isCheckpoint 0 isReadyToRender 0
 TileCell[14][0] cellSize 8 cellType C textureID 10 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
 TileCell[14][1] cellSize 8 cellType C textureID 16 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
 TileCell[14][2] cellSize 8 cellType C textureID 16 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
