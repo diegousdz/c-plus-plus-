@@ -28,23 +28,11 @@ void ResourceManager::allocateEnemies()
 
 }
 
-void ResourceManager::repositionEnemiesLevelOne(float initialPositionX, float initialPositionY)
-{
-    if(hasSpawnOneInitialized)
-    {
-        float spacing = orcSpawnManagerOne[0]->shape.getGlobalBounds().width + 20.0f;
-        for (int i = 0; i < 5; i++)
-        {
-            if (orcSpawnManagerOne[i])
-            {
-                // HERE 
-                orcSpawnManagerOne[i]->shape.setPosition(initialPositionX + (i * spacing), initialPositionY);
-            }
-        }
-    }
-}
+
 void ResourceManager::loadResources()
 {
+    gameWin = false;
+    winScreenInitialized = false;
     
     // Load the player's texture for placeholder (if needed)
     if (!playerTexture.loadFromFile("res/textures/Player/Tilemap/Idle/spritesheetIdle.png")) {
@@ -72,10 +60,15 @@ void ResourceManager::loadResources()
 
     if (!heartTexture.loadFromFile("res/textures/gameplay/heart.png")) {
         std::cout << "Failed to load heart texture!" << std::endl;
-    } else
-    {
-        std::cout << "Load heart texture!" << std::endl;
     }
+
+    
+    if (!backgroundMainMenuTexture.loadFromFile("res/textures/gameplay/menuBackground.png")) {
+        std::cout << "Failed to load background texture!" << std::endl;
+    } else {
+        std::cout << "Background texture loaded successfully" << std::endl;
+    }
+
 
     // Initialize the player with the loaded texture
     newGamePlayer.setTexture(&playerIdleTexture);
@@ -284,3 +277,51 @@ ResourceManager::~ResourceManager()
         delete orcWarriorsPoolShapes[i];
     }
 }
+
+void setOrcTypeOfAnimationLastSet(int animationType, Orc* orc) {
+    if (!orc) return;
+        
+    switch(animationType) {
+    case 0: // Idle
+        orc->currentSpriteOrc = orc->animSequencerOrc.animationFramesOrcs[Orc::Idle][orc->currentFrame];
+        orc->currentAction = Orc::Idle;
+        break;
+                
+    case 1: // Run
+        orc->currentSpriteOrc = orc->animSequencerOrc.animationFramesOrcs[Orc::Run][orc->currentFrame];
+        orc->currentAction = Orc::Run;
+        break;
+                
+    case 2: // Attack
+        orc->currentSpriteOrc = orc->animSequencerOrc.animationFramesOrcs[Orc::Attack][orc->currentFrame];
+        orc->currentAction = Orc::Attack;
+        break;
+                
+    case 3: // Hurt
+        orc->currentSpriteOrc = orc->animSequencerOrc.animationFramesOrcs[Orc::Hurt][orc->currentFrame];
+        orc->currentAction = Orc::Hurt;
+        break;
+                
+    case 4: // Die
+        orc->currentSpriteOrc = orc->animSequencerOrc.animationFramesOrcs[Orc::Die][orc->currentFrame];
+        orc->currentAction = Orc::Die;
+        break;
+    default:
+        orc->currentSpriteOrc = orc->animSequencerOrc.animationFramesOrcs[Orc::Idle][orc->currentFrame];
+        orc->currentAction = Orc::Idle;
+        break;;
+    }
+        
+    // Handle sprite direction
+    if (orc->onInverseDirection) {
+        orc->currentSpriteOrc.setScale(-1.0f, 1.0f);
+        orc->currentSpriteOrc.setPosition(
+            orc->shape.getPosition().x + orc->shape.getSize().x,
+            orc->shape.getPosition().y
+        );
+    } else {
+        orc->currentSpriteOrc.setScale(1.0f, 1.0f);
+        orc->currentSpriteOrc.setPosition(orc->shape.getPosition());
+    }
+
+};

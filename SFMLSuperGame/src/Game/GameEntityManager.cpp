@@ -347,8 +347,8 @@ void GameEntityManager::gemUpdate(Player& player, const std::vector<TileCell*>& 
             // Calculate overlap distances
             float overlapLeft = (playerBounds.left + playerBounds.width) - cellBounds.left;
             float overlapRight = (cellBounds.left + cellBounds.width) - playerBounds.left;
-            float overlapTop = (playerBounds.top + playerBounds.height) - cellBounds.top;
-            float overlapBottom = (cellBounds.top + cellBounds.height) - playerBounds.top;
+            float overlapTop = (playerBounds.top + playerBounds.height + 2) - cellBounds.top;
+            float overlapBottom = (cellBounds.top + cellBounds.height + 2) - playerBounds.top;
 
             float minOverlap = std::min({overlapLeft, overlapRight, overlapTop, overlapBottom});
 

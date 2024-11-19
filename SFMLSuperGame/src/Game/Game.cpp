@@ -333,65 +333,68 @@ void Game::init(sf::RenderWindow& window, ResourceManager& resourceManager, Play
     camera.zoom(static_cast<float>(0.6));
 }
 
-void Game::checkForDoorsAndWinCondition(Player& player)
+void Game::checkForDoorsAndWinCondition(Player& player, ResourceManager& resourceManager)
 {
-  
-    if(playerCurrentLevel == 1)
-    {
-        if(player.shape.getPosition().x > doorLevelOnePosX)
-        {
-            if(winLevel == playerCurrentLevel)
-            {
-          //      std::cout << "Player wins Level!" << std::endl;
-            /*   std::cout << "Player X: " << player.shape.getPosition().x
-                << ", Door X: " << doorLevelOnePosX
-                << ", Player Level: " << playerCurrentLevel
-                << ", Win Level: " << winLevel << std::endl; */
-            } else
-            {
-                if(playerCurrentLevel != 2)
-                    // load LeveL and pasas the number off level as a parameter
-                        playerCurrentLevel = 2;
-            }
-        }
-    } else if (playerCurrentLevel == 2)
-    {
-        if(player.shape.getPosition().x > doorLevelTwoPosX)
-        {
-            if(winLevel == playerCurrentLevel)
-            {
-                std::cout << "Player wins Level!" << std::endl;
 
-                std::cout << "Player wins Level!" << std::endl;
-                std::cout << "Player X: " << player.shape.getPosition().x
-                << ", Door X: " << doorLevelOnePosX
-                << ", Player Level: " << playerCurrentLevel
-                << ", Win Level: " << winLevel << std::endl;
-            } else
-            {
-                if(playerCurrentLevel != 3)
-                    // load LeveL and pasas the number off level as a parameter
-                        playerCurrentLevel = 3;
-            }
-        }
-    } else
+
+    if(!resourceManager.gameWin)
     {
-        // adjust to check if user is grabbing to grab..
-        if(player.shape.getPosition().x > doorLevelThreePosX)
+        
+        std::cout << "Checking Door Collision - Player X: " << player.shape.getPosition().x 
+              << ", Door X: " << doorLevelOnePosX << std::endl;
+        if(playerCurrentLevel == 1)
         {
-            if(winLevel == playerCurrentLevel)
+            if(player.shape.getPosition().x > doorLevelOnePosX)
             {
-                // display win screen
-                std::cout << "Player wins Level!" << std::endl;
-                std::cout << "Player wins Level!" << std::endl;
-                std::cout << "Player X: " << player.shape.getPosition().x
-                << ", Door X: " << doorLevelOnePosX
-                << ", Player Level: " << playerCurrentLevel
-                << ", Win Level: " << winLevel << std::endl;
+                if(winLevel == playerCurrentLevel)
+                {
+                    std::cout << "Player wins Level!" << std::endl;
+                    resourceManager.gameWin = true;
+                } else
+                {
+                    if(playerCurrentLevel != 2)
+                        // load LeveL and pasas the number off level as a parameter
+                            playerCurrentLevel = 2;
+                }
+            }
+        } else if (playerCurrentLevel == 2)
+        {
+            if(player.shape.getPosition().x > doorLevelTwoPosX)
+            {
+                if(winLevel == playerCurrentLevel)
+                {
+                    std::cout << "Player wins Level!" << std::endl;
+
+                    std::cout << "Player wins Level!" << std::endl;
+                    std::cout << "Player X: " << player.shape.getPosition().x
+                    << ", Door X: " << doorLevelOnePosX
+                    << ", Player Level: " << playerCurrentLevel
+                    << ", Win Level: " << winLevel << std::endl;
+                } else
+                {
+                    if(playerCurrentLevel != 3)
+                        // load LeveL and pasas the number off level as a parameter
+                            playerCurrentLevel = 3;
+                }
+            }
+        } else
+        {
+            // adjust to check if user is grabbing to grab..
+            if(player.shape.getPosition().x > doorLevelThreePosX)
+            {
+                if(winLevel == playerCurrentLevel)
+                {
+                    // display win screen
+                    std::cout << "Player wins Level!" << std::endl;
+                    std::cout << "Player wins Level!" << std::endl;
+                    std::cout << "Player X: " << player.shape.getPosition().x
+                    << ", Door X: " << doorLevelOnePosX
+                    << ", Player Level: " << playerCurrentLevel
+                    << ", Win Level: " << winLevel << std::endl;
+                }
             }
         }
     }
-
 }
 void Game::update(float deltaTime, Player& player, ResourceManager& resourceManager)
 {
@@ -403,7 +406,6 @@ void Game::update(float deltaTime, Player& player, ResourceManager& resourceMana
     entityManager.calculateOrcAndPlayer(resourceManager, player);
     player.handleMovement(deltaTime);
     entityManager.gemUpdate(player, collisionCells);
-    checkForDoorsAndWinCondition(player);
 }
 
 void Game::draw(sf::RenderWindow& window, ResourceManager& resourceManager) {
@@ -471,6 +473,7 @@ void Game::restartGame(Player& player, ResourceManager& resourceManager)
     player.isOnGround = false;
     player.isMoving = false;
     player.onInverseDirection = false;
+    player.life = 3;
   
     player.currentSpritePlayer.setPosition(resourceManager.initalSpawnPositionLevelOne);
     player.shape.setPosition(resourceManager.initalSpawnPositionLevelOne);
@@ -481,18 +484,21 @@ void Game::restartGame(Player& player, ResourceManager& resourceManager)
     
     collisionCells.clear();
 
-    resourceManager.gameOver = false;
-    resourceManager.gameOverInitialized = false;
-    resourceManager.isMainMenuActive = true;
+    if(resourceManager.gameOver)
+    {
+        resourceManager.gameOver = false;
+        resourceManager.gameOverInitialized = false;
+        resourceManager.isMainMenuActive = true; 
+        resourceManager.hasRenderGameOverScreen = false;
+    } else if (resourceManager.gameWin)
+    {
+        resourceManager.gameWin = false;
+        resourceManager.winScreenInitialized = false;
+        resourceManager.isMainMenuActive = true; 
+        resourceManager.hasRenderGameOverScreen = false;
+    }
 
-    // Reload the game map if necessary
-    // If your game map can change during gameplay, you might need to reload it here
-    // For simplicity, we assume the map remains the same
-
-    // Reset any other game-specific variables
-    // For example, reset score, enemy positions, etc.
-    // Since your game is simple for now, this might not be necessary
-
+    
     // Debug message
     std::cout << "Game has been restarted." << std::endl;
 }

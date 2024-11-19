@@ -16,12 +16,48 @@ void GUIHandler::mainMenuInit(ResourceManager& resourceManager)
         std::cout << "Font loaded successfully" << std::endl;
     }
 
+    // Set the texture to the sprite
+    resourceManager.backgroundMainMenu.setTexture(resourceManager.backgroundMainMenuTexture);
+
+    // Set the position to the top-left corner
+    resourceManager.backgroundMainMenu.setPosition(0.0f, 0.0f);
+
+    // Get the size of the texture and the window
+    sf::Vector2u textureSize = resourceManager.backgroundMainMenuTexture.getSize();
+    sf::Vector2u windowSize(resourceManager.windowWidth, resourceManager.windowHeight);
+
+    // Calculate the scale factors
+    float scaleX = static_cast<float>(windowSize.x) / textureSize.x;
+    float scaleY = static_cast<float>(windowSize.y) / textureSize.y;
+
+    // Set the scale of the sprite to match the window size
+    resourceManager.backgroundMainMenu.setScale(scaleX, scaleY);
+
+
     resourceManager.title.setFont(resourceManager.font);
     resourceManager.title.setString("Frost & Stone");
     resourceManager.title.setCharacterSize(32);
     resourceManager.title.setFillColor(sf::Color::White);
     
+    resourceManager.menu[0].setFont(resourceManager.font);
+    resourceManager.menu[0].setCharacterSize(16);
+    resourceManager.menu[0].setString("Start new Game");
+    resourceManager.menu[0].setPosition(sf::Vector2f(50, 180));
+
+    resourceManager.menu[1].setFont(resourceManager.font);
+    resourceManager.menu[1].setCharacterSize(16);
+    resourceManager.menu[1].setString("Load Game");
+    resourceManager.menu[1].setPosition(sf::Vector2f(50, 280));
+
+    resourceManager.menu[2].setFont(resourceManager.font);
+    resourceManager.menu[2].setCharacterSize(16);
+    resourceManager.menu[2].setString("Exit");
+    resourceManager.menu[2].setPosition(sf::Vector2f(50, 380));
+    
     resourceManager.title.setPosition(50, 50);
+    
+
+  
 }
 
 void GUIHandler::updateHealthBar(ResourceManager& resourceManager) {
@@ -124,7 +160,6 @@ void GUIHandler::gameHeaderInit(ResourceManager& resourceManager) {
     // --- ENERGY Text ---
 }
 
-
 void GUIHandler::gameFooterInit(ResourceManager& resourceManager) {
     
     resourceManager.footer.setSize(sf::Vector2f(resourceManager.windowBounds.x, 128.0f));
@@ -155,26 +190,12 @@ void GUIHandler::gameFooterInit(ResourceManager& resourceManager) {
     }
 }
 
-
 void GUIHandler::drawMainMenu(sf::RenderWindow &window, ResourceManager &resourceManager)
 {
-    // Set up the menu items
-    resourceManager.menu[0].setFont(resourceManager.font);
-    resourceManager.menu[0].setCharacterSize(16);
-    resourceManager.menu[0].setString("Start new Game");
-    resourceManager.menu[0].setPosition(sf::Vector2f(50, 180));
-
-    resourceManager.menu[1].setFont(resourceManager.font);
-    resourceManager.menu[1].setCharacterSize(16);
-    resourceManager.menu[1].setString("Load Game");
-    resourceManager.menu[1].setPosition(sf::Vector2f(50, 280));
-
-    resourceManager.menu[2].setFont(resourceManager.font);
-    resourceManager.menu[2].setCharacterSize(16);
-    resourceManager.menu[2].setString("Exit");
-    resourceManager.menu[2].setPosition(sf::Vector2f(50, 380));
-
+    window.draw(resourceManager.backgroundMainMenu);
+    
     window.draw(resourceManager.title);
+ 
 
     for (int i = 0; i < ResourceManager::maxItemsMenu; i++) {
         if (i == resourceManager.currentOptionSelected) {
@@ -201,7 +222,6 @@ void GUIHandler::drawGameHeader(sf::RenderWindow& window, ResourceManager& resou
 
   //  window.draw(resourceManager.healthText);
 }
-
 
 void GUIHandler::drawGameFooter(sf::RenderWindow& window, ResourceManager& resourceManager) {
     window.draw(resourceManager.footer);
@@ -336,6 +356,47 @@ void GUIHandler::gameOverInit(ResourceManager& resourceManager) {
     );
 }
 
+void GUIHandler::winInit(ResourceManager& resourceManager) {
+    // Main congratulations text
+    resourceManager.winText.setFont(resourceManager.font);
+    resourceManager.winText.setString("CONGRATULATIONS");
+    resourceManager.winText.setCharacterSize(64);
+    resourceManager.winText.setFillColor(sf::Color::Yellow);
+    
+    // Center the congratulations text
+    sf::FloatRect congratsBounds = resourceManager.winText.getLocalBounds();
+    resourceManager.winText.setPosition(
+        (resourceManager.windowWidth - congratsBounds.width) / 2,
+        (resourceManager.windowHeight - congratsBounds.height) / 2 - 50 
+    );
+
+    // Level passed text
+    resourceManager.winTextInstruction.setFont(resourceManager.font);
+    resourceManager.winTextInstruction.setString("Level Passed!");
+    resourceManager.winTextInstruction.setCharacterSize(32);
+    resourceManager.winTextInstruction.setFillColor(sf::Color::White);
+    
+    // Center and position the level passed text below congratulations
+    sf::FloatRect levelBounds = resourceManager.winTextInstruction.getLocalBounds();
+    resourceManager.winTextInstruction.setPosition(
+        (resourceManager.windowWidth - levelBounds.width) / 2,
+        resourceManager.winText.getPosition().y + congratsBounds.height + 20
+    );
+
+    // Restart prompt
+    resourceManager.restartPrompt.setFont(resourceManager.font);
+    resourceManager.restartPrompt.setString("Press SPACEBAR to restart");
+    resourceManager.restartPrompt.setCharacterSize(20);
+    resourceManager.restartPrompt.setFillColor(sf::Color::White);
+    
+    // Position restart prompt below level passed text
+    sf::FloatRect promptBounds = resourceManager.restartPrompt.getLocalBounds();
+    resourceManager.restartPrompt.setPosition(
+        (resourceManager.windowWidth - promptBounds.width) / 2,
+        resourceManager.winTextInstruction.getPosition().y + levelBounds.height + 30
+    );
+}
+
 void GUIHandler::drawGameOver(sf::RenderWindow& window, ResourceManager& resourceManager) {
     // Debug print to verify this method is being called
     window.setView(window.getDefaultView());
@@ -357,4 +418,22 @@ void GUIHandler::drawGameOver(sf::RenderWindow& window, ResourceManager& resourc
     
     window.draw(resourceManager.gameOverText);
     window.draw(resourceManager.restartPrompt);
+    resourceManager.hasRenderGameOverScreen = true;
+}
+
+
+void GUIHandler::drawWinScreen(sf::RenderWindow& window, ResourceManager& resourceManager) {
+    // Debug print to verify this method is being called
+    window.setView(window.getDefaultView());
+    if (!resourceManager.winScreenInitialized) {
+        winInit(resourceManager); // Check if gameOverInit is called
+        resourceManager.winScreenInitialized = true;
+    }
+    sf::RectangleShape overlay(sf::Vector2f(static_cast<float>(resourceManager.windowWidth), resourceManager.windowHeight));
+    overlay.setFillColor(sf::Color(0, 0, 0, 255));
+    window.draw(overlay);
+    window.draw(resourceManager.winText);
+    window.draw(resourceManager.winTextInstruction);
+    window.draw(resourceManager.restartPrompt);
+    resourceManager.hasRenderWinScreen = true;
 }

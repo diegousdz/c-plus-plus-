@@ -42,6 +42,22 @@ void NexusEngine::handleInput()
                     resourceManager.gameWindow.close();
                 }
             }
+        } else if(resourceManager.gameWin)
+        {
+            if (event.type == sf::Event::KeyPressed)
+            {
+                if (event.key.code == sf::Keyboard::Space)
+                {
+                    resourceManager.gameWin = false;
+                    resourceManager.winScreenInitialized = false;
+                    game.restartGame(resourceManager.newGamePlayer, resourceManager);
+                }
+                else if (event.key.code == sf::Keyboard::Escape)
+                {
+                    resourceManager.gameWindow.close();
+                }
+            }
+            return; 
         }
         // Handle main menu navigation
         if (resourceManager.isMainMenuActive)
@@ -86,7 +102,7 @@ void NexusEngine::handleInput()
                         // Reinitialize necessary components
                         resourceManager.newGamePlayer.loadAnimationsPlayer();
                         
-                  //      resourceManager.enemyLevelManager.loadAnimationsOrc();
+                    //    resourceManager.loadAnimationsOrc();
                         
                         resourceManager.newGamePlayer.setTexture(&resourceManager.playerTexture);
 
@@ -119,7 +135,8 @@ void NexusEngine::handleInput()
                         resourceManager.newGamePlayer.velocity.x = -resourceManager.newGamePlayer.speed;
                         resourceManager.newGamePlayer.onInverseDirection = true;  // Set facing direction
                         resourceManager.newGamePlayer.isMoving = true;
-                            resourceManager.setPlayerTypeOfAnimationLastSet(3);
+                          //  resourceManager.setPlayerTypeOfAnimationLastSet(3);
+                        resourceManager.setPlayerTypeOfAnimationLastSet(1 );
                     }
                 }
                 else if (event.key.code == sf::Keyboard::D)  // Move right
@@ -139,8 +156,9 @@ void NexusEngine::handleInput()
                         resourceManager.newGamePlayer.velocity.x = resourceManager.newGamePlayer.speed;
                         resourceManager.newGamePlayer.onInverseDirection = false;  // Set facing direction
                         resourceManager.newGamePlayer.isMoving = true;
-                       
-                            resourceManager.setPlayerTypeOfAnimationLastSet(3);
+
+                        resourceManager.setPlayerTypeOfAnimationLastSet(1 );
+                         //   resourceManager.setPlayerTypeOfAnimationLastSet(3);
                     }
                 } else if  (event.key.code == sf::Keyboard::K && !resourceManager.newGamePlayer.isJumping)  // Attack
                 {
@@ -169,10 +187,10 @@ void NexusEngine::handleInput()
 
             if(resourceManager.newGamePlayer.isOnGround)
             {
-                    std::cout << "can jump is on ground" << std::endl;
+                   // std::cout << "can jump is on ground" << std::endl;
                     if (event.key.code == sf::Keyboard::Space)
                     {
-                        resourceManager.newGamePlayer.velocity.y = -400.0f;  // Adjust jump strength as needed
+                        resourceManager.newGamePlayer.velocity.y = -300.0f;  // Adjust jump strength as needed
                         resourceManager.newGamePlayer.isOnGround = false;   // Mark player as airborne.
                         resourceManager.newGamePlayer.isJumping = true;
                         resourceManager.setPlayerTypeOfAnimationLastSet(2);
@@ -198,9 +216,14 @@ void NexusEngine::handleInput()
 void NexusEngine::update(float deltaTime)
 {
 
-    if(resourceManager.newGamePlayer.shape.getPosition().y >= resourceManager.deadZoneYPosition || resourceManager.newGamePlayer.life == 0)
+    if(resourceManager.newGamePlayer.shape.getPosition().y >= resourceManager.deadZoneYPosition || resourceManager.newGamePlayer.life == 0 )
     {
         resourceManager.gameOver = true;
+    }
+
+    if (!resourceManager.isMainMenuActive && !resourceManager.gameWin)
+    {
+        game.checkForDoorsAndWinCondition(resourceManager.newGamePlayer, resourceManager);
     }
     
     if (resourceManager.isMainMenuActive)
@@ -212,7 +235,7 @@ void NexusEngine::update(float deltaTime)
     }
     else
     {
-        if (!resourceManager.gameOver) {
+        if (!resourceManager.gameOver && !resourceManager.gameWin) {
 
             game.update(deltaTime, resourceManager.newGamePlayer, resourceManager);
         
@@ -222,39 +245,12 @@ void NexusEngine::update(float deltaTime)
             }
             
             resourceManager.newGamePlayer.setCurrentAction(static_cast<Player::AnimationType>(resourceManager.getPlayerTypeOfAnimationLastSet()));
-        
-            // ----------------------------------------------------------- Animation Switch
-            /*
-            switch (resourceManager.getPlayerTypeOfAnimationLastSet()) {
-            case 0:
-                resourceManager.newGamePlayer.currentSpritePlayer.setTexture(resourceManager.playerIdleTexture);
-                //     resourceManager.newGamePlayer.loadAnimations();
-                // std::cout << "Switched to Idle Texture" << std::endl;
-                break;
-            case 1:
-                resourceManager.newGamePlayer.currentSpritePlayer.setTexture(resourceManager.playerRunTexture);
-                
-                //    resourceManager.newGamePlayer.loadAnimations();
-                //   std::cout << "Switched to Run Texture" << std::endl;
-                break;
-            case 2:
-
-                resourceManager.newGamePlayer.currentSpritePlayer.setTexture(resourceManager.playerJumpTexture);
-                //    resourceManager.newGamePlayer.loadAnimations();
-                //    std::cout << "Switched to Jump Texture" << std::endl;
-                break;
-
-            case 3:
-                resourceManager.newGamePlayer.currentSpritePlayer.setTexture(resourceManager.playerAttack);
-                //    resourceManager.newGamePlayer.loadAnimations();
-                //    std::cout << "Switched to Jump Texture" << std::endl;
-                break;
-            default:  resourceManager.newGamePlayer.currentSpritePlayer.setTexture(resourceManager.playerIdleTexture);;
-                resourceManager.newGamePlayer.loadAnimationsPlayer();
-            }
-            */
-            
+             
             resourceManager.newGamePlayer.updateAnimation(deltaTime);
+            if(resourceManager.newGamePlayer.life <= 0)
+            {
+                resourceManager.newGamePlayer.life = 0;
+            }
         }
     }
 }
@@ -267,6 +263,7 @@ void NexusEngine::draw(sf::RenderWindow &gameWindow) {
         resourceManager.guiHandler.draw(gameWindow, resourceManager);
     } else {
         if (!resourceManager.gameOver) {
+            
             resourceManager.guiHandler.setIsInGame(resourceManager, true);
             game.draw(gameWindow, resourceManager);
 
@@ -275,44 +272,17 @@ void NexusEngine::draw(sf::RenderWindow &gameWindow) {
 
             resourceManager.newGamePlayer.shape.setFillColor(sf::Color(255, 0, 0, 128)); // Red with transparency
             gameWindow.draw(resourceManager.newGamePlayer.shape);
-
-            // Debug: Draw Player's Sprite (Blue)
-            sf::RectangleShape spriteDebugBox;
-            spriteDebugBox.setSize(sf::Vector2f(
-                resourceManager.newGamePlayer.currentSpritePlayer.getGlobalBounds().width,
-                resourceManager.newGamePlayer.currentSpritePlayer.getGlobalBounds().height));
-            spriteDebugBox.setPosition(resourceManager.newGamePlayer.currentSpritePlayer.getPosition());
-            spriteDebugBox.setFillColor(sf::Color(0, 0, 255, 128)); // Blue with transparency
-            gameWindow.draw(spriteDebugBox);
-
-            // Debug: Draw Collision Shape (Green)
-            resourceManager.newGamePlayer.collisionShape.setFillColor(sf::Color(0, 255, 0, 128)); // Green with transparency
-            gameWindow.draw(resourceManager.newGamePlayer.collisionShape);
+            
             resourceManager.guiHandler.draw(gameWindow, resourceManager);
 
-                // Debug Output to Console
-            /*    std::cout << "Player Shape - Position: (" << resourceManager.newGamePlayer.shape.getPosition().x
-                          << ", " << resourceManager.newGamePlayer.shape.getPosition().y
-                          << "), Size: (" << resourceManager.newGamePlayer.shape.getSize().x
-                          << ", " << resourceManager.newGamePlayer.shape.getSize().y << ")" << std::endl;
-
-                std::cout << "Player Sprite - Position: (" << resourceManager.newGamePlayer.currentSpritePlayer.getPosition().x
-                          << ", " << resourceManager.newGamePlayer.currentSpritePlayer.getPosition().y
-                          << "), Size: (" << spriteDebugBox.getSize().x
-                          << ", " << spriteDebugBox.getSize().y << ")" << std::endl;
-
-                std::cout << "Collision Shape - Position: (" << resourceManager.newGamePlayer.collisionShape.getPosition().x
-                          << ", " << resourceManager.newGamePlayer.collisionShape.getPosition().y
-                          << "), Size: (" << resourceManager.newGamePlayer.collisionShape.getSize().x
-                          << ", " << resourceManager.newGamePlayer.collisionShape.getSize().y << ")" << std::endl; */
-
-        } else {
-            if (resourceManager.gameOver) {
-                resourceManager.guiHandler.drawGameOver(gameWindow, resourceManager);
+            if (resourceManager.gameWin) {
+                  resourceManager.guiHandler.drawWinScreen(gameWindow, resourceManager);
+                std::cout << "GAME WIN" << std::endl;
             }
-        }
+        } else if (resourceManager.gameOver) {
+            resourceManager.guiHandler.drawGameOver(gameWindow, resourceManager);
+        } 
     }
-
 
     gameWindow.display();
 }

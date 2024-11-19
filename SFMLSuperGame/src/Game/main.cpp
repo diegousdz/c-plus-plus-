@@ -22,31 +22,25 @@ int main()
         if (!backgroundTexture.loadFromFile("res/textures/World/backgrounds/backgroundOne.png")) {
             std::cout << "FAILED to load bg 1 texture!" << std::endl;
         } else {
-            // backgroundTexture.setSmooth(true);
             backgroundSprite.setTexture(backgroundTexture); 
             backgroundSprite.setPosition(0, 0);          
         }
         
         while (editorWindow.isOpen() || editor.tileViewPort.isOpen())
         {
-            // Handle events for the editorWindow
             sf::Event event;
             while (editorWindow.pollEvent(event))
             {
                 if (event.type == sf::Event::Closed)
                     editorWindow.close();
             }
-            // Update and draw for editorWindow
-
-
             
             editorWindow.clear();
             editor.draw(editorWindow);
             editor.Update(editorWindow, event);
             editor.setBackgroundPosition(backgroundSprite, editor.sectionSelected);
             editorWindow.display();
-
-            // Handle events for tileViewPort
+            
             if (editor.tileViewPort.isOpen())
             {
                 sf::Event tileEvent;
@@ -56,7 +50,6 @@ int main()
                         editor.tileViewPort.close();
                 }
                 editor.tileViewPort.clear(sf::Color(50, 50, 50));
-               // editor.tileViewPort.draw(backgroundSprite);
                 editor.tileViewPort.draw(backgroundSprite);
                 editor.tilemapDraw(editor.tileViewPort);
                 editor.tilemapUpdate(editor.tileViewPort, tileEvent);
@@ -71,7 +64,6 @@ int main()
     }
     else
     {
-        // create an instance of the engine
         NexusEngine& engine = NexusEngine::getInstance();
         engine.getResourceManager().setWindowWidth(1280);
         engine.getResourceManager().setWindowHeight(720);
@@ -88,6 +80,3 @@ int main()
     }
     return 0;
 }
-
-// collisionees
-// 

@@ -20,7 +20,6 @@ public:
     void setWindowHeight(int height) { windowHeight = height; }
 
     void allocateEnemies();
-    void repositionEnemiesLevelOne(float initialPositionX, float initialPositionY);
     void loadResources();
     void loadGameBackgrounds();
     void setDeltaTime();
@@ -67,6 +66,10 @@ public:
     sf::Vector2<float> windowBounds = sf::Vector2<float>(0, 0);
 
     // ----------------------------- top part
+
+    sf::Texture backgroundMainMenuTexture;
+    sf::Sprite backgroundMainMenu = sf::Sprite();
+    
     sf::RectangleShape header;
 
     sf::RectangleShape healthBarBorder;
@@ -150,6 +153,13 @@ public:
     sf::Text restartPrompt;
 
     HelperFunctions helperFunctions;
+
+    bool hasRenderGameOverScreen = false;
+    bool gameWin = false;
+    bool winScreenInitialized = false;
+    sf::Text winText;
+    sf::Text winTextInstruction;
+    bool hasRenderWinScreen = false;
 private:
 
     

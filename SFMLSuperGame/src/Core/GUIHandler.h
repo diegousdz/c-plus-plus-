@@ -18,7 +18,8 @@ public:
     void setGameViewport(sf::RenderWindow& window, sf::View& gameView);
     void updateLifeDisplay(ResourceManager& resourceManager);
     void setIsInGame(ResourceManager& resourceManager, bool value);
-    void drawGameOver(sf::RenderWindow& window, ResourceManager& resourceManager); 
+    void drawGameOver(sf::RenderWindow& window, ResourceManager& resourceManager);
+    void drawWinScreen(sf::RenderWindow& window, ResourceManager& resourceManager);
     void gameOverInit(ResourceManager& resourceManager);
-
+    void winInit(ResourceManager& resourceManager);
 };

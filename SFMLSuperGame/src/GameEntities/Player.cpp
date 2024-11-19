@@ -111,7 +111,6 @@ void Player::loadAnimationsPlayer()
 
 }
 
-
 void Player::setPlayerPosition(sf::Vector2f incomingPosition)
 {
     shape.setPosition(incomingPosition);

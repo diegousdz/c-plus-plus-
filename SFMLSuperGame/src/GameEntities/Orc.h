@@ -79,12 +79,10 @@ public:
     // functiones from base class
     void attack(Warrior* warrior) override;
     void takeDamage(int damage);
+    void update(float deltaTime);
 
     // Animation and initialization
     void loadAnimationsOrc();
-    void initializeDetectionZones();
-    void initializeHealthBar();
-    void createEnemies();
 
 
 private:
@@ -95,16 +93,7 @@ private:
     sf::Vector2f spawnPoint;
     float patrolStartX = 0.0f;
     bool isActive = false;
-
-    void updateDetectionZones();
-    void handleIdleState(const Player& player);
-    void handlePatrolState(const Player& player);
-    void handleChaseState(const Player& player);
-    void handleAttackState(const Player& player);
-    void handleDyingState();
     
-    bool detectPlayer(const Player& player);
-    bool inAttackRange(const Player& player) const;
     
     sf::Clock idleTimer;
     sf::Clock attackTimer;

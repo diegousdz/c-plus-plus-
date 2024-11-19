@@ -17,7 +17,7 @@ public:
     void initializeTileTexturesLevelOne();
 
     void init(sf::RenderWindow& window, ResourceManager& resourceManager, Player& player);
-    void checkForDoorsAndWinCondition(Player& player);
+    void checkForDoorsAndWinCondition(Player& player, ResourceManager& resourceManager);
     void update(float deltaTime, Player& player, ResourceManager& resourceManager);
     void draw(sf::RenderWindow& window, ResourceManager& resourceManager);
     void restartGame(Player& player, ResourceManager& resourceManager);
