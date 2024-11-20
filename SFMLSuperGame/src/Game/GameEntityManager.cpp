@@ -97,7 +97,7 @@ void GameEntityManager::updatePlayerOnCollisionWithDeadZone(Player& player, sf::
 
 void GameEntityManager::updatePlayerOnCollisionWithWorld(Player& player, TileCell* cell) {
     if (!cell) return;  // Safety check if cell is null
-    const float GROUND_TOLERANCE = 1.0f;
+    const float GROUND_TOLERANCE = 0.0f;
     const float Y_OFFSET = 0.1f;  // Small offset to avoid overlap
 
     // Store the player's previous position for reset on collision
@@ -232,7 +232,7 @@ void GameEntityManager::calculateOrcAndPlayer(ResourceManager& resourceManager, 
 }
 void GameEntityManager::calculateOrcAndWorld(ResourceManager& resourceManager, const std::vector<TileCell*>& collisionCells)
 {
-    const float GROUND_TOLERANCE = 1.0f;
+    const float GROUND_TOLERANCE = 0.0f;
 
     for (int i = 0; i < 5; i++)
     {
@@ -354,12 +354,14 @@ void GameEntityManager::gemUpdate(Player& player, const std::vector<TileCell*>& 
 
             if (minOverlap == overlapTop) {
                 // Collision from above
-                player.setPosition({player.getPosition().x, cellBounds.top - playerBounds.height - GROUND_TOLERANCE});
+                player.setPosition({player.getPosition().x, cellBounds.top - playerBounds.height});
                 player.velocity.y = 0;
-                player.isOnGround = true;  // Set grounded if collision occurs from above
+                player.isOnGround = true;  // Set grounded if collision occurs from abovep
+                player.isJumping = false;
+                
             } else if (minOverlap == overlapBottom) {
                 // Collision from below
-                player.setPosition({player.getPosition().x, cellBounds.top + cellBounds.height + GROUND_TOLERANCE});
+                player.setPosition({player.getPosition().x, cellBounds.top + cellBounds.height});
                 player.velocity.y = 0;
             } else if (minOverlap == overlapLeft) {
                 // Collision from the left

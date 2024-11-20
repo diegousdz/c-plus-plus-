@@ -9,49 +9,15 @@ using namespace std;
 
 void Orc::loadAnimationsOrc()
 {
-    int frameWidth = 58;  
-    int frameHeight = 42; 
 
     animSequencerOrc.loadAnimationFramesOrc(
         Attack,
-        "res/textures/Orc/Attack/spritesheetAttack.png",
-        spriteFramesPerTypeOfAnimationOrc[Attack],
-        frameWidth,
-        frameHeight
+        "res/textures/Orc/spritesheetenemy.png",
+        spriteFramesPerTypeOfAnimationOrc[1],
+        32.0f,
+        32.0f
     );
-    
-    animSequencerOrc.loadAnimationFramesOrc(
-        Die,
-        "res/textures/Orc/Die/spritesheetDie.png",
-        spriteFramesPerTypeOfAnimationOrc[Die],
-        frameWidth,
-        frameHeight
-    );
-
-    animSequencerOrc.loadAnimationFramesOrc(
-        Hurt,
-        "res/textures/Orc/Fall/spritesheetHurt.png",
-        spriteFramesPerTypeOfAnimationOrc[Hurt],
-        frameWidth,
-        frameHeight
-    );
-    
-    animSequencerOrc.loadAnimationFramesOrc(
-        Idle,
-        "res/textures/Orc/Idle/spritesheetIdle.png",
-        spriteFramesPerTypeOfAnimationOrc[Idle],
-        frameWidth,
-        frameHeight
-    );
-
-    animSequencerOrc.loadAnimationFramesOrc(
-        Run,
-        "res/textures/Orc/Fall/spritesheetRun.png",
-        spriteFramesPerTypeOfAnimationOrc[Run],
-        frameWidth,
-        frameHeight
-    );
-
+   
     animationsLoaded = true;
 }
 
@@ -60,10 +26,10 @@ Orc::Orc() : Warrior('o', 30, 130) {
     SetDamage(30);
     SetHealth(120);
     
-    shape.setSize(sf::Vector2f(58.0f, 42.0f));
+    shape.setSize(sf::Vector2f(32.0f, 32.0f));
     shape.setPosition(100, 100);
     shape.setTexture(&textureOrc);
-    collisionShape.setSize(sf::Vector2f(58.0f, 42.0f));
+    collisionShape.setSize(sf::Vector2f(32.0f, 32.0f));
     collisionShape.setFillColor(sf::Color(255, 0, 0, 128));
     isOnGround = false;
     velocity = sf::Vector2f(0.0f, 0.0f);
@@ -92,6 +58,21 @@ void Orc::handleIdleState(const Player& player, ResourceManager& resourceManager
     }
 }
 */
+
+
+void Orc::setTexture(sf::Texture* texture)
+{
+    sf::Vector2u textureSize = texture->getSize();
+    if (textureSize.x == 0 || textureSize.y == 0)
+    {
+        std::cout << "Error: Texture is empty or not loaded properly!" << std::endl;
+    }
+    else
+    {
+        shape.setTexture(texture);
+    //    shape.setTextureRect(sf::IntRect(0, 0, static_cast<int>(shape.getSize().x), static_cast<int>(shape.getSize().y)));
+    }
+}
 void Orc::attack(Warrior* warrior)
 {
     if (dis(gen) < 0.25) { 
@@ -118,8 +99,9 @@ void Orc::takeDamage(int damage) {
     } 
 }
 
-void Orc::update(float deltaTime) {
-//    updateDetectionZones();
+void Orc::update(float deltaTime)
+{
+    //    updateDetectionZones();
     
     // Update animation frame based on time
     if (animationClockOrc.getElapsedTime().asSeconds() >= animationInterval) {
@@ -147,32 +129,43 @@ void Orc::update(float deltaTime) {
         
         animationClockOrc.restart();
     }
-
-    switch (currentState) {
-    case OrcState::IDLE:
-        currentAction = Idle;
-        break;
-            
-    case OrcState::PATROLLING:
-        currentAction = Run;
-
-        break;
-            
-    case OrcState::CHASING:
-        currentAction = Run;
-
-        break;
-            
-    case OrcState::ATTACKING:
-        currentAction = Attack;
-
-        break;
-            
-    case OrcState::DYING:
-        currentAction = Die;
-        break;
-    default: currentAction = Idle;
-        break;;
-    }
-
 }
+
+
+void Orc::updateAnimation(float deltaTime)
+{
+    // Update animation frame based on time
+    if (animationClockOrc.getElapsedTime().asSeconds() >= animationInterval) {
+        currentFrame++;
+        if (currentFrame >= 4) {
+            currentFrame = 0; // Loop back to the first frame
+        }
+
+        // Calculate the rectangle for the current frame
+        sf::IntRect frameRect(
+            currentFrame * 32, // X position on the spritesheet
+             0, // Y position (based on action)
+            32,
+            32  
+        );
+
+        // Update the sprite's texture rectangle
+        currentSpriteOrc.setTextureRect(frameRect);
+
+        // Update the sprite's position and flip if necessary
+        currentSpriteOrc.setPosition(shape.getPosition());
+        if (onInverseDirection) {
+            currentSpriteOrc.setScale(-1.0f, 1.0f); // Flip horizontally
+            currentSpriteOrc.setPosition(
+                shape.getPosition().x + shape.getSize().x,
+                shape.getPosition().y
+            );
+        } else {
+            currentSpriteOrc.setScale(1.0f, 1.0f); // Normal orientation
+        }
+
+        animationClockOrc.restart();
+
+    }
+}
+
