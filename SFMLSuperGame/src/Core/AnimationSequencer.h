@@ -9,8 +9,7 @@ public:
     
     std::map<int, std::vector<sf::Sprite>> animationFramesPlayer;  // Map of animation type to frames
     std::map<int, std::vector<sf::Sprite>> animationFramesOrcs;  // Map of animation type to frames
-
-    // Generic function to load a spritesheet and extract frames for any animation
+    
     int loadAnimationFrames(int animationType, const std::string& filePath, int totalFrames, int frameWidth, int frameHeightt);
     int loadAnimationFramesOrc(int animationType, const std::string& filePath, int totalFrames, int frameWidth,
                                int frameHeight);

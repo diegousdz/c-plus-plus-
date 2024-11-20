@@ -102,7 +102,6 @@ void NexusEngine::handleInput()
                         // Reinitialize necessary components
                         resourceManager.newGamePlayer.loadAnimationsPlayer();
                         
-                    //    resourceManager.loadAnimationsOrc();
                         
                         resourceManager.newGamePlayer.setTexture(&resourceManager.playerTexture);
 
@@ -125,7 +124,7 @@ void NexusEngine::handleInput()
                 {
                     if(!resourceManager.newGamePlayer.isJumping)
                     {
-                        resourceManager.newGamePlayer.velocity.y = resourceManager.newGamePlayer.gravity;
+                     
                         resourceManager.newGamePlayer.velocity.x = -resourceManager.newGamePlayer.speed;
                         resourceManager.newGamePlayer.onInverseDirection = true;  // Set facing direction
                         resourceManager.newGamePlayer.isMoving = true;
@@ -143,21 +142,23 @@ void NexusEngine::handleInput()
                 {
                     if(!resourceManager.newGamePlayer.isJumping)
                     {
-                        resourceManager.newGamePlayer.velocity.y = resourceManager.newGamePlayer.gravity;
+                        
+                        resourceManager.setPlayerTypeOfAnimationLastSet(1);
+                  
                         resourceManager.newGamePlayer.velocity.x = resourceManager.newGamePlayer.speed;
                         resourceManager.newGamePlayer.onInverseDirection = false;  // Set facing direction
                         resourceManager.newGamePlayer.isMoving = true;
                         
               
-                            resourceManager.setPlayerTypeOfAnimationLastSet(1 );
                         
                     } else
                     {
+                        resourceManager.setPlayerTypeOfAnimationLastSet(1);
                         resourceManager.newGamePlayer.velocity.x = resourceManager.newGamePlayer.speed;
                         resourceManager.newGamePlayer.onInverseDirection = false;  // Set facing direction
                         resourceManager.newGamePlayer.isMoving = true;
 
-                        resourceManager.setPlayerTypeOfAnimationLastSet(1 );
+                      
                          //   resourceManager.setPlayerTypeOfAnimationLastSet(3);
                     }
                 } else if  (event.key.code == sf::Keyboard::K && !resourceManager.newGamePlayer.isJumping)  // Attack
@@ -215,7 +216,10 @@ void NexusEngine::handleInput()
 
 void NexusEngine::update(float deltaTime)
 {
+    std::cout << "Position Player X: " << resourceManager.newGamePlayer.shape.getPosition().x << "Position Player Y:" << resourceManager.newGamePlayer.shape.getPosition().y << std::endl;
+    
 
+    
     if(resourceManager.newGamePlayer.shape.getPosition().y >= resourceManager.deadZoneYPosition || resourceManager.newGamePlayer.life == 0 )
     {
         resourceManager.gameOver = true;
@@ -243,7 +247,6 @@ void NexusEngine::update(float deltaTime)
             {
                 resourceManager.newGamePlayer.velocity.y += resourceManager.newGamePlayer.gravity * deltaTime;
             }
-            
             resourceManager.newGamePlayer.setCurrentAction(static_cast<Player::AnimationType>(resourceManager.getPlayerTypeOfAnimationLastSet()));
              
             resourceManager.newGamePlayer.updateAnimation(deltaTime);
@@ -267,17 +270,14 @@ void NexusEngine::draw(sf::RenderWindow &gameWindow) {
             resourceManager.guiHandler.setIsInGame(resourceManager, true);
             game.draw(gameWindow, resourceManager);
 
-            resourceManager.newGamePlayer.shape.setFillColor(sf::Color(255, 0, 0, 128)); // Red with transparency
+          //  resourceManager.newGamePlayer.shape.setFillColor(sf::Color(255, 0, 0, 128)); // Red with transparency
             gameWindow.draw(resourceManager.newGamePlayer.shape);
 
-            resourceManager.newGamePlayer.shape.setFillColor(sf::Color(255, 0, 0, 128)); // Red with transparency
-            gameWindow.draw(resourceManager.newGamePlayer.shape);
-            
             resourceManager.guiHandler.draw(gameWindow, resourceManager);
 
             if (resourceManager.gameWin) {
                   resourceManager.guiHandler.drawWinScreen(gameWindow, resourceManager);
-                std::cout << "GAME WIN" << std::endl;
+              //  std::cout << "GAME WIN" << std::endl;
             }
         } else if (resourceManager.gameOver) {
             resourceManager.guiHandler.drawGameOver(gameWindow, resourceManager);

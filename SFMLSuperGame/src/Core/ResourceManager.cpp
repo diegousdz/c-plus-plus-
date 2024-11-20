@@ -5,6 +5,12 @@
 void ResourceManager::allocateEnemies()
 {
     // Allocate orcs for spawn manager one
+    sf::Texture* texture = new sf::Texture();
+    if (!texture->loadFromFile("res/textures/Orc/spritesheetenemy.png"))
+    {
+        std::cout << "Failed to load spritesheet: " << std::endl;
+    } 
+    
     if(!hasSpawnOneInitialized)
     {
         for (int i = 0; i < 5; i++)
@@ -12,16 +18,64 @@ void ResourceManager::allocateEnemies()
             Orc* newOrc = new Orc();
             
             orcSpawnManagerOne[i] = new Orc();
-            if (!orcSpawnManagerOne[i]->animationsLoaded)
-            {
-                // orcSpawnManagerOne[i]->loadAnimationsOrc();
-            }
+   
+         
+         //   orcSpawnManagerOne[i]->loadAnimationsOrc();
+            orcSpawnManagerOne[i]->setTexture(&enemyTexture);
+            orcSpawnManagerOne[i]->shape.setFillColor(sf::Color::Transparent);
+            
 
-            newOrc->shape.setSize(sf::Vector2f(58.0f, 42));
+            newOrc->currentSpriteOrc.setTexture(*texture);
+            std::cout << "CURRENT position " << i << std::endl;
+            
+          //  backgroundSpriteOne.setPosition(0, 0);          // Position it at the origin
+
+            newOrc->shape.setSize(sf::Vector2f(32.0f, 32.0f));
             newOrc->isOnGround = false;
             newOrc->isInitialized = false;
             newOrc->hasCollidedWithPlayer = false;
             orcSpawnManagerOne[i] = newOrc;
+        }
+
+        for (int i = 0; i < 5; i++)
+        {
+            if(i == 0)
+            {
+                // Set initial position and attributes
+                   orcSpawnManagerOne[0]->shape.setPosition(310.219f, helperFunctions.recalculateYPositionNegate(3));
+      
+                std::cout << "initial position 0" << "X: " <<  orcSpawnManagerOne[i]->shape.getPosition().x << "Y" << orcSpawnManagerOne[i]->shape.getPosition().y << std::endl;
+               
+                //   orcSpawnManagerOne[i]->shape.setFillColor(sf::Color::Red);  // Set color for the Orc
+            } else if (i == 1)
+            {
+                // Set initial position and attributes
+                   orcSpawnManagerOne[1]->shape.setPosition(500.075f, helperFunctions.recalculateYPositionNegate(4));
+                std::cout << "initial position 1" << "X: " <<  orcSpawnManagerOne[i]->shape.getPosition().x << "Y" << orcSpawnManagerOne[i]->shape.getPosition().y << std::endl;
+               
+                //  orcSpawnManagerOne[i]->shape.setFillColor(sf::Color::Red);  // Set color for the Orc
+            } else if (i == 2)
+            {
+                // Set initial position and attributes
+                    orcSpawnManagerOne[2]->shape.setPosition(1376.5f, helperFunctions.recalculateYPositionNegate(7));
+                std::cout << "initial position 2" << "X: " <<  orcSpawnManagerOne[i]->shape.getPosition().x << "Y" << orcSpawnManagerOne[i]->shape.getPosition().y << std::endl;
+               
+                //   orcSpawnManagerOne[i]->shape.setFillColor(sf::Color::Red);  // Set color for the Orc
+            } else if (i == 3)
+            {
+                // Set initial position and attributes
+                    orcSpawnManagerOne[3]->shape.setPosition(2172.95f, helperFunctions.recalculateYPositionNegate(7));
+                std::cout << "initial position 3" << "X: " <<  orcSpawnManagerOne[i]->shape.getPosition().x << "Y" << orcSpawnManagerOne[i]->shape.getPosition().y << std::endl;
+               
+                //   orcSpawnManagerOne[i]->shape.setFillColor(sf::Color::Red);  // Set color for the Orc
+            } else if (i == 4)
+            {
+                // Set initial position and attributes
+                orcSpawnManagerOne[4]->shape.setPosition(2865.23f, helperFunctions.recalculateYPositionNegate(7));
+                std::cout << "initial position 4" << "X: " <<  orcSpawnManagerOne[i]->shape.getPosition().x << "Y" << orcSpawnManagerOne[i]->shape.getPosition().y << std::endl;
+               
+                //   orcSpawnManagerOne[i]->shape.setFillColor(sf::Color::Red);  // Set color for the Orc
+            }
         }
         hasSpawnOneInitialized = true;
     }
@@ -67,6 +121,12 @@ void ResourceManager::loadResources()
         std::cout << "Failed to load background texture!" << std::endl;
     } else {
         std::cout << "Background texture loaded successfully" << std::endl;
+    }
+
+    if (!enemyTexture.loadFromFile("res/textures/Orc/spritesheetenemy.png")) {
+        std::cout << "Failed to load  orc base texture!" << std::endl;
+    } else {
+        std::cout << "orc base texture loaded successfully" << std::endl;
     }
 
 
@@ -118,11 +178,13 @@ float ResourceManager::getDeltaTime() const
 
 void ResourceManager::updateAndMoveOrcs(float deltaTime)
 {
+
+    
     float positionUpdateOrcOneA = 310.219f, positionUpdateOrcOneB = 96.0f;
-    float positionUpdateOrcTwoA = 1024.0f, positionUpdateOrcTwoB = 64.0f;
-    float positionUpdateOrcThreeA = 2048.0f, positionUpdateOrcThreeB = 64.0f;
-    float positionUpdateOrcFourA = 2422.99f, positionUpdateOrcFourB = 64.0f;
-    float positionUpdateOrcFiveA = 2870.32f, positionUpdateOrcFiveB = 64.0f;
+    float positionUpdateOrcTwoA = 632.0f, positionUpdateOrcTwoB = 440.0f;
+    float positionUpdateOrcThreeA = 1531.63f, positionUpdateOrcThreeB = 1376.5f;
+    float positionUpdateOrcFourA = 2425.39f, positionUpdateOrcFourB =  2172.95f;
+    float positionUpdateOrcFiveA = 2865.23f, positionUpdateOrcFiveB = 2624.5f;
 
     // Define movement speed (pixels per second)
     const float movementSpeed = 64.0f;
@@ -135,6 +197,7 @@ void ResourceManager::updateAndMoveOrcs(float deltaTime)
         float currentPositionX = orc->shape.getPosition().x;
         float currentPositionY = orc->shape.getPosition().y;
 
+        orc->currentSpriteOrc.setPosition(orc->shape.getPosition().x, orc->shape.getPosition().y);
         // Initialize orc velocity if not already initialized
         if (!orc->isInitialized)
         {
@@ -197,20 +260,23 @@ void ResourceManager::updateAndMoveOrcs(float deltaTime)
         else if (currentPositionX >= positionA)
         {
             orc->velocity.x = -abs(movementSpeed); // Move left
+            
         }
 
         // Ensure position is within boundaries
         if (currentPositionX < positionB)
         {
             orc->shape.setPosition(positionB, orc->shape.getPosition().y);
+        //    orc->currentSpriteOrc.setPosition(orc->shape.getPosition().x, orc->shape.getPosition().y);
         }
         else if (currentPositionX > positionA)
         {
             orc->shape.setPosition(positionA, orc->shape.getPosition().y);
+          
         }
 
         // Change the color of the orc for better visualization
-        orc->shape.setFillColor(sf::Color::Red);
+        orc->updateAnimation(deltaTime);
     }
 }
 
@@ -220,35 +286,35 @@ void ResourceManager::createEnemiesLevelOne(float initialPositionX, float initia
     float spacing = orcSpawnManagerOne[0]->shape.getGlobalBounds().width + 20.0f; 
 
     // Position and initialize attributes for each Orc in the pool
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < 2; i++)
     {
         if (orcSpawnManagerOne[i]) // Check if the orc exists
         {
             if(i == 1)
             {
                 // Set initial position and attributes
-                orcSpawnManagerOne[i]->shape.setPosition(310.219f, 0);
-                orcSpawnManagerOne[i]->shape.setFillColor(sf::Color::Red);  // Set color for the Orc
+             //   orcSpawnManagerOne[i]->shape.setPosition(310.219f, helperFunctions.recalculateYPositionNegate(3));
+             //   orcSpawnManagerOne[i]->shape.setFillColor(sf::Color::Red);  // Set color for the Orc
             } else if (i == 2)
             {
                 // Set initial position and attributes
-                orcSpawnManagerOne[i]->shape.setPosition(1024.0f, helperFunctions.recalculateYPositionNegate(13));
-                orcSpawnManagerOne[i]->shape.setFillColor(sf::Color::Red);  // Set color for the Orc
+             //   orcSpawnManagerOne[i]->shape.setPosition(506.075f, helperFunctions.recalculateYPositionNegate(13));
+              //  orcSpawnManagerOne[i]->shape.setFillColor(sf::Color::Red);  // Set color for the Orc
             } else if (i == 3)
             {
                 // Set initial position and attributes
-                orcSpawnManagerOne[i]->shape.setPosition(2048, helperFunctions.recalculateYPositionNegate(13));
-                orcSpawnManagerOne[i]->shape.setFillColor(sf::Color::Red);  // Set color for the Orc
+            //    orcSpawnManagerOne[i]->shape.setPosition(2048, helperFunctions.recalculateYPositionNegate(13));
+             //   orcSpawnManagerOne[i]->shape.setFillColor(sf::Color::Red);  // Set color for the Orc
             } else if (i == 4)
             {
                 // Set initial position and attributes
-                orcSpawnManagerOne[i]->shape.setPosition(2422.99f, helperFunctions.recalculateYPositionNegate(13));
-                orcSpawnManagerOne[i]->shape.setFillColor(sf::Color::Red);  // Set color for the Orc
+            //    orcSpawnManagerOne[i]->shape.setPosition(2422.99f, helperFunctions.recalculateYPositionNegate(13));
+             //   orcSpawnManagerOne[i]->shape.setFillColor(sf::Color::Red);  // Set color for the Orc
             } else 
             {
                 // Set initial position and attributes
-                orcSpawnManagerOne[i]->shape.setPosition(2870.32f, helperFunctions.recalculateYPositionNegate(13));
-                orcSpawnManagerOne[i]->shape.setFillColor(sf::Color::Red);  // Set color for the Orc
+           //     orcSpawnManagerOne[i]->shape.setPosition(2870.32f, helperFunctions.recalculateYPositionNegate(13));
+              //  orcSpawnManagerOne[i]->shape.setFillColor(sf::Color::Red);  // Set color for the Orc
             }
 
         }

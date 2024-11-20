@@ -160,6 +160,8 @@ public:
     sf::Text winText;
     sf::Text winTextInstruction;
     bool hasRenderWinScreen = false;
+
+    sf::Texture enemyTexture;
 private:
 
     

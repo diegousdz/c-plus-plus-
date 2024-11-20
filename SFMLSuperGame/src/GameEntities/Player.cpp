@@ -117,10 +117,21 @@ void Player::setPlayerPosition(sf::Vector2f incomingPosition)
     sf::Vector2f shapeSize = shape.getSize();
     sf::Vector2f collisionSize = collisionShape.getSize();
     
-    collisionShape.setPosition(
+
+
+    if(isOnGround)
+    {
+        collisionShape.setPosition(
         incomingPosition.x + (shapeSize.x - collisionSize.x) / 2.0f,
-        incomingPosition.y + (shapeSize.y - collisionSize.y) / 2.0f
-    );
+        (incomingPosition.y + (shapeSize.y - collisionSize.y) / 2.0f) + 1.0f
+        );
+    } else
+    {
+        collisionShape.setPosition(
+            incomingPosition.x + (shapeSize.x - collisionSize.x) / 2.0f,
+            incomingPosition.y + (shapeSize.y - collisionSize.y) / 2.0f
+        );
+    }
 
     // Set the sprite to match shape's position
     currentSpritePlayer.setPosition(incomingPosition);

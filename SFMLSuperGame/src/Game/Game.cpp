@@ -339,9 +339,6 @@ void Game::checkForDoorsAndWinCondition(Player& player, ResourceManager& resourc
 
     if(!resourceManager.gameWin)
     {
-        
-        std::cout << "Checking Door Collision - Player X: " << player.shape.getPosition().x 
-              << ", Door X: " << doorLevelOnePosX << std::endl;
         if(playerCurrentLevel == 1)
         {
             if(player.shape.getPosition().x > doorLevelOnePosX)
@@ -406,6 +403,7 @@ void Game::update(float deltaTime, Player& player, ResourceManager& resourceMana
     entityManager.calculateOrcAndPlayer(resourceManager, player);
     player.handleMovement(deltaTime);
     entityManager.gemUpdate(player, collisionCells);
+  //  entityManager.updatePlayerOnCollisionWithWorld(player, collisionCells);
 }
 
 void Game::draw(sf::RenderWindow& window, ResourceManager& resourceManager) {
@@ -455,7 +453,10 @@ void Game::draw(sf::RenderWindow& window, ResourceManager& resourceManager) {
             for(int i = 0; i < 5; i++)
             {
                 if (resourceManager.orcSpawnManagerOne[i]) 
-                    window.draw(resourceManager.orcSpawnManagerOne[i]->shape);
+                //    window.draw(resourceManager.orcSpawnManagerOne[i]->shape);
+                    window.draw(resourceManager.orcSpawnManagerOne[i]->currentSpriteOrc);
+                std::cout << "Position Orc : " << i << "position X: " << resourceManager.orcSpawnManagerOne[i]->shape.getPosition().x << "Position Orc Y:" <<  resourceManager.orcSpawnManagerOne[i]->shape.getPosition().y << std::endl;
+                
             }
         }
     }

@@ -41,8 +41,9 @@ public:
     };
     
     Orc();
+    void setTexture(sf::Texture* texture);
 
-    int spriteFramesPerTypeOfAnimationOrc[5] = {7, 9, 3, 4, 6}; 
+    int spriteFramesPerTypeOfAnimationOrc[1] = {4}; 
     
     sf::Sprite currentSpriteOrc;
     AnimationSequencer animSequencerOrc;
@@ -80,6 +81,7 @@ public:
     void attack(Warrior* warrior) override;
     void takeDamage(int damage);
     void update(float deltaTime);
+    void updateAnimation(float deltaTime);
 
     // Animation and initialization
     void loadAnimationsOrc();
