@@ -126,40 +126,31 @@ void NexusEngine::handleInput()
                     {
                      
                         resourceManager.newGamePlayer.velocity.x = -resourceManager.newGamePlayer.speed;
-                        resourceManager.newGamePlayer.onInverseDirection = true;  // Set facing direction
+                        resourceManager.newGamePlayer.onInverseDirection = true;  
                         resourceManager.newGamePlayer.isMoving = true;
                             resourceManager.setPlayerTypeOfAnimationLastSet(1);
                     } else
                     {
                         resourceManager.newGamePlayer.velocity.x = -resourceManager.newGamePlayer.speed;
-                        resourceManager.newGamePlayer.onInverseDirection = true;  // Set facing direction
+                        resourceManager.newGamePlayer.onInverseDirection = true; 
                         resourceManager.newGamePlayer.isMoving = true;
-                          //  resourceManager.setPlayerTypeOfAnimationLastSet(3);
-                        resourceManager.setPlayerTypeOfAnimationLastSet(1 );
+                        resourceManager.setPlayerTypeOfAnimationLastSet(1);
                     }
                 }
                 else if (event.key.code == sf::Keyboard::D)  // Move right
                 {
                     if(!resourceManager.newGamePlayer.isJumping)
                     {
-                        
                         resourceManager.setPlayerTypeOfAnimationLastSet(1);
-                  
                         resourceManager.newGamePlayer.velocity.x = resourceManager.newGamePlayer.speed;
                         resourceManager.newGamePlayer.onInverseDirection = false;  // Set facing direction
                         resourceManager.newGamePlayer.isMoving = true;
-                        
-              
-                        
                     } else
                     {
                         resourceManager.setPlayerTypeOfAnimationLastSet(1);
                         resourceManager.newGamePlayer.velocity.x = resourceManager.newGamePlayer.speed;
                         resourceManager.newGamePlayer.onInverseDirection = false;  // Set facing direction
                         resourceManager.newGamePlayer.isMoving = true;
-
-                      
-                         //   resourceManager.setPlayerTypeOfAnimationLastSet(3);
                     }
                 } else if  (event.key.code == sf::Keyboard::K && !resourceManager.newGamePlayer.isJumping)  // Attack
                 {
@@ -183,7 +174,10 @@ void NexusEngine::handleInput()
                 {
                     resourceManager.newGamePlayer.velocity.x = 0;
                     resourceManager.newGamePlayer.isMoving = false;
-                    resourceManager.setPlayerTypeOfAnimationLastSet(0);
+                    
+                    if (resourceManager.newGamePlayer.isOnGround) {
+                        resourceManager.setPlayerTypeOfAnimationLastSet(Player::Idle);
+                    }
                 }
 
             if(resourceManager.newGamePlayer.isOnGround)
@@ -198,13 +192,8 @@ void NexusEngine::handleInput()
                     }
             }else if (!resourceManager.newGamePlayer.isOnGround && resourceManager.newGamePlayer.velocity.y > 0)
              {
-                 // If we're falling, transition to fall animation
-                 resourceManager.setPlayerTypeOfAnimationLastSet(3);  // Fall
+                 resourceManager.setPlayerTypeOfAnimationLastSet(3);  
              }
-
-               // if (resourceManager.newGamePlayer.isOnGround && )
-
-                // Toggle main menu with 'P'
                 if (event.key.code == sf::Keyboard::P)
                 {
                     resourceManager.isMainMenuActive = !resourceManager.isMainMenuActive;  // Toggle the main menu
@@ -214,12 +203,32 @@ void NexusEngine::handleInput()
     }
 }
 
+void NexusEngine::updatePlayerAnimation() {
+    Player& player = resourceManager.newGamePlayer;
+    
+    if (player.isOnGround) {
+        if (!player.isMoving) {
+            resourceManager.setPlayerTypeOfAnimationLastSet(Player::Idle);
+        }
+    } else {
+        if (player.velocity.y > 0) {
+            resourceManager.setPlayerTypeOfAnimationLastSet(Player::Fall);
+        }
+        else if (player.velocity.y < 0) {
+            resourceManager.setPlayerTypeOfAnimationLastSet(Player::Jump);
+        }
+    }
+    
+    if (player.isMoving) {
+        resourceManager.setPlayerTypeOfAnimationLastSet(Player::Run);
+    }
+    
+    player.setCurrentAction(static_cast<Player::AnimationType>(resourceManager.getPlayerTypeOfAnimationLastSet()));
+}
+
+
 void NexusEngine::update(float deltaTime)
 {
-    std::cout << "Position Player X: " << resourceManager.newGamePlayer.shape.getPosition().x << "Position Player Y:" << resourceManager.newGamePlayer.shape.getPosition().y << std::endl;
-    
-
-    
     if(resourceManager.newGamePlayer.shape.getPosition().y >= resourceManager.deadZoneYPosition || resourceManager.newGamePlayer.life == 0 )
     {
         resourceManager.gameOver = true;
@@ -236,22 +245,20 @@ void NexusEngine::update(float deltaTime)
         {
             resourceManager.loadGameBackgrounds();
         }
-    }
-    else
-    {
+    } else {
         if (!resourceManager.gameOver && !resourceManager.gameWin) {
-
             game.update(deltaTime, resourceManager.newGamePlayer, resourceManager);
         
             if (!resourceManager.newGamePlayer.isOnGround)
-            {
                 resourceManager.newGamePlayer.velocity.y += resourceManager.newGamePlayer.gravity * deltaTime;
-            }
+            
             resourceManager.newGamePlayer.setCurrentAction(static_cast<Player::AnimationType>(resourceManager.getPlayerTypeOfAnimationLastSet()));
-             
+            
             resourceManager.newGamePlayer.updateAnimation(deltaTime);
-            if(resourceManager.newGamePlayer.life <= 0)
-            {
+
+            updatePlayerAnimation();
+            
+            if(resourceManager.newGamePlayer.life <= 0) {
                 resourceManager.newGamePlayer.life = 0;
             }
         }
@@ -269,15 +276,13 @@ void NexusEngine::draw(sf::RenderWindow &gameWindow) {
             
             resourceManager.guiHandler.setIsInGame(resourceManager, true);
             game.draw(gameWindow, resourceManager);
-
-          //  resourceManager.newGamePlayer.shape.setFillColor(sf::Color(255, 0, 0, 128)); // Red with transparency
+            
             gameWindow.draw(resourceManager.newGamePlayer.shape);
 
             resourceManager.guiHandler.draw(gameWindow, resourceManager);
 
             if (resourceManager.gameWin) {
                   resourceManager.guiHandler.drawWinScreen(gameWindow, resourceManager);
-              //  std::cout << "GAME WIN" << std::endl;
             }
         } else if (resourceManager.gameOver) {
             resourceManager.guiHandler.drawGameOver(gameWindow, resourceManager);

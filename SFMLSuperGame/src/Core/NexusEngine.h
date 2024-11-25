@@ -24,6 +24,7 @@ public:
     void update(float deltaTime);
     void draw(sf::RenderWindow& gameWindow);
     void handleInput();
+    void updatePlayerAnimation();
     void initializeWindow(sf::RenderWindow& gameWindow, int width, int height, std::string windowName);
 
 private:

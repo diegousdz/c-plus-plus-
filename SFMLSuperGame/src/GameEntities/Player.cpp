@@ -1,8 +1,6 @@
 #include "Player.h"
-
 #include "../Core/ResourceManager.h"
 
-// Initialize variables using the class constructor
 Player::Player(std::string playerName, Inventory inventory) : Warrior(100, 20)
 {
     name = playerName;
@@ -13,8 +11,7 @@ Player::Player(std::string playerName, Inventory inventory) : Warrior(100, 20)
     energy = 100.0f;
     isMagicBeltEquipped = false;
     hasKingdomCrownInInventory = false;
-
-    // Initialize player shape (16x16 pixels)
+    
     shape.setSize(sf::Vector2f(50.0f, 37.0f));
     shape.setTexture(&texturePlayer);
     shape.setPosition(100, 100);
@@ -79,7 +76,7 @@ void Player::loadAnimationsPlayer()
 
     animSequencerPlayer.loadAnimationFrames(
         Jump,
-        "res/textures/Player/Tilemap/Fall/spritesheetFall.png",
+        "res/textures/Player/Tilemap/Jump/spritesheetJump.png",
         spriteFramesPerTypeOfAnimationPlayer[Jump],
         frameWidth,
         frameHeight
@@ -111,168 +108,87 @@ void Player::loadAnimationsPlayer()
 
 }
 
-void Player::setPlayerPosition(sf::Vector2f incomingPosition)
-{
+void Player::setPlayerPosition(sf::Vector2f incomingPosition) {
     shape.setPosition(incomingPosition);
     sf::Vector2f shapeSize = shape.getSize();
     sf::Vector2f collisionSize = collisionShape.getSize();
-    
 
-
-    if(isOnGround)
-    {
+    if(isOnGround) {
         collisionShape.setPosition(
         incomingPosition.x + (shapeSize.x - collisionSize.x) / 2.0f,
         (incomingPosition.y + (shapeSize.y - collisionSize.y) / 2.0f) + 1.0f
         );
-    } else
-    {
+    } else {
         collisionShape.setPosition(
             incomingPosition.x + (shapeSize.x - collisionSize.x) / 2.0f,
             incomingPosition.y + (shapeSize.y - collisionSize.y) / 2.0f
         );
     }
-
-    // Set the sprite to match shape's position
+    
     currentSpritePlayer.setPosition(incomingPosition);
 }
 
-void Player::setTexture(sf::Texture* texture)
-{
+void Player::setTexture(sf::Texture* texture) {
     sf::Vector2u textureSize = texture->getSize();
-    if (textureSize.x == 0 || textureSize.y == 0)
-    {
+    if (textureSize.x == 0 || textureSize.y == 0) {
         std::cout << "Error: Texture is empty or not loaded properly!" << std::endl;
-    }
-    else
-    {
+    } else {
         shape.setTexture(texture);
     }
 }
 
-void Player::setSize(float sizeX, float sizeY)
-{
+void Player::setSize(float sizeX, float sizeY) {
     shape.setSize(sf::Vector2f(sizeX, sizeY));
 }
 
-void Player::handleMovement(float deltaTime)
-{
-   // velocity.y += gravity * deltaTime;
+void Player::handleMovement(float deltaTime) {
 
-    if (movingLeft)
-    {
+    velocity.y += gravity * deltaTime;
+
+    if (movingLeft) {
         velocity.x = -speed;
         currentAction = Run;
         isMoving = true;
         std::cout << "Player is moving left. currentAction: " << currentAction << std::endl;
-    }
-    else if (movingRight)
-    {
+    } else if (movingRight) {
         velocity.x = speed;
         currentAction = Run;
         isMoving = true;
         std::cout << "Player is moving right. currentAction: " << currentAction << std::endl;
     }
-    
 
     shape.move(velocity * deltaTime);
-
     currentSpritePlayer.setPosition(shape.getPosition());
-    /*else if (isOnGround) {  // Only set Idle if on the ground and not moving
-        currentAction = Idle;
-    }
-        
-    if (isJumping && isOnGround)
-    {
-        velocity.y = -200.0f;  // Reduced jump height (adjust value as needed)
-        isOnGround = false;
-        currentAction = Jump;
-        isJumping = false;
-    }
-
-    // Apply gravity to control fall speed
-    float gravityStrength = 800.0f;  // Adjust as needed to balance the fall rate
-    velocity.y += gravityStrength * deltaTime;
-
-    // Apply gravity
-  //  velocity.y += gravity * deltaTime;
-
-    // Update position
-    shape.move(velocity * deltaTime);
-
-    // Update sprite position
-    currentSprite.setPosition(shape.getPosition());
-
-    // Check for landing
-    if (shape.getPosition().y >= 500)
-    {
-        
-        isOnGround = true;
-        velocity.y = 0;
-        shape.setPosition(shape.getPosition().x, 500);
-        if (!isMoving)
-            currentAction = Idle;
-            std::cout << "Player landed and is idle. currentAction: " << currentAction << std::endl;
-    }
-    */
 }
 
-
-// Update the player's animation based on the current action
-void Player::updateAnimation(float deltaTime)
-{
-    if (animationClockPlayer.getElapsedTime().asSeconds() >= animationInterval)
-    {
+void Player::updateAnimation(float deltaTime) {
+    if (animationClockPlayer.getElapsedTime().asSeconds() >= animationInterval) {
         animationClockPlayer.restart();
-
-        // Get the total number of frames for the current action
+        
         int totalFrames = spriteFramesPerTypeOfAnimationPlayer[currentAction];
-
-        // Move to the next frame
+        
         currentFrame = (currentFrame + 1) % totalFrames;
-
-        // Get the current sprite based on the current action
+        
         currentSpritePlayer = animSequencerPlayer.getCurrentSpritePlayer(currentAction, currentFrame);
-
-        // Set the correct scale and origin based on direction
-        if (onInverseDirection) 
-        {
+        
+        if (onInverseDirection) {
             currentSpritePlayer.setScale(-1.f, 1.f);
             currentSpritePlayer.setOrigin(currentSpritePlayer.getLocalBounds().width, 0.f);
-        } 
-        else 
-        {
+        } else {
             currentSpritePlayer.setScale(1.f, 1.f);
             currentSpritePlayer.setOrigin(0.f, 0.f);
         }
-
-        // Update position
+        
         currentSpritePlayer.setPosition(shape.getPosition());
     }
 }
 
-void Player::setCurrentAction(AnimationType newAction){
+void Player::setCurrentAction(AnimationType newAction) {
+    
     currentAction = newAction;
 }
 
 void Player::takeDamage(int damage) {
-    /*
-    health -= damage;
 
-    if (health <= 0) {
-        health = 0;
-        life--;
-
-        if (life < 0) life = 0;
-
-        if (life > 0) {
-     
-            health = 100.0f;
-
-        } else {
-            
-        }
-    } */
     life = life - damage;
-    
 }

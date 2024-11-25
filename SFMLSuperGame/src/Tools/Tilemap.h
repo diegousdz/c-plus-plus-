@@ -484,7 +484,7 @@ struct GameMap
     }
     
     ~GameMap() {
-        clearSections();  // Ensure cleanup in destructor
+        clearSections(); 
     }
 
    
