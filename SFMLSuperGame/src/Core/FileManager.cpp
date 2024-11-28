@@ -1,34 +1,13 @@
 ﻿#include "FileManager.h"
+#include <iostream>
+#include <fstream>
 #include <string>
 
-/* teacher way
-void FileManager::createNewOuputFile(std::string basePath, string nameFile, string data)
-{
-    string finalPath = basePath + "/" + nameFile + ".dat";
-    ofstream newFile(finalPath);
-    if(newFile.is_open())
-        newFile << data << endl;
-    newFile.close();
-}
+Player FileManager::loadPlayerProgress(const std::string& basePath, const std::string& fileName) {
 
-void FileManager::createNewInputFile(string basePath, string nameFile)
-{
-    ifstream newFile;
-    string finalPath = basePath + "/" + nameFile + ".dat";
-    string line;
-    newFile.open(finalPath);
-    while(std::getline(newFile, line))
-    {
-        cout << line << endl;
-    }
-    newFile.close();
-}
-*/
-
-Player FileManager::loadPlayerProgress(const std::string& basePath, const std::string& fileName)
-{
     std::string filePath = basePath + "/" + fileName + ".dat";
     std::ifstream inFile(filePath);
+    
     Player loadedPlayer;
 
     if (inFile.is_open()) {
@@ -58,8 +37,8 @@ Player FileManager::loadPlayerProgress(const std::string& basePath, const std::s
 }
 
 
-bool FileManager::savePlayerProgress(const std::string& basePath, const std::string& fileName, const Player& player)
-{
+bool FileManager::savePlayerProgress(const std::string& basePath, const std::string& fileName, const Player& player) {
+    
     std::string filePath = basePath + "/" + fileName + ".dat";
     std::ofstream outFile(filePath);
 
