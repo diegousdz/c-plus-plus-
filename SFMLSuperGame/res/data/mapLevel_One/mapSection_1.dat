@@ -217,7 +217,7 @@ TileCell[13][4] cellSize 8 cellType V textureID -1 xPos 0 yPos 0 isDoor 0 isChec
 TileCell[13][5] cellSize 8 cellType C textureID 3 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
 TileCell[13][6] cellSize 8 cellType C textureID 3 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
 TileCell[13][7] cellSize 8 cellType C textureID 3 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
-TileCell[13][8] cellSize 8 cellType C textureID 14 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
+TileCell[13][8] cellSize 8 cellType C textureID 3 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
 TileCell[13][9] cellSize 8 cellType C textureID 7 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
 TileCell[13][10] cellSize 8 cellType C textureID 7 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
 TileCell[13][11] cellSize 8 cellType V textureID -1 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
@@ -256,6 +256,6 @@ TileCell[15][11] cellSize 8 cellType C textureID 13 xPos 0 yPos 0 isDoor 0 isChe
 TileCell[15][12] cellSize 8 cellType V textureID 2 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
 TileCell[15][13] cellSize 8 cellType V textureID 2 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
 TileCell[15][14] cellSize 8 cellType V textureID 2 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
-TileCell[15][15] cellSize 8 cellType V textureID 2 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
+TileCell[15][15] cellSize 8 cellType C textureID 7 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
 backgroundArray:
 Sprite[0] PositionX 512 PositionY 0 ScaleX 512 ScaleY 512

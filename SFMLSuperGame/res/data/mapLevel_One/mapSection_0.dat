@@ -72,8 +72,8 @@ TileCell[4][3] cellSize 8 cellType V textureID -1 xPos 0 yPos 0 isDoor 0 isCheck
 TileCell[4][4] cellSize 8 cellType V textureID -1 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
 TileCell[4][5] cellSize 8 cellType V textureID -1 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
 TileCell[4][6] cellSize 8 cellType V textureID -1 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
-TileCell[4][7] cellSize 8 cellType V textureID -1 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
-TileCell[4][8] cellSize 8 cellType V textureID -1 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
+TileCell[4][7] cellSize 8 cellType C textureID 3 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
+TileCell[4][8] cellSize 8 cellType C textureID 3 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
 TileCell[4][9] cellSize 8 cellType V textureID -1 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
 TileCell[4][10] cellSize 8 cellType V textureID -1 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
 TileCell[4][11] cellSize 8 cellType V textureID -1 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
@@ -88,8 +88,8 @@ TileCell[5][3] cellSize 8 cellType V textureID -1 xPos 0 yPos 0 isDoor 0 isCheck
 TileCell[5][4] cellSize 8 cellType V textureID -1 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
 TileCell[5][5] cellSize 8 cellType V textureID -1 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
 TileCell[5][6] cellSize 8 cellType V textureID -1 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
-TileCell[5][7] cellSize 8 cellType C textureID 3 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
-TileCell[5][8] cellSize 8 cellType C textureID 3 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
+TileCell[5][7] cellSize 8 cellType V textureID -1 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
+TileCell[5][8] cellSize 8 cellType V textureID -1 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
 TileCell[5][9] cellSize 8 cellType V textureID -1 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
 TileCell[5][10] cellSize 8 cellType V textureID -1 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
 TileCell[5][11] cellSize 8 cellType V textureID -1 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
@@ -153,8 +153,8 @@ TileCell[9][4] cellSize 8 cellType V textureID -1 xPos 0 yPos 0 isDoor 0 isCheck
 TileCell[9][5] cellSize 8 cellType V textureID -1 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
 TileCell[9][6] cellSize 8 cellType V textureID -1 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
 TileCell[9][7] cellSize 8 cellType V textureID -1 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
-TileCell[9][8] cellSize 8 cellType V textureID -1 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
-TileCell[9][9] cellSize 8 cellType V textureID -1 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
+TileCell[9][8] cellSize 8 cellType C textureID 3 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
+TileCell[9][9] cellSize 8 cellType C textureID 3 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
 TileCell[9][10] cellSize 8 cellType V textureID -1 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
 TileCell[9][11] cellSize 8 cellType V textureID -1 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
 TileCell[9][12] cellSize 8 cellType V textureID -1 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
@@ -169,8 +169,8 @@ TileCell[10][4] cellSize 8 cellType V textureID -1 xPos 0 yPos 0 isDoor 0 isChec
 TileCell[10][5] cellSize 8 cellType V textureID -1 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
 TileCell[10][6] cellSize 8 cellType V textureID -1 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
 TileCell[10][7] cellSize 8 cellType V textureID -1 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
-TileCell[10][8] cellSize 8 cellType C textureID 3 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
-TileCell[10][9] cellSize 8 cellType C textureID 3 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
+TileCell[10][8] cellSize 8 cellType V textureID -1 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
+TileCell[10][9] cellSize 8 cellType V textureID -1 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
 TileCell[10][10] cellSize 8 cellType V textureID -1 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
 TileCell[10][11] cellSize 8 cellType V textureID -1 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0
 TileCell[10][12] cellSize 8 cellType V textureID -1 xPos 0 yPos 0 isDoor 0 isCheckpoint 0 isReadyToRender 0

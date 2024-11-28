@@ -83,15 +83,13 @@ public:
     {
         return doorEntity;
     }
-
-    // Collision detection methods
+    
     int checkCollisionEnemies(Player& player);
     int checkCollisionPowerUps(Player& player);
     int checkCollisionDeadZone(Player& player);
     bool checkCollisionDoor(Player& player);
     int checkCollisionStaticWorld(Player& player);
 
-    // Collision response methods
     void updatePlayerOnCollisionWithEnemy(Player& player, sf::RectangleShape& entity);
     void updatePlayerOnCollisionWithPowerUp(Player& player, sf::RectangleShape& entity);
     void updatePlayerOnCollisionWithDeadZone(Player& player, sf::RectangleShape& entity);
@@ -101,13 +99,10 @@ public:
     void createEnemiesLevelOne();
     void calculateOrcAndPlayer(ResourceManager& resourceManager, Player& player);
     void calculateOrcAndWorld( ResourceManager& resourceManager, const std::vector<TileCell*>& collisionCells);
-
-    // Initialization and update methods
+    
     void gemInit(int levelEnemiesCount, sf::RectangleShape* enemies, int levelPowerUpsCount, sf::RectangleShape* powerUps, int levelDeadZoneCount, sf::RectangleShape* deadZones, int levelStaticWorldEntitiesCount, sf::RectangleShape* staticWorld, const sf::RectangleShape& door);
     void gemUpdate(Player& player, const std::vector<TileCell*>& collisionCells);
-    int checkCollisionWithCells(Player& player, const std::vector<TileCell*>& collisionCells);
-
-    // Setters for entity counts
+    
     void setEnemiesNumber(int value)
     {
         this->numberOfEnemies = value;

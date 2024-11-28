@@ -1,21 +1,18 @@
 ﻿#pragma once
 #include "Warrior.h"
 #include "Player.h"
-#include <SFML/Graphics.hpp>
 #include "./../Core/AnimationSequencer.h"
-
+#include <SFML/Graphics.hpp>
 #include <iostream>
 
-class Orc : public Warrior
-{
-
+class Orc : public Warrior {
 public:
     enum AnimationType {
         Attack,
         Die,
         Hurt,
         Idle,
-        Run,
+        Run
     };
 
     enum class OrcState {
@@ -39,12 +36,12 @@ public:
         const float HEIGHT = 8.0f;
         const float OFFSET_Y = -15.0f;
     };
-    
+
     Orc();
     void setTexture(sf::Texture* texture);
 
-    int spriteFramesPerTypeOfAnimationOrc[1] = {4}; 
-    
+    int spriteFramesPerTypeOfAnimationOrc[1] = {4};
+
     sf::Sprite currentSpriteOrc;
     AnimationSequencer animSequencerOrc;
     float speed = 100.0f;
@@ -52,7 +49,7 @@ public:
     float animationInterval = 0.1f;
     AnimationType currentAction = Idle;
     sf::Clock animationClockOrc;
-    
+
     sf::RectangleShape shape;
     sf::RectangleShape collisionShape;
     sf::Texture textureOrc;
@@ -74,18 +71,13 @@ public:
 
     bool isInitialized = false;
     bool hasCollidedWithPlayer = false;
-
     bool animationsLoaded = false;
-    
-    // functiones from base class
+
     void attack(Warrior* warrior) override;
     void takeDamage(int damage);
     void update(float deltaTime);
     void updateAnimation(float deltaTime);
-
-    // Animation and initialization
     void loadAnimationsOrc();
-
 
 private:
     OrcState currentState = OrcState::IDLE;
@@ -95,8 +87,7 @@ private:
     sf::Vector2f spawnPoint;
     float patrolStartX = 0.0f;
     bool isActive = false;
-    
-    
+
     sf::Clock idleTimer;
     sf::Clock attackTimer;
 };

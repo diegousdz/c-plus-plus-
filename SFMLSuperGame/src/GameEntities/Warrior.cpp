@@ -1,42 +1,37 @@
 ﻿#include "Warrior.h"
 #include <random>
 
-// Define the static member variables
-std::mt19937 Warrior::gen = std::mt19937(std::random_device{}());  // Mersenne Twister engine
-std::uniform_real_distribution<> Warrior::dis = std::uniform_real_distribution<>(0.0, 1.0);  // Uniform distribution
+std::mt19937 Warrior::gen = std::mt19937(std::random_device{}());
+std::uniform_real_distribution<> Warrior::dis = std::uniform_real_distribution<>(0.0, 1.0);
 
-Warrior::Warrior()
-{
-    this->id = 'o';
-    this->health = 100;
-    this->damage = 20;
+Warrior::Warrior() {
+    id = 'o';
+    health = 100;
+    damage = 20;
 }
-Warrior::Warrior(char id, int damage, int health)
-{
+
+Warrior::Warrior(char id, int damage, int health) {
     this->id = id;
     this->damage = damage;
     this->health = health;
 }
-// warrior type orc
-Warrior::Warrior(int health, int damage)
-{
+
+Warrior::Warrior(int health, int damage) {
     id = 'o';
     this->health = health;
     this->damage = damage;
 }
 
-Warrior::Warrior(char id)
-{
+Warrior::Warrior(char id) {
     this->id = id;
-    this->damage = 20;
-    this->health = 100;
+    damage = 20;
+    health = 100;
 }
 
-Warrior::Warrior(char id, int damage)
-{
+Warrior::Warrior(char id, int damage) {
     this->id = id;
     this->damage = damage;
-    this->health = 100;
+    health = 100;
 }
 
 void Warrior::attack(Warrior* warrior) {
@@ -45,13 +40,13 @@ void Warrior::attack(Warrior* warrior) {
     }
 }
 
-void Warrior::receivedDamage()
-{
+void Warrior::receivedDamage() {
     health -= 10;
 }
 
 void Warrior::receivedDamage(int damageFromWarrior) {
     health -= damageFromWarrior;
-    if (health < 0)
-        health = 0; 
+    if (health < 0) {
+        health = 0;
+    }
 }

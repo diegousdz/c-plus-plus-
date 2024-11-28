@@ -3,8 +3,7 @@
 #include <map>
 #include <vector>
 
-class AnimationSequencer
-{
+class AnimationSequencer {
 public:
     
     std::map<int, std::vector<sf::Sprite>> animationFramesPlayer; 

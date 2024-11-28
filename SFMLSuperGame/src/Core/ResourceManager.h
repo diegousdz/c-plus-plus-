@@ -9,15 +9,18 @@
 
 struct TileCell;
 
-class ResourceManager
-{
+class ResourceManager {
 public:
-    // Engine
     int windowWidth = 512;
     int windowHeight  = 512;
     
-    void setWindowWidth(int width) { windowWidth = width; }
-    void setWindowHeight(int height) { windowHeight = height; }
+    void setWindowWidth(int width) {
+        windowWidth = width;
+    }
+
+    void setWindowHeight(int height) {
+        windowHeight = height;
+    }
 
     void allocateEnemies();
     void loadResources();
@@ -26,7 +29,6 @@ public:
     float getDeltaTime() const;
     void updateAndMoveOrcs(float deltaTime);
 
-    // Game variables
     bool isMainMenuActive = true;
     bool isGameInitialized = false;
     int currentOptionSelected = 0;
@@ -40,8 +42,7 @@ public:
     bool hasPlayerMoved = false;
     static constexpr  int NUMBER_OF_ENEMY_LEVEL_ONE = 10;
     Orc* orcWarriorsPoolShapes[NUMBER_OF_ENEMY_LEVEL_ONE];
-    void createEnemiesLevelOne(float initialPositionX, float initialPositionY);
-
+ 
     int getPlayerTypeOfAnimationLastSet() const;
     void setPlayerTypeOfAnimationLastSet(int type);
     ~ResourceManager();
@@ -97,19 +98,8 @@ public:
 
     // ----------------------------- Game class
     
-    void setSpawnPointOne(int index, Orc* orc) {
-        if (index >= 0 && index < 5) {
-            orcSpawnManagerOne[index] = orc;
-        }
-    }
-
-    Orc* getSpawnPointOne(int index) const {
-        if (index >= 0 && index < 5) {
-            return orcSpawnManagerOne[index];
-        }
-        return nullptr; 
-    }
-
+    void setSpawnPointOne(int index, Orc* orc); 
+    Orc* getSpawnPointOne(int index) const;
     
     Orc* orcSpawnManagerOne[5];
     float spawnPointOnePosX = 300.0f;
@@ -133,7 +123,8 @@ public:
     sf::Sprite  backgroundSpriteOne;
     sf::Sprite  backgroundSpriteTwo;
     sf::Sprite  backgroundSpriteThree;
-    sf::Sprite& getBackgroundSpriteOne() { return backgroundSpriteOne; }
+    sf::Sprite& getBackgroundSpriteOne(); 
+
 
     bool hasTextureToSpriteOneFinished = false;
     bool hasTextureToSpriteTwoFinished = false;
@@ -141,13 +132,13 @@ public:
 
     bool hasTexturesForGameLoaded = false;
 
-    sf::Vector2f initalSpawnPositionLevelOne = sf::Vector2f(91.5141, 32);
+    sf::Vector2f initalSpawnPositionLevelOne = sf::Vector2f(91.5141f, 32.0f);
     sf::Vector2f initalSpawnPositionLevelTwo;
     sf::Vector2f initalSpawnPositionLevelThree;
 
     int currentUserLevel = 1;
     float deadZoneYPosition = 510.0f;
-    bool gameOver = false; // Add this variable to track game over state
+    bool gameOver = false; 
     bool gameOverInitialized = false;
     sf::Text gameOverText;
     sf::Text restartPrompt;
@@ -163,9 +154,6 @@ public:
 
     sf::Texture enemyTexture;
 private:
-
-    
-    int playerTypeOfAnimationLastSet; 
-    
+    int playerTypeOfAnimationLastSet = 0; 
     float deltaTime = 0.0f;
 };
