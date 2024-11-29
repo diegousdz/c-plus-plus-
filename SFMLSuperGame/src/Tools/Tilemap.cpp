@@ -113,7 +113,8 @@ void Tilemap::deallocateGameMap() {
 }
 
 void Tilemap::allocateGameMap(int cellSize, int screenWidth, int screenHeight, int mapSize) {
-    if (gameMap) deallocateGameMap();
+    if (gameMap)
+        deallocateGameMap();
 
     gameMap = new GameMap(cellSize, screenWidth, screenHeight, mapSize);
     if (mapSize == 1) {
@@ -123,10 +124,8 @@ void Tilemap::allocateGameMap(int cellSize, int screenWidth, int screenHeight, i
     } else if (mapSize == 3) {
         gameMap->createSections(6);
     }
-    std::cout << "GameMap allocated with cell size: " << cellSize
-              << ", screen dimensions: " << screenWidth << "x" << screenHeight
-              << ", map size: " << mapSize << std::endl;
-
+    
+    std::cout << "GameMap allocated with cell size: " << cellSize << ", screen dimensions: " << screenWidth << "x" << screenHeight << ", map size: " << mapSize << std::endl;
     allocateMapSections(gameMap->sections);
 }
 
