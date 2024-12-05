@@ -1,8 +1,9 @@
 ﻿#pragma once
+#include <SFML/Audio.hpp>
 
 class SoundSequencer
-{
-public:
-    
-    
+{ 
+    int loadSoundBuffers();
+private:
+    sf::SoundBuffer soundBuffer[6];
 };
