@@ -35,9 +35,8 @@ Warrior::Warrior(char id, int damage) {
 }
 
 void Warrior::attack(Warrior* warrior) {
-    if (warrior) {
+    if (warrior) 
         warrior->receivedDamage(damage);
-    }
 }
 
 void Warrior::receivedDamage() {

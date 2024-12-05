@@ -68,19 +68,15 @@ void Orc::takeDamage(int damage) {
 void Orc::update(float deltaTime) {
     if (animationClockOrc.getElapsedTime().asSeconds() >= animationInterval) {
         currentFrame++;
-        if (currentFrame >= spriteFramesPerTypeOfAnimationOrc[currentAction]) {
+        if (currentFrame >= spriteFramesPerTypeOfAnimationOrc[currentAction]) 
             currentFrame = 0;
-        }
 
         if (animationsLoaded) {
             currentSpriteOrc = animSequencerOrc.animationFramesOrcs[currentAction][currentFrame];
             currentSpriteOrc.setPosition(shape.getPosition());
             if (onInverseDirection) {
                 currentSpriteOrc.setScale(-1.0f, 1.0f);
-                currentSpriteOrc.setPosition(
-                    shape.getPosition().x + shape.getSize().x,
-                    shape.getPosition().y
-                );
+                currentSpriteOrc.setPosition(shape.getPosition().x + shape.getSize().x, shape.getPosition().y);
             } else {
                 currentSpriteOrc.setScale(1.0f, 1.0f);
             }
@@ -92,9 +88,8 @@ void Orc::update(float deltaTime) {
 void Orc::updateAnimation(float deltaTime) {
     if (animationClockOrc.getElapsedTime().asSeconds() >= animationInterval) {
         currentFrame++;
-        if (currentFrame >= 4) {
+        if (currentFrame >= 4) 
             currentFrame = 0;
-        }
 
         sf::IntRect frameRect(
             currentFrame * 32,
@@ -107,10 +102,7 @@ void Orc::updateAnimation(float deltaTime) {
         currentSpriteOrc.setPosition(shape.getPosition());
         if (onInverseDirection) {
             currentSpriteOrc.setScale(-1.0f, 1.0f);
-            currentSpriteOrc.setPosition(
-                shape.getPosition().x + shape.getSize().x,
-                shape.getPosition().y
-            );
+            currentSpriteOrc.setPosition(shape.getPosition().x + shape.getSize().x, shape.getPosition().y);
         } else {
             currentSpriteOrc.setScale(1.0f, 1.0f);
         }

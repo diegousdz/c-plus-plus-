@@ -1,9 +1,6 @@
 ﻿#include "GameEntityManager.h"
-
 #include "../Core/FileManager.h"
 #include "../GameEntities/Orc.h"
-
-struct TileCell;
 #include "../Tools/Tilemap.h"
 #include "../Core/ResourceManager.h"
 

@@ -3,7 +3,6 @@
 #include "../Core/ResourceManager.h"
 #include "../GameEntities/Player.h"
 #include "../Tools/Tilemap.h"
-
 #include <sstream>
 #include <iostream>
 #include <fstream>
