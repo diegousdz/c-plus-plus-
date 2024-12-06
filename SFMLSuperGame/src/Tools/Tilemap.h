@@ -158,11 +158,13 @@ struct MapSection {
     {
         for (int y = 0; y < numberOfCellsPerRow; ++y) {
             delete[] tilecellArray[y];
+            
         }
         delete[] tilecellArray;
-
-        // Clean up backgroundArray
+        tilecellArray = nullptr;
+        
         delete[] backgroundArray;
+        backgroundArray = nullptr;
     }
 
     bool saveToFile(const std::string& basePath, const std::string& nameFile) const {
@@ -416,7 +418,6 @@ struct GameMap {
     ~GameMap() {
         clearSections(); 
     }
-
    
     bool loadFromFile(const char* basePath, const char* fileName) {
         std::string filePath = std::string(basePath) + "/" + std::string(fileName) + ".dat";
@@ -463,6 +464,7 @@ public:
     sf::Sprite** getTilemap() const;
 
     GameMap* getGameMap() { return gameMap;}
+    
     GameMap* gameMap = nullptr;
     MapSection** getMapSection() const { return mapSection; }
     MapSection** mapSection = nullptr;

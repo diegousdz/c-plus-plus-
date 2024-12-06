@@ -38,7 +38,6 @@ public:
     void drawSectionMap(sf::RenderWindow& window) const;
     void drawBrushesTexture(sf::RenderWindow& window) const;
     void drawRotationControls(sf::RenderWindow& window) const;
-    void drawBackground(sf::RenderWindow& window) const;
     void draw(sf::RenderWindow &window);
     void checkMousePositionAndClickOnVisibilityAndRotation(const sf::Vector2i& mousePosition, sf::Event event);
     void onLoadButtonClick();

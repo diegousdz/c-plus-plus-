@@ -16,6 +16,7 @@ void NexusManager::handleInput() {
     sf::Event event;
     while (resourceManager.gameWindow.pollEvent(event)) {
         if (event.type == sf::Event::Closed || event.key.code == sf::Keyboard::Escape) {
+            game.~Game();
             resourceManager.gameWindow.close();
         }
 
@@ -26,6 +27,7 @@ void NexusManager::handleInput() {
                     resourceManager.gameOverInitialized = false;
                     game.restartGame(resourceManager.newGamePlayer, resourceManager);
                 } else if (event.key.code == sf::Keyboard::Escape) {
+                    game.~Game();
                     resourceManager.gameWindow.close();
                 }
             }
@@ -36,6 +38,7 @@ void NexusManager::handleInput() {
                     resourceManager.winScreenInitialized = false;
                     game.restartGame(resourceManager.newGamePlayer, resourceManager);
                 } else if (event.key.code == sf::Keyboard::Escape) {
+                    game.~Game();
                     resourceManager.gameWindow.close();
                 }
             }
@@ -74,6 +77,7 @@ void NexusManager::handleInput() {
                         resourceManager.isMainMenuActive = false;
                         resourceManager.isInGame = true;
                     } else if (resourceManager.currentOptionSelected == 2) {
+                        game.~Game();
                         resourceManager.gameWindow.close();
                     }
                 }

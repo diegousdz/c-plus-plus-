@@ -70,7 +70,7 @@ void WorldEditor::initLoadTilemap() {
     buttonTextSave.setPosition(buttonSave.getPosition().x + 8.0f, static_cast<float>(baseTilePositionY) + static_cast<float>(paddingLoadTile));
     buttonTextSave.setFillColor(sf::Color::White);
 
-    sectionLoadTilemapHeight = static_cast<int>(static_cast<float>(baseLoadTilemap.getSize().y) + static_cast<float>(paddingLoadTile) * 2.0f);
+    sectionLoadTilemapHeight = baseLoadTilemap.getSize().y + paddingLoadTile * 2.0f;
 }
 
 void WorldEditor::initTileSizeGroup() {

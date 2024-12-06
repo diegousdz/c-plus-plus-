@@ -7,6 +7,8 @@ Tilemap::Tilemap(int type, int cellSize) {
 }
 
 Tilemap::~Tilemap() {
+    deallocateMapSections();
+    deallocateGameMap();
     clearTilemap();
 }
 

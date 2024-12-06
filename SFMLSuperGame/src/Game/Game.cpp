@@ -1,11 +1,19 @@
 ﻿#include "Game.h"
 #include "../GameEntities/Orc.h"
 
-Game::Game() {
+Game::Game() : entityManager(), currentSection(nullptr) {
+}
+
+Game::~Game() {
+    if (gameMap) {
+        deallocateSections();
+        delete gameMap; 
+        gameMap = nullptr;
+    }
 }
 
 float Game::recalculateYPosition(int row) {
-    return 512 - (row * 32);
+    return static_cast<float>(512 - (row * 32));
 }
 
 void Game::initializeTileTexturesLevelOne() {
@@ -154,7 +162,7 @@ bool Game::loadMapSection(GameMap* gameMap, const std::string& basePath, int sec
                     cell.isDoor = isDoor;
 
                     if (isDoor) {
-                        int offsetMap = (mapSectionNumberWhereDoorIsAtLevelOne - 1) * 512;
+                        float offsetMap = static_cast<float>((mapSectionNumberWhereDoorIsAtLevelOne - 1) * 512);
                         float doorX = static_cast<float>(col * cellSize) + offsetMap;
                         float doorY = recalculateYPosition(row);
 
@@ -185,7 +193,7 @@ bool Game::loadMapSection(GameMap* gameMap, const std::string& basePath, int sec
             cell.shape.setPosition(cell.xPos, cell.yPos);
             cell.sprite.setPosition(cell.xPos, cell.yPos);
 
-            cell.shape.setSize(sf::Vector2f(cell.cellSize, cell.cellSize));
+            cell.shape.setSize(sf::Vector2f(static_cast<float>(cell.cellSize), static_cast<float>(cell.cellSize)));
             if (cell.cellType == 'C') {
                 cell.shape.setFillColor(sf::Color(0, 0, 255, 100));
             } else {
@@ -302,36 +310,21 @@ void Game::draw(sf::RenderWindow& window, ResourceManager& resourceManager) {
                         if (cell.cellType == 'V' && cell.textureID == 11 || cell.cellType == 'V' && cell.textureID == 2) {
                             window.draw(cell.sprite);
                         }
-
-                        if (!cell.textureID == -1) {
-                            window.draw(cell.shape);
-                        }
                     }
                 }
             }
         }
 
         if (resourceManager.hasSpawnOneInitialized) {
-            for (int i = 0; i < 5; i++) {
-                if (resourceManager.orcSpawnManagerOne[i]) {
-                    window.draw(resourceManager.orcSpawnManagerOne[i]->currentSpriteOrc);
+            for (const auto& orc : resourceManager.orcSpawnManagerOne) {
+                if (orc) {
+                    window.draw(orc->currentSpriteOrc);
                 }
             }
         }
     }
 
     window.draw(resourceManager.newGamePlayer.currentSpritePlayer);
-/*
-    sf::RectangleShape debugBoxRed(resourceManager.newGamePlayer.shape.getSize());
-    debugBoxRed.setPosition(resourceManager.newGamePlayer.shape.getPosition());
-    debugBoxRed.setFillColor(sf::Color(255, 0, 0, 128));
-    window.draw(debugBoxRed);
-
-    sf::FloatRect spriteBounds = resourceManager.newGamePlayer.currentSpritePlayer.getGlobalBounds();
-    sf::RectangleShape debugBoxBlue(sf::Vector2f(spriteBounds.width, spriteBounds.height));
-    debugBoxBlue.setPosition(spriteBounds.left, spriteBounds.top);
-    debugBoxBlue.setFillColor(sf::Color(0, 0, 255, 128));
-    window.draw(debugBoxBlue);*/ 
 }
 
 void Game::restartGame(Player& player, ResourceManager& resourceManager) {
@@ -362,4 +355,34 @@ void Game::restartGame(Player& player, ResourceManager& resourceManager) {
     }
 
     std::cout << "Game has been restarted." << std::endl;
+}
+void Game::deallocateTileCellArray(MapSection* section) {
+    if (!section || !section->tilecellArray)
+        return;
+
+    for (int y = 0; y < section->numberOfCellsPerRow; y++) {
+        delete[] section->tilecellArray[y]; // Deallocate each row
+    }
+
+    delete[] section->tilecellArray; // Deallocate the main array
+    section->tilecellArray = nullptr;
+
+    std::cout << "TileCell array deallocated for section." << std::endl;
+}
+
+void Game::deallocateSections() {
+    if (!gameMap || !gameMap->sections)
+        return;
+
+    for (int i = 0; i < gameMap->mapSections; i++) {
+        if (gameMap->sections[i]) {
+            deallocateTileCellArray(gameMap->sections[i]); // Clean up TileCell array
+            delete gameMap->sections[i]; // Delete the MapSection
+        }
+    }
+
+    delete[] gameMap->sections; // Delete the sections array
+    gameMap->sections = nullptr;
+
+    std::cout << "All map sections deallocated successfully." << std::endl;
 }

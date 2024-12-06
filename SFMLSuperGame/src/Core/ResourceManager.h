@@ -28,7 +28,7 @@ public:
     void loadGameBackgrounds();
     void setDeltaTime();
     float getDeltaTime() const;
-    void updateAndMoveOrcs(float deltaTime);
+    void updateAndMoveOrcs(float deltaTime) const;
 
     bool isMainMenuActive = true;
     bool isGameInitialized = false;

@@ -102,9 +102,8 @@ bool SoundSequencer::initBuffers() {
 }
 
 bool SoundSequencer::soundSequencerInit() {
-    
-   if(loadSoundBuffers()) 
-       initBuffers();
-    
+    if (loadSoundBuffers() && initBuffers()) {
+        return true; 
+    }
     return false; 
 }

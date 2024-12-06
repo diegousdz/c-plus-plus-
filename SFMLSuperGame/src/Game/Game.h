@@ -12,6 +12,7 @@ class ResourceManager;
 class Game {
 public:
     Game();
+    ~Game();
     float recalculateYPosition(int row);
     void initializeTileTexturesLevelOne();
 
@@ -20,6 +21,9 @@ public:
     void update(float deltaTime, Player& player, ResourceManager& resourceManager);
     void draw(sf::RenderWindow& window, ResourceManager& resourceManager);
     void restartGame(Player& player, ResourceManager& resourceManager);
+
+    void deallocateSections();
+    void deallocateTileCellArray(MapSection* section);
 
     GameEntityManager entityManager;
     bool isGameMapLoaded = false;
@@ -69,7 +73,6 @@ private:
 
     float doorLevelThreePosX = 0.0f;
     float doorLevelThreePosY = 0.0f;
-    float mapSectionNumberWhereDoorIsAtLevelThree = 6;
 
     int winLevel = 1;
     int playerCurrentLevel = 1;

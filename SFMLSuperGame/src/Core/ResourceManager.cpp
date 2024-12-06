@@ -126,7 +126,7 @@ float ResourceManager::getDeltaTime() const {
     return deltaTime;
 }
 
-void ResourceManager::updateAndMoveOrcs(float deltaTime) {
+void ResourceManager::updateAndMoveOrcs(float deltaTime) const {
     float positionUpdateOrcOneA = 310.219f, positionUpdateOrcOneB = 96.0f;
     float positionUpdateOrcTwoA = 632.0f, positionUpdateOrcTwoB = 440.0f;
     float positionUpdateOrcThreeA = 1531.63f, positionUpdateOrcThreeB = 1376.5f;
