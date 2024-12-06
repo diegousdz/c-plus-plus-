@@ -270,7 +270,7 @@ void Game::update(float deltaTime, Player& player, ResourceManager& resourceMana
     entityManager.calculateOrcAndWorld(resourceManager, collisionCells);
     entityManager.calculateOrcAndPlayer(resourceManager, player);
     player.handleMovement(deltaTime);
-    entityManager.gemUpdate(player, collisionCells);
+    entityManager.gemUpdate(player, collisionCells, resourceManager);
 }
 
 void Game::draw(sf::RenderWindow& window, ResourceManager& resourceManager) {
@@ -315,15 +315,13 @@ void Game::draw(sf::RenderWindow& window, ResourceManager& resourceManager) {
             for (int i = 0; i < 5; i++) {
                 if (resourceManager.orcSpawnManagerOne[i]) {
                     window.draw(resourceManager.orcSpawnManagerOne[i]->currentSpriteOrc);
-                    std::cout << "Position Orc: " << i << " position X: " << resourceManager.orcSpawnManagerOne[i]->shape.getPosition().x
-                              << " Position Orc Y: " << resourceManager.orcSpawnManagerOne[i]->shape.getPosition().y << std::endl;
                 }
             }
         }
     }
 
     window.draw(resourceManager.newGamePlayer.currentSpritePlayer);
-
+/*
     sf::RectangleShape debugBoxRed(resourceManager.newGamePlayer.shape.getSize());
     debugBoxRed.setPosition(resourceManager.newGamePlayer.shape.getPosition());
     debugBoxRed.setFillColor(sf::Color(255, 0, 0, 128));
@@ -333,7 +331,7 @@ void Game::draw(sf::RenderWindow& window, ResourceManager& resourceManager) {
     sf::RectangleShape debugBoxBlue(sf::Vector2f(spriteBounds.width, spriteBounds.height));
     debugBoxBlue.setPosition(spriteBounds.left, spriteBounds.top);
     debugBoxBlue.setFillColor(sf::Color(0, 0, 255, 128));
-    window.draw(debugBoxBlue);
+    window.draw(debugBoxBlue);*/ 
 }
 
 void Game::restartGame(Player& player, ResourceManager& resourceManager) {

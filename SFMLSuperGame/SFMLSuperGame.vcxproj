@@ -150,7 +150,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir)\libs\SFML\lib\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib</AdditionalDependencies>
+      <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-audio-d.lib;</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>if not exist "$(TargetDir)res\" (
@@ -191,7 +191,7 @@
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <!-- Disable debug information for release -->
       <AdditionalLibraryDirectories>$(ProjectDir)\libs\SFML\lib\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-graphics.lib;sfml-window.lib;sfml-system.lib;sfml-main.lib</AdditionalDependencies>
+      <AdditionalDependencies>sfml-graphics.lib;sfml-window.lib;sfml-system.lib;sfml-main.lib;sfml-audio.lib;</AdditionalDependencies>
       <WholeProgramOptimization>true</WholeProgramOptimization>
       <!-- Enable whole program optimization for the linker as well -->
     </Link>
@@ -206,6 +206,7 @@
     <ClInclude Include="src\Core\GUIHandler.h" />
     <ClInclude Include="src\Core\HelperFunctions.h" />
     <ClInclude Include="src\Core\NexusManager.h" />
+    <ClInclude Include="src\Core\Program.h" />
     <ClInclude Include="src\Core\ResourceManager.h" />
     <ClInclude Include="src\Core\SoundSequencer.h" />
     <ClInclude Include="src\GameEntities\Orc.h" />
@@ -222,6 +223,7 @@
     <ClCompile Include="src\Core\GUIHandler.cpp" />
     <ClCompile Include="src\Core\HelperFunctions.cpp" />
     <ClCompile Include="src\Core\NexusManager.cpp" />
+    <ClCompile Include="src\Core\Program.cpp" />
     <ClCompile Include="src\Core\ResourceManager.cpp" />
     <ClCompile Include="src\Core\SoundSequencer.cpp" />
     <ClCompile Include="src\GameEntities\Orc.cpp" />

@@ -25,23 +25,23 @@ void ResourceManager::allocateEnemies() {
 
         for (int i = 0; i < 5; i++) {
             if (i == 0) {
-                orcSpawnManagerOne[0]->shape.setPosition(310.219f, helperFunctions.recalculateYPositionNegate(3));
+                orcSpawnManagerOne[0]->shape.setPosition(310.219f, helperFunctions.recalculateYPosition(2));
                 std::cout << "initial position 0"
                           << "X: " << orcSpawnManagerOne[i]->shape.getPosition().x << "Y" << orcSpawnManagerOne[i]->shape.getPosition().y << std::endl;
             } else if (i == 1) {
-                orcSpawnManagerOne[1]->shape.setPosition(500.075f, helperFunctions.recalculateYPositionNegate(4));
+                orcSpawnManagerOne[1]->shape.setPosition(500.075f, helperFunctions.recalculateYPosition(2));
                 std::cout << "initial position 1"
                           << "X: " << orcSpawnManagerOne[i]->shape.getPosition().x << "Y" << orcSpawnManagerOne[i]->shape.getPosition().y << std::endl;
             } else if (i == 2) {
-                orcSpawnManagerOne[2]->shape.setPosition(1376.5f, helperFunctions.recalculateYPositionNegate(7));
+                orcSpawnManagerOne[2]->shape.setPosition(1376.5f, helperFunctions.recalculateYPosition(2));
                 std::cout << "initial position 2"
                           << "X: " << orcSpawnManagerOne[i]->shape.getPosition().x << "Y" << orcSpawnManagerOne[i]->shape.getPosition().y << std::endl;
             } else if (i == 3) {
-                orcSpawnManagerOne[3]->shape.setPosition(2172.95f, helperFunctions.recalculateYPositionNegate(7));
+                orcSpawnManagerOne[3]->shape.setPosition(2172.95f, helperFunctions.recalculateYPosition(1));
                 std::cout << "initial position 3"
                           << "X: " << orcSpawnManagerOne[i]->shape.getPosition().x << "Y" << orcSpawnManagerOne[i]->shape.getPosition().y << std::endl;
             } else if (i == 4) {
-                orcSpawnManagerOne[4]->shape.setPosition(2865.23f, helperFunctions.recalculateYPositionNegate(7));
+                orcSpawnManagerOne[4]->shape.setPosition(2865.23f, helperFunctions.recalculateYPosition(2));
                 std::cout << "initial position 4"
                           << "X: " << orcSpawnManagerOne[i]->shape.getPosition().x << "Y" << orcSpawnManagerOne[i]->shape.getPosition().y << std::endl;
             }
@@ -93,6 +93,12 @@ void ResourceManager::loadResources() {
     newGamePlayer.setTexture(&playerIdleTexture);
     newGamePlayer.loadAnimationsPlayer();
     loadGameBackgrounds();
+
+    if (!soundSequencer.soundSequencerInit()) {
+        std::cerr << "SoundSequencer failed to initialize." << std::endl;
+    } else {
+        std::cout << "SoundSequencer initialized successfully." << std::endl;
+    }
 }
 
 void ResourceManager::loadGameBackgrounds() {
@@ -142,7 +148,7 @@ void ResourceManager::updateAndMoveOrcs(float deltaTime) {
         }
 
         if (!orc->isOnGround) {
-            orc->velocity.y += gravity * deltaTime;
+           // orc->velocity.y += gravity * deltaTime;
         } else {
             orc->velocity.y = 0.0f;
         }

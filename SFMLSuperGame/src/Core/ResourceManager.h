@@ -6,6 +6,7 @@
 #include "FileManager.h"
 #include "GUIHandler.h"
 #include "HelperFunctions.h"
+#include "SoundSequencer.h"
 
 struct TileCell;
 
@@ -153,6 +154,8 @@ public:
     bool hasRenderWinScreen = false;
 
     sf::Texture enemyTexture;
+
+    SoundSequencer soundSequencer;
 private:
     int playerTypeOfAnimationLastSet = 0; 
     float deltaTime = 0.0f;

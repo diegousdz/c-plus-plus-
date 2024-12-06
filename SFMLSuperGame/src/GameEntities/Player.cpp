@@ -97,22 +97,8 @@ void Player::loadAnimationsPlayer() {
 
 void Player::setPlayerPosition(sf::Vector2f incomingPosition) {
     shape.setPosition(incomingPosition);
-    sf::Vector2f shapeSize = shape.getSize();
-    sf::Vector2f collisionSize = collisionShape.getSize();
-
-    if (isOnGround) {
-        collisionShape.setPosition(
-            incomingPosition.x + (shapeSize.x - collisionSize.x) / 2.0f,
-            (incomingPosition.y + (shapeSize.y - collisionSize.y) / 2.0f) + 1.0f
-        );
-    } else {
-        collisionShape.setPosition(
-            incomingPosition.x + (shapeSize.x - collisionSize.x) / 2.0f,
-            incomingPosition.y + (shapeSize.y - collisionSize.y) / 2.0f
-        );
-    }
-
     currentSpritePlayer.setPosition(incomingPosition);
+    sf::Vector2f collisionSize = collisionShape.getSize();
 }
 
 void Player::setTexture(sf::Texture* texture) {
@@ -129,8 +115,11 @@ void Player::setSize(float sizeX, float sizeY) {
 }
 
 void Player::handleMovement(float deltaTime) {
-    velocity.y += gravity * deltaTime;
-
+    if (shape.getPosition().y != previousPosition.y) {
+        velocity.y += gravity * 16 * deltaTime;
+        previousPosition.x = shape.getPosition().x;
+    }
+    
     if (movingLeft) {
         velocity.x = -speed;
         currentAction = Run;
@@ -142,13 +131,28 @@ void Player::handleMovement(float deltaTime) {
     }
 
     shape.move(velocity * deltaTime);
+    previousPosition.y = shape.getPosition().y;
 }
 
 void Player::updateAnimation(float deltaTime) {
     if (animationClockPlayer.getElapsedTime().asSeconds() >= animationInterval) {
         animationClockPlayer.restart();
+
         int totalFrames = spriteFramesPerTypeOfAnimationPlayer[currentAction];
-        currentFrame = (currentFrame + 1) % totalFrames;
+        
+        if (currentAction == Jump) {
+            if (!hasPlayerJump) {
+                currentFrame = 0;
+            } else {
+                if (currentFrame < totalFrames - 1) {
+                    currentFrame++;
+                } else {
+                    currentFrame = totalFrames - 1;
+                }
+            }
+        } else {
+            currentFrame = (currentFrame + 1) % totalFrames;
+        }
 
         currentSpritePlayer = animSequencerPlayer.getCurrentSpritePlayer(currentAction, currentFrame);
 
@@ -158,7 +162,7 @@ void Player::updateAnimation(float deltaTime) {
         } else {
             currentSpritePlayer.setScale(1.f, 1.f);
             currentSpritePlayer.setOrigin(0.f, 0.f);
-        }
+        }   
 
         sf::Vector2f currentShapeSize = shape.getSize();
         sf::Vector2f newShapeSize;
@@ -197,4 +201,9 @@ void Player::setCurrentAction(AnimationType newAction) {
 
 void Player::takeDamage(int damage) {
     life = life - damage;
+}
+
+void Player::updateGroundState()
+{
+    wasOnGround = isOnGround; 
 }

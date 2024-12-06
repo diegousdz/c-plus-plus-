@@ -3,6 +3,7 @@
 #include "../GameEntities/Player.h"
 #include "../Core/HelperFunctions.h"
 
+class Orc;
 struct TileCell;
 
 class ResourceManager;
@@ -71,7 +72,7 @@ public:
     void calculateOrcAndWorld( ResourceManager& resourceManager, const std::vector<TileCell*>& collisionCells);
     
     void gemInit(int levelEnemiesCount, sf::RectangleShape* enemies, int levelPowerUpsCount, sf::RectangleShape* powerUps, int levelDeadZoneCount, sf::RectangleShape* deadZones, int levelStaticWorldEntitiesCount, sf::RectangleShape* staticWorld, const sf::RectangleShape& door);
-    void gemUpdate(Player& player, const std::vector<TileCell*>& collisionCells);
+    void gemUpdate(Player& player, const std::vector<TileCell*>& collisionCells, ResourceManager& resourceManager);
     
     void setEnemiesNumber(int value) {
         this->numberOfEnemies = value;
@@ -98,6 +99,33 @@ public:
     int staticWorldIndex = -1;
     bool hasStaticWorldIndex = false;
     float GROUND_TOLERANCE = 1.0f;
+
+    sf::FloatRect playerBounds;
+    sf::FloatRect cellBounds;
+
+    float overlapLeft;
+    float overlapRight;
+    float overlapTop;
+    float overlapBottom;
+
+    float minOverlap;
+
+    float overlapLeftPlayerOrc;
+    float overlapRightPlayerOrc;
+    float overlapTopPlayerOrc;
+    float overlapBottomPlayerOrc;
+    float minOverlapPlayerOrc;
+
+    sf::FloatRect orcBoundsOrc;
+    sf::FloatRect cellBoundsOrc;
+
+    float overlapLeftOrc;
+    float overlapRightOrc;
+    float overlapTopOrc;
+    float overlapBottomOrc;
+    float minOverlapOrc;
+
+    Orc* orc;
 private:
     int numberOfEnemies = 0;
     int numberOfPowerUps = 0;

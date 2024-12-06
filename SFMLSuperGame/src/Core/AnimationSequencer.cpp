@@ -44,9 +44,13 @@ int AnimationSequencer::loadAnimationFramesOrc(int animationType, const std::str
 
 sf::Sprite& AnimationSequencer::getCurrentSpritePlayer(int animationType, int currentFrame) {
     
-    int totalFrames;  
-    totalFrames = static_cast<int>(animationFramesPlayer[animationType].size());
-    int frameIndex = currentFrame % totalFrames;
-
+    int totalFrames = static_cast<int>(animationFramesPlayer[animationType].size());
+    int frameIndex;
+    
+    if (animationType == 3) {
+        frameIndex = std::min(currentFrame, totalFrames - 1);
+    } else {
+        frameIndex  = currentFrame % totalFrames;
+    }
     return animationFramesPlayer[animationType][frameIndex]; 
 }

@@ -70,6 +70,15 @@ public:
     sf::Vector2f getPosition() const { return shape.getPosition(); }
     void setPosition(const sf::Vector2f& pos) { shape.setPosition(pos); }
 
+    void updateGroundState();
+    bool hasPlayerMoved() const {return shape.getPosition() != previousPosition; }
+    void updatePreviousPosition() {previousPosition = shape.getPosition(); }
+    bool wasOnGround = false;
+    
+    bool hasTriggeredOnGroundSound = false;
+
+    bool hasPlayerJump = false;
+    float previousMinOverlap = 0.0f;
 private:
     static std::mt19937 gen;
     static std::uniform_real_distribution<> dis;

@@ -84,16 +84,30 @@ void NexusManager::handleInput() {
                     resourceManager.newGamePlayer.velocity.x = -resourceManager.newGamePlayer.speed;
                     resourceManager.newGamePlayer.onInverseDirection = true;
                     resourceManager.newGamePlayer.isMoving = true;
-                    resourceManager.setPlayerTypeOfAnimationLastSet(1);
+                    
+                    if (resourceManager.newGamePlayer.isOnGround) {
+              //          resourceManager.setPlayerTypeOfAnimationLastSet(Player::Run);
+                        resourceManager.soundSequencer.playPlayerRunSound();
+                    }
                 } else if (event.key.code == sf::Keyboard::D) {
                     resourceManager.newGamePlayer.velocity.x = resourceManager.newGamePlayer.speed;
                     resourceManager.newGamePlayer.onInverseDirection = false;
                     resourceManager.newGamePlayer.isMoving = true;
-                    resourceManager.setPlayerTypeOfAnimationLastSet(1);
+                    
+                    if (resourceManager.newGamePlayer.isOnGround) {
+               //         resourceManager.setPlayerTypeOfAnimationLastSet(Player::Run);
+                        resourceManager.soundSequencer.playPlayerRunSound();
+                    }
                 } else if (event.key.code == sf::Keyboard::K && !resourceManager.newGamePlayer.isJumping) {
                     resourceManager.newGamePlayer.velocity.x = 0;
                     resourceManager.newGamePlayer.isMoving = false;
                     resourceManager.setPlayerTypeOfAnimationLastSet(4);
+                    
+                }
+
+                if (event.key.code == sf::Keyboard::Space && resourceManager.newGamePlayer.isOnGround) {
+                    resourceManager.setPlayerTypeOfAnimationLastSet(Player::Jump);
+                    resourceManager.newGamePlayer.hasPlayerJump = false;
                 }
             }
 
@@ -101,17 +115,20 @@ void NexusManager::handleInput() {
                 if (event.key.code == sf::Keyboard::A || event.key.code == sf::Keyboard::D || event.key.code == sf::Keyboard::K) {
                     resourceManager.newGamePlayer.velocity.x = 0;
                     resourceManager.newGamePlayer.isMoving = false;
-                    if (resourceManager.newGamePlayer.isOnGround) {
-                        resourceManager.setPlayerTypeOfAnimationLastSet(Player::Idle);
+                    resourceManager.soundSequencer.stopPlayerRunSound();
+                    if (resourceManager.newGamePlayer.isOnGround && !resourceManager.newGamePlayer.hasPlayerJump && resourceManager.getPlayerTypeOfAnimationLastSet() != Player::Jump) {
+                     //   resourceManager.setPlayerTypeOfAnimationLastSet(Player::Idle);
                     }
                 }
 
                 if (resourceManager.newGamePlayer.isOnGround) {
                     if (event.key.code == sf::Keyboard::Space) {
+                        resourceManager.newGamePlayer.hasPlayerJump = true;
                         resourceManager.newGamePlayer.velocity.y = -400.0f;
                         resourceManager.newGamePlayer.isOnGround = false;
                         resourceManager.newGamePlayer.isJumping = true;
                         resourceManager.setPlayerTypeOfAnimationLastSet(2);
+                        resourceManager.soundSequencer.playPlayerJumpSound();
                     }
                 } else if (!resourceManager.newGamePlayer.isOnGround && resourceManager.newGamePlayer.velocity.y > 0) {
                     resourceManager.setPlayerTypeOfAnimationLastSet(3);
@@ -127,19 +144,17 @@ void NexusManager::handleInput() {
 
 void NexusManager::updatePlayerAnimation() {
     Player& player = resourceManager.newGamePlayer;
-    if (player.isOnGround) {
-        if (!player.isMoving) {
-            resourceManager.setPlayerTypeOfAnimationLastSet(Player::Idle);
-        }
+    if (player.isOnGround && !player.isMoving &&  resourceManager.getPlayerTypeOfAnimationLastSet() != Player::Jump) {
+        resourceManager.setPlayerTypeOfAnimationLastSet(Player::Idle);
     } else {
         if (player.velocity.y > 0) {
             resourceManager.setPlayerTypeOfAnimationLastSet(Player::Fall);
-        } else if (player.velocity.y < 0) {
+        } else if (player.velocity.y < 0 && player.hasPlayerJump) {
             resourceManager.setPlayerTypeOfAnimationLastSet(Player::Jump);
         }
     }
 
-    if (player.isMoving) {
+    if (player.isMoving && player.isOnGround) {
         resourceManager.setPlayerTypeOfAnimationLastSet(Player::Run);
     }
 
@@ -164,7 +179,7 @@ void NexusManager::update(float deltaTime) {
             game.update(deltaTime, resourceManager.newGamePlayer, resourceManager);
             if (!resourceManager.newGamePlayer.isOnGround) {
                 resourceManager.newGamePlayer.velocity.y += resourceManager.newGamePlayer.gravity * deltaTime;
-            }
+            }  
 
             resourceManager.newGamePlayer.setCurrentAction(static_cast<Player::AnimationType>(resourceManager.getPlayerTypeOfAnimationLastSet()));
             resourceManager.newGamePlayer.updateAnimation(deltaTime);
